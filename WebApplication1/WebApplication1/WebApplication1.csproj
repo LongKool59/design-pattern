@@ -250,8 +250,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="images\hrm.png" />
-    <Content Include="images\IMG-20190124-WA0019.jpg" />
+    <Content Include="Content\images\hrm.png" />
+    <Content Include="Content\images\IMG-20190124-WA0019.jpg" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
