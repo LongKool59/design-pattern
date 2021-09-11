@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -21,6 +22,7 @@ namespace WebApplication1.Controllers
         public ActionResult Index(string loaiTimKiem, string tenTimKiem, int? page, string trangThai)
         {
             IQueryable<ChucVu> chucVus;
+            IQueryable<ChucVu> chucVuViewModels;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             try
