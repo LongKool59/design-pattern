@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -32,7 +33,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(luongThang);
+            LuongThangViewModel luongThangViewModel = luongThang;
+            return View(luongThangViewModel);
         }
 
         public ActionResult XemBangLuong(int? page, int? month, int? year)
@@ -41,31 +43,37 @@ namespace WebApplication1.Controllers
             int pageSize = 10;
             IQueryable<LuongThang> luongThangs;
             string maNV = Session["MaNhanVien"].ToString();
+            List<LuongThangViewModel> luongThangViewModels;
             try
             {
                 if (year != null && month != null)
                 {
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.MaNhanVien.ToString().Equals(maNV)).OrderBy(x => x.ThangNam);
-                    return View(luongThangs.ToList().ToPagedList(pageNumber, pageSize));
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else if (year != null && month == null)
                 {
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.MaNhanVien.ToString().Equals(maNV)).OrderBy(x => x.ThangNam);
-                    return View(luongThangs.ToList().ToPagedList(pageNumber, pageSize));
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else if (year == null && month != null)
                 {
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.MaNhanVien.ToString().Equals(maNV)).OrderBy(x => x.ThangNam);
-                    return View(luongThangs.ToList().ToPagedList(pageNumber, pageSize));
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.MaNhanVien.ToString().Equals(maNV)).OrderBy(x => x.ThangNam);
-                return View(luongThangs.ToList().ToPagedList(pageNumber, pageSize));
+                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện lại!", NotificationType.ERROR);
                 luongThangs = db.LuongThangs.Where(x => x.MaLuong_Thang.ToString().Contains("+-*/*-+-*/-+")).OrderBy(x => x.ThangNam);
-                return View(luongThangs.ToList().ToPagedList(pageNumber, pageSize));
+                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
             }
 
         }
@@ -115,7 +123,8 @@ namespace WebApplication1.Controllers
                 NhanVien nhanVien = db.NhanViens.Where(x => x.MaNhanVien == taiKhoan.MaNhanVien).SingleOrDefault();
                 if (nhanVien != null)
                 {
-                    return View(nhanVien);
+                    NhanVienViewModel nhanVienViewModel = nhanVien;
+                    return View(nhanVienViewModel);
                 }
             }
             return RedirectToAction("ThongTinTaiKhoan");

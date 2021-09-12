@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -23,6 +24,7 @@ namespace WebApplication1.Controllers
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             IQueryable<Nghi> nghis;
+            List<NghiViewModel> nghiViewModels;
             if (MaPB == "12")
             {
                 if (trangThai == "TatCa")
@@ -31,18 +33,21 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                        nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                        return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
                         if (fromDate == null && toDate == null)
                         {
                             nghis = db.Nghis.Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x); 
+                            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate).OrderBy(x => x.NhanVien.HoTen);
-                    return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                    nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x); 
+                    return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 if (trangThai == "HoatDong")
                 {
@@ -50,18 +55,21 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                        nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                        return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
                         if (fromDate == null && toDate == null)
                         {
                             nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.Phep == true).OrderBy(x => x.NhanVien.HoTen);
-                            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.Phep == true).OrderBy(x => x.NhanVien.HoTen);
-                    return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                    nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                    return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 if (trangThai == "VoHieuHoa")
                 {
@@ -69,18 +77,21 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                        nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                        return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
                         if (fromDate == null && toDate == null)
                         {
                             nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.Phep != true).OrderBy(x => x.NhanVien.HoTen);
-                            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.Phep != true).OrderBy(x => x.NhanVien.HoTen);
-                    return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                    nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                    return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                 }
             }
             else
@@ -91,18 +102,21 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                        nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x); 
+                        return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
                         if (fromDate == null && toDate == null)
                         {
                             nghis = db.Nghis.Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen).Where(x=>x.NhanVien.PhongBan.MaPB.ToString() == MaPB);
-                            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).OrderBy(x => x.NhanVien.HoTen);
-                    return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                    nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x); 
+                    return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 if (trangThai == "HoatDong")
                 {
@@ -110,18 +124,21 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                        nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                        return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
                         if (fromDate == null && toDate == null)
                         {
                             nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.Phep == true && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).OrderBy(x => x.NhanVien.HoTen);
-                            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.Phep == true && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).OrderBy(x => x.NhanVien.HoTen);
-                    return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                    nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                    return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 if (trangThai == "VoHieuHoa")
                 {
@@ -129,22 +146,26 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                        nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                        return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
                         if (fromDate == null && toDate == null)
                         {
                             nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.Phep != true && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).OrderBy(x => x.NhanVien.HoTen);
-                            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x); 
+                            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     nghis = db.Nghis.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.Phep != true && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).OrderBy(x => x.NhanVien.HoTen);
-                    return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+                    nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+                    return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
                 }
             }
             nghis = db.Nghis.Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-            return View(nghis.ToList().ToPagedList(pageNumber, pageSize));
+            nghiViewModels = nghis.ToList().ConvertAll<NghiViewModel>(x => x);
+            return View(nghiViewModels.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Nghi/Details/5
@@ -159,33 +180,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(nghi);
-        }
-
-
-        // GET: Nghi/Create
-        public ActionResult Create()
-        {
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen");
-            return View();
-        }
-
-        // POST: Nghi/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaNhanVien,NgayNghi,Phep,NguoiDuyet,NgaySua,GhiChu")] Nghi nghi)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Nghis.Add(nghi);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", nghi.MaNhanVien);
-            return View(nghi);
+            NghiViewModel nghiViewModel = nghi;
+            return View(nghiViewModel);
         }
 
         // GET: Nghi/Edit/5
@@ -201,7 +197,8 @@ namespace WebApplication1.Controllers
                 return HttpNotFound();
             }
             ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", nghi.MaNhanVien);
-            return View(nghi);
+            NghiViewModel nghiViewModel = nghi;
+            return View(nghiViewModel);
         }
 
         // POST: Nghi/Edit/5
@@ -209,16 +206,18 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaNhanVien,NgayNghi,Phep,NguoiDuyet,NgaySua,GhiChu")] Nghi nghi)
+        public ActionResult Edit(NghiViewModel nghiViewModel)
         {
+            Nghi nghi;
             if (ModelState.IsValid)
             {
+                nghi = nghiViewModel;
                 db.Entry(nghi).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", nghi.MaNhanVien);
-            return View(nghi);
+            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", nghiViewModel.MaNhanVien);
+            return View(nghiViewModel);
         }
 
         protected override void Dispose(bool disposing)
@@ -230,19 +229,19 @@ namespace WebApplication1.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult DuyetPhep(List<Nghi> nghis, FormCollection form)
+        public ActionResult DuyetPhep(List<NghiViewModel> nghiViewModels, FormCollection form)
         {
             try
             {
                 db.Configuration.ValidateOnSaveEnabled = false;
-                var checkIsChecked = nghis.Where(x => x.IsChecked == true).FirstOrDefault();
+                var checkIsChecked = nghiViewModels.Where(x => x.IsChecked == true).FirstOrDefault();
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn nhân viên để duyệt!", NotificationType.ERROR);
                     return RedirectToAction("Index");
                 }
 
-                foreach (var item in nghis)
+                foreach (var item in nghiViewModels)
                 {
                     if (item.IsChecked == true)
                     {

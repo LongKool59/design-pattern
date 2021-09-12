@@ -12,10 +12,9 @@ namespace WebApplication1.Models.ViewModel
     {
         private QLNhanSuEntities db = new QLNhanSuEntities();
         /* [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]*/
-        public ChucVuViewModel(List<ChucVu> chucVuViewModels)
+        public ChucVuViewModel()
         {
             this.NhanViens = new HashSet<NhanVien>();
-            this.chucVuViewModels = chucVuViewModels;
         }
 
         [DisplayName("Mã chức vụ")]
@@ -39,11 +38,39 @@ namespace WebApplication1.Models.ViewModel
         [DisplayName("Ngày sửa")]
         public System.DateTime NgaySua { get; set; }
 
-        public List<ChucVu> chucVuViewModels
+        public static implicit operator ChucVuViewModel(ChucVu chucVu)
+        {
+            return new ChucVuViewModel
+            {
+                MaChucVu = chucVu.MaChucVu,
+                TenChucVu = chucVu.TenChucVu,
+                HeSoChucVu = chucVu.HeSoChucVu,
+                PhuCap = chucVu.PhuCap,
+                NguoiSua = chucVu.NguoiSua,
+                NgaySua = chucVu.NgaySua,
+                TrangThai = chucVu.TrangThai,
+
+            };
+        }
+
+        public static implicit operator ChucVu(ChucVuViewModel chucVuViewModel)
+        {
+            return new ChucVu
+            {
+                MaChucVu = chucVuViewModel.MaChucVu,
+                TenChucVu = chucVuViewModel.TenChucVu,
+                HeSoChucVu = chucVuViewModel.HeSoChucVu,
+                PhuCap = chucVuViewModel.PhuCap,
+                NguoiSua = chucVuViewModel.NguoiSua,
+                NgaySua = chucVuViewModel.NgaySua,
+                TrangThai = chucVuViewModel.TrangThai,
+
+            };
+        }
+        public List<ChucVu> chucVus
         {
             get; set;
         }
-
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NhanVien> NhanViens { get; set; }
     }

@@ -22,25 +22,15 @@ namespace WebApplication1.Models
             this.NhanViens = new HashSet<NhanVien>();
         }
 
-        [DisplayName("Mã chức vụ")]
 
         public int MaChucVu { get; set; }
-        [DisplayName("Tên chức vụ")]
-        [Required(ErrorMessage = "Tên chức vụ không được trống...")]
         public string TenChucVu { get; set; }
-        [DisplayName("Hệ số chức vụ")]
-        [Required(ErrorMessage = "Hệ số chức vụ không được trống...")]
         public double HeSoChucVu { get; set; }
-        [DisplayName("Phụ cấp")]
-        [Required(ErrorMessage = "Phụ cấp không được trống...")]
         public Nullable<int> PhuCap { get; set; }
-        [DisplayName("Trạng thái")]
         public bool TrangThai { get; set; }
 
-        public bool IsChecked { get; set; }
-        [DisplayName("Người sửa")]
+        //public bool IsChecked { get; set; }
         public string NguoiSua { get; set; }
-        [DisplayName("Ngày sửa")]
         public System.DateTime NgaySua { get; set; }
 
 

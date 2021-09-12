@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Ct_Phat
+﻿@model WebApplication1.Models.ViewModel.Ct_PhatViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -18,7 +18,7 @@
             @Html.DisplayFor(model => model.MaNhanVien)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.NhanVien.HoTen)
+            @Html.DisplayNameFor(model => model.NhanVienViewModel.HoTen)
         </dt>
 
         <dd>
@@ -26,14 +26,14 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NhanVien.PhongBan.TenPB)
+            @Html.DisplayNameFor(model => model.NhanVienViewModel.PhongBanViewModel.TenPB)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.NhanVien.PhongBan.TenPB)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.LoaiPhat.TenLoaiPhat)
+            @Html.DisplayNameFor(model => model.LoaiPhatViewModel.TenLoaiPhat)
         </dt>
 
         <dd>

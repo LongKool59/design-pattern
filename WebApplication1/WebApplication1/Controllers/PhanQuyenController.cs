@@ -24,6 +24,7 @@ namespace WebApplication1.Controllers
             IQueryable<PhanQuyen> phanQuyens;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
+            List<PhanQuyenViewModel> phanQuyenViewModels;
             try
             {
                 if (loaiTimKiem == "MaQuyen")
@@ -33,7 +34,8 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã quyền!", NotificationType.WARNING);
                     }
                     phanQuyens = db.PhanQuyens.Where(x => x.MaQuyen.ToString().Contains(tenTimKiem.ToString())).OrderByDescending(x => x.TenQuyen);
-                    return View("Index", phanQuyens.ToList().ToPagedList(pageNumber, pageSize));
+                    phanQuyenViewModels = phanQuyens.ToList().ConvertAll<PhanQuyenViewModel>(x => x);
+                    return View("Index", phanQuyenViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else if (loaiTimKiem == "TenQuyen")
                 {
@@ -42,33 +44,36 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên quyền!", NotificationType.WARNING);
                     }
                     phanQuyens = db.PhanQuyens.Where(x => x.TenQuyen.Contains(tenTimKiem.ToString())).OrderByDescending(x => x.TenQuyen);
-                    return View("Index", phanQuyens.ToList().ToPagedList(pageNumber, pageSize));
+                    phanQuyenViewModels = phanQuyens.ToList().ConvertAll<PhanQuyenViewModel>(x => x);
+                    return View("Index", phanQuyenViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 phanQuyens = db.PhanQuyens.OrderByDescending(x => x.TenQuyen);
-                return View("Index", phanQuyens.ToList().ToPagedList(pageNumber, pageSize));
+                phanQuyenViewModels = phanQuyens.ToList().ConvertAll<PhanQuyenViewModel>(x => x);
+                return View("Index", phanQuyenViewModels.ToPagedList(pageNumber, pageSize));
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
                 phanQuyens = db.PhanQuyens.Where(x => x.MaQuyen.ToString().Contains("+-*/*-+-*/-+"));
-                return View("Index", phanQuyens.ToList().ToPagedList(pageNumber, pageSize));
+                phanQuyenViewModels = phanQuyens.ToList().ConvertAll<PhanQuyenViewModel>(x => x);
+                return View("Index", phanQuyenViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(List<PhanQuyen> phanQuyens)
+        public ActionResult Delete(List<PhanQuyenViewModel> phanQuyenViewModels)
         {
             try
             {
                 db.Configuration.ValidateOnSaveEnabled = false;
-                var checkIsChecked = phanQuyens.Where(x => x.IsChecked == true).FirstOrDefault();
+                var checkIsChecked = phanQuyenViewModels.Where(x => x.IsChecked == true).FirstOrDefault();
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn phân quyền để xóa!", NotificationType.ERROR);
                     return RedirectToAction("Index");
                 }
 
-                foreach (var item in phanQuyens)
+                foreach (var item in phanQuyenViewModels)
                 {
                     if (item.IsChecked == true)
                     {
@@ -104,7 +109,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(phanQuyen);
+            PhanQuyenViewModel phanQuyenViewModel = phanQuyen;
+            return View(phanQuyenViewModel);
         }
 
         // GET: PhanQuyen/Create
@@ -118,16 +124,18 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaQuyen,TenQuyen,GhiChu")] PhanQuyen phanQuyen)
+        public ActionResult Create(PhanQuyenViewModel phanQuyenViewModel)
         {
+            PhanQuyen phanQuyen;
             if (ModelState.IsValid)
             {
+                phanQuyen = phanQuyenViewModel;
                 db.PhanQuyens.Add(phanQuyen);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(phanQuyen);
+            return View(phanQuyenViewModel);
         }
 
         // GET: PhanQuyen/Edit/5
@@ -142,7 +150,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(phanQuyen);
+            PhanQuyenViewModel phanQuyenViewModel = phanQuyen;
+            return View(phanQuyenViewModel);
         }
 
         // POST: PhanQuyen/Edit/5
@@ -150,15 +159,17 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaQuyen,TenQuyen,GhiChu")] PhanQuyen phanQuyen)
+        public ActionResult Edit(PhanQuyenViewModel phanQuyenViewModel)
         {
+            PhanQuyen phanQuyen;
             if (ModelState.IsValid)
             {
+                phanQuyen = phanQuyenViewModel;
                 db.Entry(phanQuyen).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(phanQuyen);
+            return View(phanQuyenViewModel);
         }
 
 

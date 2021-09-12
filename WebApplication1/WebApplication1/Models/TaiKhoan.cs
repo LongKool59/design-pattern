@@ -16,17 +16,12 @@ namespace WebApplication1.Models
 
     public partial class TaiKhoan
     {
-        [DisplayName("Mã nhân viên")]
-        public int MaNhanVien { get; set; }
-        [DisplayName("Tên tài khoản")]
-        [Required(ErrorMessage = "Tên tài khoản không được trống...")]
-        public string TenTK { get; set; }
-        [DisplayName("Mật khẩu")]
 
-        [Required(ErrorMessage = "Mật khẩu không được trống...")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*\d).{5,25}$", ErrorMessage = "Mật khẩu bao gồm chữ và số, từ 5 đến 25 kí tự")]
+        public int MaNhanVien { get; set; }
+        
+        public string TenTK { get; set; }
+   
         public string MatKhau { get; set; }
-        [DisplayName("Mã quyền")]
         public int MaQuyen { get; set; }
         public string ResetPasswordCode { get; set; }
 

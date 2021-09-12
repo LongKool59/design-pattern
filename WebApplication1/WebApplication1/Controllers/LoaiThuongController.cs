@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 using PagedList;
 using PagedList.Mvc;
 namespace WebApplication1.Controllers
@@ -20,9 +21,10 @@ namespace WebApplication1.Controllers
         {
             int pageNumber = page ?? 1;
             int pageSize = 10;
+            IQueryable<LoaiThuong> loaiThuongs;
+            List<LoaiThuongViewModel> loaiThuongViewModels;
             try
             {
-                IQueryable<LoaiThuong> loaiThuongs;
                 QLNhanSuEntities db = new QLNhanSuEntities();
                 if (trangThai == "TatCa")
                 {
@@ -32,12 +34,14 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã loại thưởng!", NotificationType.WARNING);
                             loaiThuongs = db.LoaiThuongs.Where(x => x.MaLoaiThuong.ToString().StartsWith("+-*/abcdefgh")).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x);  
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiThuongs = db.LoaiThuongs.Where(x => x.MaLoaiThuong.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x);  
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else if (loaiTimKiem == "TenLoaiThuong")
@@ -46,18 +50,21 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên loại thưởng!", NotificationType.WARNING);
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TenLoaiThuong.Contains("+-*/abcdefgh")).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x);  
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TenLoaiThuong.Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         loaiThuongs = db.LoaiThuongs.OrderBy(x => x.TenLoaiThuong);
-                        return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                        loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x);  
+                        return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
                 else if (trangThai == "HoatDong")
@@ -68,12 +75,14 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã loại thưởng!", NotificationType.WARNING);
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai == true && x.MaLoaiThuong.ToString().StartsWith("+-*/abcdefgh")).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai == true && x.MaLoaiThuong.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else if (loaiTimKiem == "TenLoaiThuong")
@@ -82,18 +91,21 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên loại thưởng!", NotificationType.WARNING);
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai == true && x.TenLoaiThuong.Contains("+-*/abcdefgh")).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai == true && x.TenLoaiThuong.Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x);  
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai == true).OrderBy(x => x.TenLoaiThuong);
-                        return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                        loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                        return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
                 else if (trangThai == "VoHieuHoa")
@@ -104,12 +116,14 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã loại thưởng!", NotificationType.WARNING);
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai != true && x.MaLoaiThuong.ToString().StartsWith("+-*/abcdefgh")).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai != true && x.MaLoaiThuong.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else if (loaiTimKiem == "TenLoaiThuong")
@@ -118,30 +132,36 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên loại thưởng!", NotificationType.WARNING);
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai != true && x.TenLoaiThuong.Contains("+-*/abcdefgh")).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai != true && x.TenLoaiThuong.Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiThuong);
-                            return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                            loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                            return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         loaiThuongs = db.LoaiThuongs.Where(x => x.TrangThai != true).OrderBy(x => x.TenLoaiThuong);
-                        return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                        loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                        return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
                 else
                 {
                     loaiThuongs = db.LoaiThuongs.OrderBy(x => x.TenLoaiThuong);
-                    return View("Index", loaiThuongs.ToList().ToPagedList(pageNumber, pageSize));
+                    loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                    return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
                 }
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
-                return View("Index", db.LoaiThuongs.OrderBy(x => x.TenLoaiThuong).ToList().ToPagedList(pageNumber, pageSize));
+                loaiThuongs = db.LoaiThuongs.OrderBy(x => x.TenLoaiThuong);
+                loaiThuongViewModels = loaiThuongs.ToList().ConvertAll<LoaiThuongViewModel>(x => x); 
+                return View("Index", loaiThuongViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
 
@@ -157,13 +177,15 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(loaiThuong);
+            LoaiThuongViewModel loaiThuongViewModel = loaiThuong;
+            return View(loaiThuongViewModel);
         }
 
         // GET: LoaiThuong/Create
         public ActionResult Create()
         {
-            return View();
+            LoaiThuongViewModel loaiThuongViewModel = new LoaiThuongViewModel();
+            return View(loaiThuongViewModel);
         }
 
         // POST: LoaiThuong/Create
@@ -171,12 +193,13 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaLoaiThuong,TenLoaiThuong,GiaTri,TrangThai,NguoiSua,NgaySua")] LoaiThuong loaiThuong)
+        public ActionResult Create(LoaiThuongViewModel loaiThuongViewModel)
         {
+            LoaiThuong loaiThuong;
             if (ModelState.IsValid)
             {
                 //kiểm tra tên loại thưởng được nhập từ ô textbox có trùng với bất kỳ tên loại thưởng nào trong database bảng LoaiThuong không 
-                var tenLoaiThuongList = db.LoaiThuongs.Where(x => x.TenLoaiThuong.Equals(loaiThuong.TenLoaiThuong.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+                var tenLoaiThuongList = db.LoaiThuongs.Where(x => x.TenLoaiThuong.Equals(loaiThuongViewModel.TenLoaiThuong.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
                 string oldTenLoaiThuong = "";
                 if (tenLoaiThuongList.Count > 0)
                 {
@@ -185,24 +208,26 @@ namespace WebApplication1.Controllers
                         if (item.TrangThai == true)
                         {
                             item.TrangThai = false;
-                            item.NguoiSua = "Hệ thống - " + loaiThuong.NguoiSua;
+                            item.NguoiSua = "Hệ thống - " + loaiThuongViewModel.NguoiSua;
                             item.NgaySua = DateTime.Now;
                             
                         }
                         oldTenLoaiThuong = item.TenLoaiThuong;
                     }
-                    loaiThuong.TenLoaiThuong = oldTenLoaiThuong;
-                    loaiThuong.TrangThai = true;
+                    loaiThuongViewModel.TenLoaiThuong = oldTenLoaiThuong;
+                    loaiThuongViewModel.TrangThai = true;
+                    loaiThuong = loaiThuongViewModel;
                     db.LoaiThuongs.Add(loaiThuong);
                 }
                 else
                 {
+                    loaiThuong = loaiThuongViewModel;
                     db.LoaiThuongs.Add(loaiThuong);
                 }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(loaiThuong);
+            return View(loaiThuongViewModel);
         }
 
         // GET: LoaiThuong/Edit/5
@@ -217,7 +242,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(loaiThuong);
+            LoaiThuongViewModel loaiThuongViewModel = loaiThuong;
+            return View(loaiThuongViewModel);
         }
 
         // POST: LoaiThuong/Edit/5
@@ -225,11 +251,12 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaLoaiThuong,TenLoaiThuong,GiaTri,TrangThai,NguoiSua,NgaySua")] LoaiThuong loaiThuong)
+        public ActionResult Edit(LoaiThuongViewModel loaiThuongViewModel)
         {
+            LoaiThuong loaiThuong;
             if (ModelState.IsValid)
             {
-                var tenLoaiThuongList = db.LoaiThuongs.Where(x => x.TenLoaiThuong.Equals(loaiThuong.TenLoaiThuong.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+                var tenLoaiThuongList = db.LoaiThuongs.Where(x => x.TenLoaiThuong.Equals(loaiThuongViewModel.TenLoaiThuong.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
                 string oldTenLoaiThuong = "";
                 if (tenLoaiThuongList.Count > 0)
                 {
@@ -238,41 +265,43 @@ namespace WebApplication1.Controllers
                         if (item.TrangThai == true)
                         {
                             item.TrangThai = false;
-                            item.NguoiSua = "Hệ thống - " + loaiThuong.NguoiSua;
+                            item.NguoiSua = "Hệ thống - " + loaiThuongViewModel.NguoiSua;
                             item.NgaySua = DateTime.Now;
                            
                         }
                         oldTenLoaiThuong = item.TenLoaiThuong;
                     }
-                    loaiThuong.TenLoaiThuong = oldTenLoaiThuong;
-                    loaiThuong.TrangThai = true;
+                    loaiThuongViewModel.TenLoaiThuong = oldTenLoaiThuong;
+                    loaiThuongViewModel.TrangThai = true;
+                    loaiThuong = loaiThuongViewModel;
                     db.LoaiThuongs.Add(loaiThuong);
                 }
                 else
                 {
+                    loaiThuong = loaiThuongViewModel;
                     db.LoaiThuongs.Add(loaiThuong);
                 }
 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(loaiThuong);
+            return View(loaiThuongViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(List<LoaiThuong> loaiThuongs)
+        public ActionResult Delete(List<LoaiThuongViewModel> loaiThuongViewModels)
         {
             try
             {
                 db.Configuration.ValidateOnSaveEnabled = false;
-                var checkIsChecked = loaiThuongs.Where(x => x.IsChecked == true).FirstOrDefault();
+                var checkIsChecked = loaiThuongViewModels.Where(x => x.IsChecked == true).FirstOrDefault();
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn loại thưởng để xóa!", NotificationType.ERROR);
                     return RedirectToAction("Index");
                 }
-                foreach (var item in loaiThuongs)
+                foreach (var item in loaiThuongViewModels)
                 {
                     if (item.IsChecked == true)
                     {

@@ -18,13 +18,14 @@ namespace WebApplication1.Controllers
         // GET: Login
         public ActionResult Login()
         {
-            return View();
+            TaiKhoanViewModel taiKhoanViewModel = new TaiKhoanViewModel();
+            return View(taiKhoanViewModel);
         }
         [HttpPost]
-        public ActionResult CheckLogin(TaiKhoan taiKhoan)
+        public ActionResult CheckLogin(TaiKhoanViewModel taiKhoanViewModel)
         {
-            var check = database.TaiKhoans.Where(s => s.TenTK == taiKhoan.TenTK && s.MatKhau == taiKhoan.MatKhau).SingleOrDefault();
-            var trangThaiLamViec = database.TaiKhoans.Where(s => s.TenTK == taiKhoan.TenTK && s.MatKhau == taiKhoan.MatKhau && s.NhanVien.TrangThai == true).SingleOrDefault();
+            var check = database.TaiKhoans.Where(s => s.TenTK == taiKhoanViewModel.TenTK && s.MatKhau == taiKhoanViewModel.MatKhau).SingleOrDefault();
+            var trangThaiLamViec = database.TaiKhoans.Where(s => s.TenTK == taiKhoanViewModel.TenTK && s.MatKhau == taiKhoanViewModel.MatKhau && s.NhanVien.TrangThai == true).SingleOrDefault();
             if (ModelState.IsValid)
             {
                 if (check == null)
@@ -39,7 +40,7 @@ namespace WebApplication1.Controllers
                     {
                         database.Configuration.ValidateOnSaveEnabled = false;
                         var tenNhanVien = (from a in database.TaiKhoans
-                                           where a.TenTK == taiKhoan.TenTK
+                                           where a.TenTK == taiKhoanViewModel.TenTK
                                            select a.NhanVien.HoTen).SingleOrDefault();
                         if (tenNhanVien != null)
                         {
@@ -50,8 +51,8 @@ namespace WebApplication1.Controllers
                         Session["TenPB"] = trangThaiLamViec.NhanVien.PhongBan.TenPB;
                         Session["TenChucVu"] = trangThaiLamViec.NhanVien.ChucVu.TenChucVu;
                         Session["TenQuyen"] = trangThaiLamViec.PhanQuyen.TenQuyen;
-                        Session["TenTK"] = taiKhoan.TenTK;
-                        Session["MatKhau"] = taiKhoan.MatKhau;
+                        Session["TenTK"] = taiKhoanViewModel.TenTK;
+                        Session["MatKhau"] = taiKhoanViewModel.MatKhau;
                         switch (check.MaQuyen)
                         {
                             case 4:

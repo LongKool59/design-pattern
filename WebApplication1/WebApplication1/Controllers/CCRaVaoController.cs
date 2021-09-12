@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 using PagedList;
 using PagedList.Mvc;
 using WebApplication1.Extensions;
@@ -21,23 +22,28 @@ namespace WebApplication1.Controllers
             var maNhanVien = Session["MaNhanVien"].ToString();
 
             IQueryable<ChamCong> chamCongs;
+            List<ChamCongViewModel> chamCongViewModels;
             if (month != null && year != null)
             {
                 chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay.Month == month && x.Ngay.Year == year);
-                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                chamCongViewModels = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
             }
             else if(month == null && year != null)
             {
                 chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) &&  x.Ngay.Year == year);
-                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                chamCongViewModels = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
             }
             else if (month != null && year == null)
             {
                 chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay.Month == month);
-                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                chamCongViewModels = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
             }
             chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay.Month == DateTime.Now.Month && x.Ngay.Year == DateTime.Now.Year);
-            return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+            chamCongViewModels = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+            return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]

@@ -22,19 +22,12 @@ namespace WebApplication1.Models
             this.LuongThangs = new HashSet<LuongThang>();
         }
 
-        [DisplayName("Mã lương cơ bản")]
         public int MaLuongCoBan { get; set; }
-        [DisplayName("Tiền lương cơ bản")]
-        [Required(ErrorMessage = "Tiền lương không được trống...")]
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
+
         public int TienLuongCoBan { get; set; }
-        [DisplayName("Mã nhân viên")]
         public int MaNhanVien { get; set; }
-        [DisplayName("Trạng thái")]
         public bool TrangThai { get; set; }
-        [DisplayName("Người sửa")]
         public string NguoiSua { get; set; }
-        [DisplayName("Ngày sửa")]
         public System.DateTime NgaySua { get; set; }
 
 

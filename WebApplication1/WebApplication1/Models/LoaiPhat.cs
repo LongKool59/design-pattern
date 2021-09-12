@@ -21,20 +21,13 @@ namespace WebApplication1.Models
         {
             this.Ct_Phat = new HashSet<Ct_Phat>();
         }
-
-        [DisplayName("Mã loại phạt")]
-        public int MaLoaiPhat { get; set; }
-        [DisplayName("Tên loại phạt")]
-        public string TenLoaiPhat { get; set; }
-        [DisplayName("Giá trị")]
-        public int GiaTri { get; set; }
-        [DisplayName("Trạng thái")]
-        public bool TrangThai { get; set; }
-        [DisplayName("Người sửa")]
+         
+        public int MaLoaiPhat { get; set; } 
+        public string TenLoaiPhat { get; set; } 
+        public int GiaTri { get; set; } 
+        public bool TrangThai { get; set; } 
         public string NguoiSua { get; set; }
-        [DisplayName("Ngày sửa")]
         public System.DateTime NgaySua { get; set; }
-        public bool IsChecked { get; set; }
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

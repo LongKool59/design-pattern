@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 using WebApplication1.Extensions;
 using PagedList;
 namespace WebApplication1.Controllers
@@ -22,6 +23,7 @@ namespace WebApplication1.Controllers
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             IQueryable<ChamCong> chamCongs;
+            List<ChamCongViewModel> chamCongViewModel;
             try
             {
                 if (MaPB == "12")
@@ -30,7 +32,8 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         chamCongs = db.ChamCongs.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
@@ -43,7 +46,8 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else if (loaiTimKiem == "TenNhanVien")
                             {
@@ -52,12 +56,14 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else
                             {
                                 chamCongs = db.ChamCongs.Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                         }
                         else
@@ -69,7 +75,8 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else if (loaiTimKiem == "TenNhanVien")
                             {
@@ -78,12 +85,14 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else 
                             {
                                 chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                         }
                     }
@@ -94,7 +103,8 @@ namespace WebApplication1.Controllers
                     {
                         this.AddNotification("Ngày bắt đầu không lớn hơn ngày kết thúc!", NotificationType.ERROR);
                         chamCongs = db.ChamCongs.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                        return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
@@ -107,7 +117,8 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString()) && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else if (loaiTimKiem == "TenNhanVien")
                             {
@@ -116,12 +127,14 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString()) && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x); 
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else
                             {
                                 chamCongs = db.ChamCongs.Where(x=> x.NhanVien.PhongBan.MaPB.ToString() == MaPB).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x); 
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                         }
                         else
@@ -133,7 +146,8 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString()) && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x); 
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else if (loaiTimKiem == "TenNhanVien")
                             {
@@ -142,25 +156,29 @@ namespace WebApplication1.Controllers
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                 }
                                 chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString()) && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x); 
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                             else
                             {
                                 chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.NhanVien.PhongBan.MaPB.ToString() == MaPB).Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                             }
                         }
 
                     }
                 }
                 chamCongs = db.ChamCongs.Include(n => n.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
                 chamCongs = db.ChamCongs.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderBy(x => x.NhanVien.HoTen);
-                return View(chamCongs.ToList().ToPagedList(pageNumber, pageSize));
+                chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
             }
         }
 

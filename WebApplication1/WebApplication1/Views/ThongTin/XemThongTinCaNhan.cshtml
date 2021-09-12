@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.NhanVien
+﻿@model WebApplication1.Models.ViewModel.NhanVienViewModel
 @{
     ViewBag.Title = "XemThongTinCaNhan";
     if (Convert.ToInt32(Session["MaQuyen"]) == 4)
@@ -97,7 +97,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.ChucVu.TenChucVu)
+                @Html.DisplayNameFor(model => model.ChucVuViewModel.TenChucVu)
             </dt>
 
             <dd>
@@ -105,7 +105,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.PhongBan.TenPB)
+                @Html.DisplayNameFor(model => model.PhongBanViewModel.TenPB)
             </dt>
 
             <dd>
@@ -113,7 +113,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.TaiKhoan.TenTK)
+                @Html.DisplayNameFor(model => model.TaiKhoanViewModel.TenTK)
             </dt>
 
             <dd>

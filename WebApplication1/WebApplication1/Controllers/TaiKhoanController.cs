@@ -23,6 +23,7 @@ namespace WebApplication1.Controllers
             IQueryable<TaiKhoan> taiKhoans;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
+            List<TaiKhoanViewModel> taiKhoanViewModels;
             try
             {
                 if (loaiTimKiem == "TenTK")
@@ -32,7 +33,8 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên tài khoản!", NotificationType.WARNING);
                     }
                     taiKhoans = db.TaiKhoans.Where(x => x.TenTK.Contains(tenTimKiem.ToString())).Include(t => t.NhanVien).Include(t => t.PhanQuyen).OrderBy(t => t.NhanVien.HoTen);
-                    return View("Index", taiKhoans.ToList().ToPagedList(pageNumber, pageSize));
+                    taiKhoanViewModels = taiKhoans.ToList().ConvertAll<TaiKhoanViewModel>(x => x);
+                    return View("Index", taiKhoanViewModels.ToPagedList(pageNumber, pageSize));
 
                 }
                 else if (loaiTimKiem == "MaNhanVien")
@@ -42,7 +44,8 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                     }
                     taiKhoans = db.TaiKhoans.Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(t => t.NhanVien).Include(t => t.PhanQuyen).OrderBy(t => t.NhanVien.HoTen);
-                    return View("Index", taiKhoans.ToList().ToPagedList(pageNumber, pageSize));
+                    taiKhoanViewModels = taiKhoans.ToList().ConvertAll<TaiKhoanViewModel>(x => x);
+                    return View("Index", taiKhoanViewModels.ToPagedList(pageNumber, pageSize));
 
                 }
                 else if (loaiTimKiem == "TenQuyen")
@@ -52,19 +55,22 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên quyền!", NotificationType.WARNING);
                     }
                     taiKhoans = db.TaiKhoans.Where(x => x.PhanQuyen.TenQuyen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                    return View("Index", taiKhoans.ToList().ToPagedList(pageNumber, pageSize));
+                    taiKhoanViewModels = taiKhoans.ToList().ConvertAll<TaiKhoanViewModel>(x => x);
+                    return View("Index", taiKhoanViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else
                 {
                     taiKhoans = db.TaiKhoans.Include(t => t.NhanVien).Include(t => t.PhanQuyen).OrderBy(t => t.NhanVien.HoTen);
-                    return View("Index", taiKhoans.ToList().ToPagedList(pageNumber, pageSize));
+                    taiKhoanViewModels = taiKhoans.ToList().ConvertAll<TaiKhoanViewModel>(x => x);
+                    return View("Index", taiKhoanViewModels.ToPagedList(pageNumber, pageSize));
                 }
             }
             catch
             {
-                taiKhoans = db.TaiKhoans.Where(x => x.PhanQuyen.TenQuyen.Contains("-*/+-*/*-++//*")).Include(t => t.NhanVien).Include(t => t.PhanQuyen).OrderBy(t => t.PhanQuyen.TenQuyen);
                 this.AddNotification("Không tìm thấy từ khóa yêu cầu. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
-                return View("Index", taiKhoans.ToList().ToPagedList(pageNumber, pageSize));
+                taiKhoans = db.TaiKhoans.Where(x => x.PhanQuyen.TenQuyen.Contains("-*/+-*/*-++//*")).Include(t => t.NhanVien).Include(t => t.PhanQuyen).OrderBy(t => t.PhanQuyen.TenQuyen);
+                taiKhoanViewModels = taiKhoans.ToList().ConvertAll<TaiKhoanViewModel>(x => x);
+                return View("Index", taiKhoanViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
 
@@ -80,35 +86,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(taiKhoan);
-        }
-
-        // GET: TaiKhoan/Create
-        public ActionResult Create()
-        {
-
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen");
-            ViewBag.MaQuyen = new SelectList(db.PhanQuyens.Where(a => a.MaQuyen != 3), "MaQuyen", "TenQuyen");
-            return View();
-        }
-
-        // POST: TaiKhoan/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaNhanVien,TenTK,MatKhau,MaQuyen")] TaiKhoan taiKhoan)
-        {
-            if (ModelState.IsValid)
-            {
-                db.TaiKhoans.Add(taiKhoan);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", taiKhoan.MaNhanVien);
-            ViewBag.MaQuyen = new SelectList(db.PhanQuyens, "MaQuyen", "TenQuyen", taiKhoan.MaQuyen);
-            return View(taiKhoan);
+            TaiKhoanViewModel taiKhoanViewModel = taiKhoan;
+            return View(taiKhoanViewModel);
         }
 
         // GET: TaiKhoan/Edit/5
@@ -125,7 +104,8 @@ namespace WebApplication1.Controllers
             }
             ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", taiKhoan.MaNhanVien);
             ViewBag.MaQuyen = new SelectList(db.PhanQuyens.Where(a => a.MaQuyen != 3), "MaQuyen", "TenQuyen", taiKhoan.MaQuyen);
-            return View(taiKhoan);
+            TaiKhoanViewModel taiKhoanViewModel = taiKhoan;
+            return View(taiKhoanViewModel);
         }
 
         // POST: TaiKhoan/Edit/5
@@ -133,26 +113,19 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaNhanVien,TenTK,MatKhau,MaQuyen,ResetPasswordCode")] TaiKhoan taiKhoan)
+        public ActionResult Edit(TaiKhoanViewModel taiKhoanViewModel)
         {
-            //try
-            //{
+            TaiKhoan taiKhoan;
             if (ModelState.IsValid)
             {
+                taiKhoan = taiKhoanViewModel;
                 db.Entry(taiKhoan).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", taiKhoan.MaNhanVien);
-            ViewBag.MaQuyen = new SelectList(db.PhanQuyens.Where(a => a.MaQuyen != 3), "MaQuyen", "TenQuyen", taiKhoan.MaQuyen);
-            return View(taiKhoan);
-            //}catch
-            //{
-            //    this.AddNotification("Vui lòng nhập đủ thông tin...", NotificationType.ERROR);
-            //    ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", taiKhoan.MaNhanVien);
-            //    ViewBag.MaQuyen = new SelectList(db.PhanQuyens.Where(a => a.MaQuyen != 3), "MaQuyen", "TenQuyen", taiKhoan.MaQuyen);
-            //    return View(taiKhoan);
-            //}
+            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", taiKhoanViewModel.MaNhanVien);
+            ViewBag.MaQuyen = new SelectList(db.PhanQuyens.Where(a => a.MaQuyen != 3), "MaQuyen", "TenQuyen", taiKhoanViewModel.MaQuyen);
+            return View(taiKhoanViewModel);
         }
 
         protected override void Dispose(bool disposing)

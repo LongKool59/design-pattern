@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 using PagedList;
 using PagedList.Mvc;
 using WebApplication1.Extensions;
@@ -22,6 +23,7 @@ namespace WebApplication1.Controllers
         {
             IQueryable<Ct_Phat> ct_P;
             QLNhanSuEntities db = new QLNhanSuEntities();
+            List<Ct_PhatViewModel> ct_PhatViewModels;
             if(submit != null)
             {
                 if(submit == "timKiem")
@@ -36,12 +38,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "TenNhanVien")
@@ -50,12 +54,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.HoTen.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "PhongBan")
@@ -64,18 +70,21 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else
                             {
                                 ct_P = db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                             }
                         }
                         else if (trangThai == "HoatDong")
@@ -86,13 +95,15 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
 
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "TenNhanVien")
@@ -101,12 +112,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.HoTen.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "PhongBan")
@@ -115,19 +128,22 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else
                             {
 
                                 ct_P = db.Ct_Phat.Where(x => x.TrangThai == true).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
 
                             }
                         }
@@ -139,12 +155,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "TenNhanVien")
@@ -153,12 +171,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.HoTen.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "PhongBan")
@@ -167,30 +187,36 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else
                             {
                                 ct_P = db.Ct_Phat.Where(x => x.TrangThai != true).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                             }
                         }
                         else
                         {
                             ct_P = db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen).OrderBy(x => x.NhanVien.HoTen);
-                            return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                            ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                            return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                         }
                     }
                     catch
                     {
                         this.AddNotification("Không tìm thấy từ khóa yêu cầu. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
-                        return View("Index", db.Ct_Phat.OrderBy(x => x.NhanVien.HoTen).ToList().ToPagedList(page ?? 1, 10));
+                        ct_P = db.Ct_Phat.OrderBy(x => x.NhanVien.HoTen);
+                        ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                        return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                     }
                 }
                 else
@@ -205,12 +231,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "TenNhanVien")
@@ -219,12 +247,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.HoTen.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "PhongBan")
@@ -233,18 +263,21 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else
                             {
                                 ct_P = db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                             }
                         }
                         else if (trangThai == "HoatDong")
@@ -255,13 +288,15 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
 
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "TenNhanVien")
@@ -270,12 +305,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.HoTen.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "PhongBan")
@@ -284,19 +321,22 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai == true && x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else
                             {
 
                                 ct_P = db.Ct_Phat.Where(x => x.TrangThai == true).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
 
                             }
                         }
@@ -308,12 +348,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "TenNhanVien")
@@ -322,12 +364,14 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.HoTen.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else if (loaiTimKiem == "PhongBan")
@@ -336,72 +380,46 @@ namespace WebApplication1.Controllers
                                 {
                                     this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                                 else
                                 {
                                     ct_P = db.Ct_Phat.Where(x => x.TrangThai != true && x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                    return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                    ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                    return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                                 }
                             }
                             else
                             {
                                 ct_P = db.Ct_Phat.Where(x => x.TrangThai != true).Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
-                                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                             }
                         }
                         else
                         {
                             ct_P = db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgayPhat);
-                            return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                            ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                            return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                         }
                     }
                     catch
                     {
                         this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
-                        return View("Index", db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua).ToList().ToPagedList(page ?? 1, 10));
+                        ct_P = db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderByDescending(x => x.NgaySua);
+                        ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                        return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
                     }
                 }
             }
             else
             {
                 ct_P = db.Ct_Phat.Include(c => c.NhanVien).Include(c => c.LoaiPhat).OrderBy(x => x.NhanVien.HoTen);
-                return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
+                ct_PhatViewModels = ct_P.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+                return View("Index", ct_PhatViewModels.ToPagedList(page ?? 1, 10));
             }
         }
-
-        //public ActionResult Search(string loaiTimKiem, string tenTimKiem, int? page)
-        //{
-        //    try
-        //    {
-        //        IQueryable<Ct_Phat> ct_P;
-        //        QLNhanSuEntities db = new QLNhanSuEntities();
-        //        if (loaiTimKiem == "MaNhanVien")
-        //        {
-
-        //            int tenTimKiem_int;
-        //            int.TryParse(tenTimKiem, out tenTimKiem_int);
-        //            ct_P = db.Ct_Phat.Where(x => x.NhanVien.MaNhanVien.ToString().StartsWith(tenTimKiem) || tenTimKiem == null).Include(c => c.NhanVien).Include(c => c.LoaiPhat);
-        //            return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
-        //        }
-        //        else if (loaiTimKiem == "TenNhanVien")
-        //        {
-
-        //            ct_P = db.Ct_Phat.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem) || tenTimKiem == null).Include(c => c.NhanVien).Include(c => c.LoaiPhat);
-        //            return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
-        //        }
-        //        else
-        //        {
-        //            ct_P = db.Ct_Phat.Where(x => x.NhanVien.PhongBan.TenPB.Contains(tenTimKiem) || tenTimKiem == null).Include(c => c.NhanVien).Include(c => c.LoaiPhat);
-        //            return View("Index", ct_P.ToList().ToPagedList(page ?? 1, 10));
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
-        //        return View("Index", db.Ct_Phat.OrderBy(x => x.NhanVien.HoTen).ToList().ToPagedList(page ?? 1, 10));
-        //    }
-        //}
 
         // GET: Ct_Phat/Details/5
         public ActionResult Details(int? id)
@@ -415,34 +433,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(ct_Phat);
-        }
-
-        // GET: Ct_Phat/Create
-        public ActionResult Create()
-        {
-            ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats, "MaLoaiPhat", "TenLoaiPhat");
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen");
-            return View();
-        }
-
-        // POST: Ct_Phat/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaCTPhat,MaNhanVien,MaLoaiPhat,TrangThai,NguoiSua,NgaySua,NguoiPhat,NgayPhat")] Ct_Phat ct_Phat)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Ct_Phat.Add(ct_Phat);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats, "MaLoaiPhat", "TenLoaiPhat", ct_Phat.MaLoaiPhat);
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", ct_Phat.MaNhanVien);
-            return View(ct_Phat);
+            Ct_PhatViewModel ct_PhatViewModel = ct_Phat;
+            return View(ct_PhatViewModel);
         }
 
         // GET: Ct_Phat/Edit/5
@@ -459,7 +451,8 @@ namespace WebApplication1.Controllers
             }
             ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats.Where(x => x.TrangThai == true), "MaLoaiPhat", "TenLoaiPhat", ct_Phat.MaLoaiPhat);
             ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", ct_Phat.MaNhanVien);
-            return View(ct_Phat);
+            Ct_PhatViewModel ct_PhatViewModel = ct_Phat;
+            return View(ct_PhatViewModel);
         }
 
         // POST: Ct_Phat/Edit/5
@@ -467,33 +460,34 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaCTPhat,MaNhanVien,MaLoaiPhat,TrangThai,NguoiSua,NgaySua,NguoiPhat,NgayPhat")] Ct_Phat ct_Phat)
+        public ActionResult Edit(Ct_PhatViewModel ct_PhatViewModel)
         {
             if (ModelState.IsValid)
             {
+                Ct_Phat ct_Phat = ct_PhatViewModel;
                 db.Entry(ct_Phat).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats.Where(x => x.TrangThai == true), "MaLoaiPhat", "TenLoaiPhat", ct_Phat.MaLoaiPhat);
-            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", ct_Phat.MaNhanVien);
-            return View(ct_Phat);
+            ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats.Where(x => x.TrangThai == true), "MaLoaiPhat", "TenLoaiPhat", ct_PhatViewModel.MaLoaiPhat);
+            ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", ct_PhatViewModel.MaNhanVien);
+            return View(ct_PhatViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(List<Ct_Phat> ct_Phats)
+        public ActionResult Delete(List<Ct_PhatViewModel> ct_PhatViewModels)
         {
             try
             {
                 db.Configuration.ValidateOnSaveEnabled = false;
-                var checkIsChecked = ct_Phats.Where(x => x.IsChecked == true).FirstOrDefault();
+                var checkIsChecked = ct_PhatViewModels.Where(x => x.IsChecked == true).FirstOrDefault();
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn chi tiết phạt để xóa!", NotificationType.ERROR);
                     return RedirectToAction("Index");
                 }
-                foreach (var item in ct_Phats)
+                foreach (var item in ct_PhatViewModels)
                 {
                     if (item.IsChecked == true)
                     {

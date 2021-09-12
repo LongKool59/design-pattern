@@ -22,19 +22,12 @@ namespace WebApplication1.Models
             this.Ct_Thuong = new HashSet<Ct_Thuong>();
         }
 
-        [DisplayName("Mã loại thưởng")]
         public int MaLoaiThuong { get; set; }
-        [DisplayName("Tên loại thưởng")]
         public string TenLoaiThuong { get; set; }
-        [DisplayName("Giá trị")]
         public int GiaTri { get; set; }
-        [DisplayName("Trạng thái")]
         public bool TrangThai { get; set; }
-        [DisplayName("Người sửa")]
         public string NguoiSua { get; set; }
-        [DisplayName("Ngày sửa")]
         public System.DateTime NgaySua { get; set; }
-        public bool IsChecked { get; set; }
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

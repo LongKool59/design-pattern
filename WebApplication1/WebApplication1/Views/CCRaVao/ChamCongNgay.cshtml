@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 @using WebApplication1.Models;
 
-@model IPagedList<WebApplication1.Models.ChamCong>
+@model IPagedList<WebApplication1.Models.ViewModel.ChamCongViewModel>
 @{
     ViewBag.Title = "ChamCongNgay";
     if (Convert.ToInt32(Session["MaQuyen"]) == 4)

@@ -154,7 +154,6 @@
     <Compile Include="Controllers\ChucVuController.cs" />
     <Compile Include="Controllers\Ct_PhatController.cs" />
     <Compile Include="Controllers\Ct_ThuongController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoaiPhatController.cs" />
     <Compile Include="Controllers\LoaiThuongController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -231,7 +230,18 @@
     <Compile Include="Models\TaiKhoan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\ChamCongViewModel.cs" />
     <Compile Include="Models\ViewModel\ChucVuViewModel.cs" />
+    <Compile Include="Models\ViewModel\Ct_PhatViewModel.cs" />
+    <Compile Include="Models\ViewModel\Ct_ThuongViewModel.cs" />
+    <Compile Include="Models\ViewModel\LoaiPhatViewModel.cs" />
+    <Compile Include="Models\ViewModel\LoaiThuongViewModel.cs" />
+    <Compile Include="Models\ViewModel\LuongCoBanViewModel.cs" />
+    <Compile Include="Models\ViewModel\LuongThangViewModel.cs" />
+    <Compile Include="Models\ViewModel\NghiViewModel.cs" />
+    <Compile Include="Models\ViewModel\NhanVienViewModel.cs" />
+    <Compile Include="Models\ViewModel\PhanQuyenViewModel.cs" />
+    <Compile Include="Models\ViewModel\PhongBanViewModel.cs" />
     <Compile Include="Models\ViewModel\TaiKhoanViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -302,7 +312,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\ListEmployee.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Login\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Notifications.cshtml" />
@@ -314,7 +323,6 @@
     <Content Include="Views\PhanQuyen\Details.cshtml" />
     <Content Include="Views\PhanQuyen\Edit.cshtml" />
     <Content Include="Views\PhanQuyen\Index.cshtml" />
-    <Content Include="Views\TaiKhoan\Create.cshtml" />
     <Content Include="Views\TaiKhoan\Details.cshtml" />
     <Content Include="Views\TaiKhoan\Edit.cshtml" />
     <Content Include="Views\TaiKhoan\Index.cshtml" />
@@ -330,7 +338,6 @@
     <Content Include="Views\LoaiThuong\Details.cshtml" />
     <Content Include="Views\LoaiThuong\Edit.cshtml" />
     <Content Include="Views\LoaiThuong\Index.cshtml" />
-    <Content Include="Views\Ct_Thuong\Create.cshtml" />
     <Content Include="Views\Ct_Thuong\Details.cshtml" />
     <Content Include="Views\Ct_Thuong\Edit.cshtml" />
     <Content Include="Views\Ct_Thuong\Index.cshtml" />
@@ -338,7 +345,6 @@
     <Content Include="Views\LoaiPhat\Details.cshtml" />
     <Content Include="Views\LoaiPhat\Edit.cshtml" />
     <Content Include="Views\LoaiPhat\Index.cshtml" />
-    <Content Include="Views\Ct_Phat\Create.cshtml" />
     <Content Include="Views\Ct_Phat\Details.cshtml" />
     <Content Include="Views\Ct_Phat\Edit.cshtml" />
     <Content Include="Views\Ct_Phat\Index.cshtml" />
@@ -351,8 +357,6 @@
     <Content Include="Views\ThongTin\ThongTinTaiKhoan.cshtml" />
     <Content Include="Views\ThongTin\DoiMatKhau.cshtml" />
     <Content Include="Views\ThongTin\XemThongTinCaNhan.cshtml" />
-    <Content Include="Views\Nghi\Create.cshtml" />
-    <Content Include="Views\Nghi\Delete.cshtml" />
     <Content Include="Views\Nghi\Details.cshtml" />
     <Content Include="Views\Nghi\Edit.cshtml" />
     <Content Include="Views\Nghi\Index.cshtml" />

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -24,6 +25,7 @@ namespace WebApplication1.Controllers
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             IQueryable<PhongBan> phongBans;
+            List<PhongBanViewModel> phongBanViewModels;
             try
             {
                 if (loaiTimKiem == "MaPhongBan")
@@ -33,7 +35,8 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã phòng ban!", NotificationType.WARNING);
                     }
                     phongBans = db.PhongBans.Where(x => x.MaPB.ToString().Contains(tenTimKiem.ToString()) && x.MaPB != 12).OrderBy(x => x.TenPB);
-                    return View("Index", phongBans.ToList().ToPagedList(pageNumber, pageSize));
+                    phongBanViewModels = phongBans.ToList().ConvertAll<PhongBanViewModel>(x => x);
+                    return View("Index", phongBanViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else if (loaiTimKiem == "TenPhongBan")
                 {
@@ -42,33 +45,36 @@ namespace WebApplication1.Controllers
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên phòng ban!", NotificationType.WARNING);
                     }
                     phongBans = db.PhongBans.Where(x => x.TenPB.Contains(tenTimKiem.ToString()) && x.MaPB != 12).OrderBy(x => x.TenPB);
-                    return View("Index", phongBans.ToList().ToPagedList(pageNumber, pageSize));
+                    phongBanViewModels = phongBans.ToList().ConvertAll<PhongBanViewModel>(x => x);
+                    return View("Index", phongBanViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 phongBans = db.PhongBans.Where(x => x.MaPB != 12).OrderBy(x => x.TenPB);
-                return View("Index", phongBans.ToList().ToPagedList(pageNumber, pageSize));
+                phongBanViewModels = phongBans.ToList().ConvertAll<PhongBanViewModel>(x => x);
+                return View("Index", phongBanViewModels.ToPagedList(pageNumber, pageSize));
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
                 phongBans = db.PhongBans.Where(x => x.TenPB.Contains("+-*/*-+-*/+") && x.MaPB != 12).OrderBy(x => x.TenPB);
-                return View("Index", phongBans.ToList().ToPagedList(pageNumber, pageSize));
+                phongBanViewModels = phongBans.ToList().ConvertAll<PhongBanViewModel>(x => x);
+                return View("Index", phongBanViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(List<PhongBan> phongBans)
+        public ActionResult Delete(List<PhongBanViewModel> phongBanViewModels)
         {
             try
             {
                 db.Configuration.ValidateOnSaveEnabled = false;
-                var checkIsChecked = phongBans.Where(x => x.IsChecked == true);
+                var checkIsChecked = phongBanViewModels.Where(x => x.IsChecked == true);
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn phòng ban để xóa!", NotificationType.ERROR);
                     return RedirectToAction("Index");
                 }
-                foreach (var item in phongBans)
+                foreach (var item in phongBanViewModels)
                 {
                     if (item.IsChecked == true)
                     {
@@ -102,7 +108,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(phongBan);
+            PhongBanViewModel phongBanViewModel = phongBan;
+            return View(phongBanViewModel);
         }
 
         // GET: PhongBan/Create
@@ -116,16 +123,18 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MaPB,TenPB,SoDT,NguoiSua,NgaySua")] PhongBan phongBan)
+        public ActionResult Create(PhongBanViewModel phongBanViewModel)
         {
+            PhongBan phongBan;
             if (ModelState.IsValid)
             {
+                phongBan = phongBanViewModel;
                 db.PhongBans.Add(phongBan);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(phongBan);
+            return View(phongBanViewModel);
         }
 
         // GET: PhongBan/Edit/5
@@ -140,7 +149,8 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(phongBan);
+            PhongBanViewModel phongBanViewModel = phongBan;
+            return View(phongBanViewModel);
         }
 
         // POST: PhongBan/Edit/5
@@ -148,15 +158,17 @@ namespace WebApplication1.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MaPB,TenPB,SoDT,NguoiSua,NgaySua")] PhongBan phongBan)
+        public ActionResult Edit(PhongBanViewModel phongBanViewModel)
         {
+            PhongBan phongBan;
             if (ModelState.IsValid)
             {
+                phongBan = phongBanViewModel;
                 db.Entry(phongBan).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(phongBan);
+            return View(phongBanViewModel);
         }
 
        
