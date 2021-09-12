@@ -12,12 +12,9 @@ namespace WebApplication1.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.IO;
-
+    
     public partial class QLNhanSuEntities : DbContext
     {
-        internal TextWriter Log;
-
         public QLNhanSuEntities()
             : base("name=QLNhanSuEntities")
         {
@@ -40,7 +37,6 @@ namespace WebApplication1.Models
         public virtual DbSet<NhanVien> NhanViens { get; set; }
         public virtual DbSet<PhanQuyen> PhanQuyens { get; set; }
         public virtual DbSet<PhongBan> PhongBans { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
     }
 }

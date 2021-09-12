@@ -172,16 +172,6 @@
     <Property Name="NgaySua" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="NhanViens" Relationship="Self.FK_NhanVien_PhongBan" FromRole="PhongBan" ToRole="NhanVien" />
   </EntityType>
-  <EntityType Name="sysdiagram">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="principal_id" Type="Int32" Nullable="false" />
-    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="Int32" />
-    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-  </EntityType>
   <EntityType Name="TaiKhoan">
     <Key>
       <PropertyRef Name="MaNhanVien" />
@@ -351,7 +341,6 @@
     <EntitySet Name="NhanViens" EntityType="Self.NhanVien" />
     <EntitySet Name="PhanQuyens" EntityType="Self.PhanQuyen" />
     <EntitySet Name="PhongBans" EntityType="Self.PhongBan" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
     <EntitySet Name="TaiKhoans" EntityType="Self.TaiKhoan" />
     <AssociationSet Name="FK_ChamCong_NhanVien" Association="Self.FK_ChamCong_NhanVien">
       <End Role="NhanVien" EntitySet="NhanViens" />
