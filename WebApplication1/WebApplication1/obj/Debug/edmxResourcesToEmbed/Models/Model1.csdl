@@ -390,5 +390,15 @@
       <End Role="PhanQuyen" EntitySet="PhanQuyens" />
       <End Role="TaiKhoan" EntitySet="TaiKhoans" />
     </AssociationSet>
+    <EntitySet Name="QuyDinhThoiGians" EntityType="QLNhanSuModel.QuyDinhThoiGian" />
   </EntityContainer>
+  <EntityType Name="QuyDinhThoiGian">
+    <Key>
+      <PropertyRef Name="MaQuyDinh" />
+    </Key>
+    <Property Name="MaQuyDinh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenQuyDinh" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="GiaTri" Type="Time" Nullable="false" Precision="1" />
+    <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

@@ -172,5 +172,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="QuyDinhThoiGians">
+      <EntityTypeMapping TypeName="QLNhanSuModel.QuyDinhThoiGian">
+        <MappingFragment StoreEntitySet="QuyDinhThoiGian">
+          <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+          <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
+          <ScalarProperty Name="TenQuyDinh" ColumnName="TenQuyDinh" />
+          <ScalarProperty Name="MaQuyDinh" ColumnName="MaQuyDinh" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

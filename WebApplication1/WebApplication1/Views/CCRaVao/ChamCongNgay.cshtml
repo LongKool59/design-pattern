@@ -135,7 +135,7 @@
                         checkInTime = Model[i].ThoiGianVao;
                     }
                 }
-                TimeSpan thoiGianKhongChoVao = DateTime.Parse("10:00 AM").TimeOfDay;
+                
                 <td>
                     @*Nếu chưa check in thì mới hiện button check in*@
                     @if (checkInTime == null)
@@ -143,11 +143,9 @@
                         DateTime dayOfW = DateTime.Today;
                         if (dayOfW.DayOfWeek != DayOfWeek.Saturday && dayOfW.DayOfWeek != DayOfWeek.Sunday)
                         {
-                            //trước 10h sáng mới hiện button check in.
-                            if (DateTime.Now.TimeOfDay < thoiGianKhongChoVao)
-                            {
-                                <button class="btn btn-check-in" type="submit">Check in</button>
-                            }
+                           
+                             <button class="btn btn-check-in" type="submit">Check in</button>
+                            
                         }
                     }
                 </td>
@@ -156,11 +154,6 @@
                 <td>
                     <p id="checkInTime">
                         @{
-                            @*if (checkInTime != DateTime.Now.TimeOfDay)
-                                {
-                                    checkInTime.ToString();
-                                }*@
-
                             foreach (var item in db.ChamCongs)
                             {
                                 if (item.MaNhanVien.ToString().Equals(maNhanVien) && item.Ngay == DateTime.Today)
@@ -197,7 +190,7 @@
                     {
                         if (checkInTime != null)
                         {
-                            <button class="btn btn-check-out">Check out</button>
+                            <button class="btn btn-check-out" onclick="return confirm('Bạn chắc chắn muốn check out chứ?')">Check out</button>
                         }
                     }
                 </td>

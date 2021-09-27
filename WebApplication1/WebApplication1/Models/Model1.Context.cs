@@ -38,5 +38,6 @@ namespace WebApplication1.Models
         public virtual DbSet<PhanQuyen> PhanQuyens { get; set; }
         public virtual DbSet<PhongBan> PhongBans { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
+        public virtual DbSet<QuyDinhThoiGian> QuyDinhThoiGians { get; set; }
     }
 }

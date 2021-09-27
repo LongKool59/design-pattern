@@ -11,7 +11,6 @@ namespace WebApplication1.Models.ViewModel
     public partial class ChucVuViewModel
     {
         private QLNhanSuEntities db = new QLNhanSuEntities();
-        /* [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]*/
         public ChucVuViewModel()
         {
             this.NhanViens = new HashSet<NhanVien>();

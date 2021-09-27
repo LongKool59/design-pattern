@@ -52,5 +52,6 @@ namespace WebApplication1.Models.ViewModel
         }
 
         public virtual NhanVien NhanVien { get; set; }
+        public virtual NhanVienViewModel NhanVienViewModel { get; set; }
     }
 }
