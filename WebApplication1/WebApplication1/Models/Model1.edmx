@@ -56,6 +56,18 @@
           <Property Name="NguoiSua" Type="nvarchar" MaxLength="500" />
           <Property Name="NgaySua" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="DonNghiPhep">
+          <Key>
+            <PropertyRef Name="MaDonNghiPhep" />
+          </Key>
+          <Property Name="MaDonNghiPhep" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaNhanVien" Type="int" Nullable="false" />
+          <Property Name="NgayNghi" Type="date" Nullable="false" />
+          <Property Name="CaNghi" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="LyDo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+          <Property Name="NguoiDuyet" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="LoaiPhat">
           <Key>
             <PropertyRef Name="MaLoaiPhat" />
@@ -234,6 +246,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DonNghiPhep_NhanVien">
+          <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="1" />
+          <End Role="DonNghiPhep" Type="Self.DonNghiPhep" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="DonNghiPhep">
+              <PropertyRef Name="MaNhanVien" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_LuongCoBan_LuongCoBan">
           <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="1" />
           <End Role="LuongCoBan" Type="Self.LuongCoBan" Multiplicity="*" />
@@ -323,6 +347,7 @@
           <EntitySet Name="ChucVu" EntityType="Self.ChucVu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ct_Phat" EntityType="Self.Ct_Phat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ct_Thuong" EntityType="Self.Ct_Thuong" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DonNghiPhep" EntityType="Self.DonNghiPhep" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiPhat" EntityType="Self.LoaiPhat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiThuong" EntityType="Self.LoaiThuong" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LuongCoBan" EntityType="Self.LuongCoBan" Schema="dbo" store:Type="Tables" />
@@ -352,6 +377,10 @@
           <AssociationSet Name="FK_Ct_Thuong_Thuong" Association="Self.FK_Ct_Thuong_Thuong">
             <End Role="LoaiThuong" EntitySet="LoaiThuong" />
             <End Role="Ct_Thuong" EntitySet="Ct_Thuong" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DonNghiPhep_NhanVien" Association="Self.FK_DonNghiPhep_NhanVien">
+            <End Role="NhanVien" EntitySet="NhanVien" />
+            <End Role="DonNghiPhep" EntitySet="DonNghiPhep" />
           </AssociationSet>
           <AssociationSet Name="FK_LuongCoBan_LuongCoBan" Association="Self.FK_LuongCoBan_LuongCoBan">
             <End Role="NhanVien" EntitySet="NhanVien" />
@@ -537,6 +566,7 @@
           <NavigationProperty Name="Nghis" Relationship="Self.FK_Nghi_NhanVien" FromRole="NhanVien" ToRole="Nghi" />
           <NavigationProperty Name="PhongBan" Relationship="Self.FK_NhanVien_PhongBan" FromRole="NhanVien" ToRole="PhongBan" />
           <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_TaiKhoan_NhanVien" FromRole="NhanVien" ToRole="TaiKhoan" />
+          <NavigationProperty Name="DonNghiPheps" Relationship="QLNhanSuModel.FK_DonNghiPhep_NhanVien" FromRole="NhanVien" ToRole="DonNghiPhep" />
         </EntityType>
         <EntityType Name="PhanQuyen">
           <Key>
@@ -777,6 +807,11 @@
             <End Role="TaiKhoan" EntitySet="TaiKhoans" />
           </AssociationSet>
           <EntitySet Name="QuyDinhThoiGians" EntityType="QLNhanSuModel.QuyDinhThoiGian" />
+          <EntitySet Name="DonNghiPheps" EntityType="QLNhanSuModel.DonNghiPhep" />
+          <AssociationSet Name="FK_DonNghiPhep_NhanVien" Association="QLNhanSuModel.FK_DonNghiPhep_NhanVien">
+            <End Role="NhanVien" EntitySet="NhanViens" />
+            <End Role="DonNghiPhep" EntitySet="DonNghiPheps" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="QuyDinhThoiGian">
           <Key>
@@ -787,6 +822,31 @@
           <Property Name="GiaTri" Type="Time" Nullable="false" Precision="1" />
           <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="DonNghiPhep">
+          <Key>
+            <PropertyRef Name="MaDonNghiPhep" />
+          </Key>
+          <Property Name="MaDonNghiPhep" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaNhanVien" Type="Int32" Nullable="false" />
+          <Property Name="NgayNghi" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CaNghi" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LyDo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+          <Property Name="NguoiDuyet" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NhanVien" Relationship="QLNhanSuModel.FK_DonNghiPhep_NhanVien" FromRole="DonNghiPhep" ToRole="NhanVien" />
+        </EntityType>
+        <Association Name="FK_DonNghiPhep_NhanVien">
+          <End Type="QLNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+          <End Type="QLNhanSuModel.DonNghiPhep" Role="DonNghiPhep" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhanVien">
+              <PropertyRef Name="MaNhanVien" />
+            </Principal>
+            <Dependent Role="DonNghiPhep">
+              <PropertyRef Name="MaNhanVien" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -971,6 +1031,19 @@
                 <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
                 <ScalarProperty Name="TenQuyDinh" ColumnName="TenQuyDinh" />
                 <ScalarProperty Name="MaQuyDinh" ColumnName="MaQuyDinh" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonNghiPheps">
+            <EntityTypeMapping TypeName="QLNhanSuModel.DonNghiPhep">
+              <MappingFragment StoreEntitySet="DonNghiPhep">
+                <ScalarProperty Name="NguoiDuyet" ColumnName="NguoiDuyet" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="LyDo" ColumnName="LyDo" />
+                <ScalarProperty Name="CaNghi" ColumnName="CaNghi" />
+                <ScalarProperty Name="NgayNghi" ColumnName="NgayNghi" />
+                <ScalarProperty Name="MaNhanVien" ColumnName="MaNhanVien" />
+                <ScalarProperty Name="MaDonNghiPhep" ColumnName="MaDonNghiPhep" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

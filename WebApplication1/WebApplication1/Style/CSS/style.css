@@ -381,3 +381,13 @@ có chiều rộng dưới 600px */
     background-color: #ff3685;
     color: black;
 }
+
+.truncated-box {
+    width: 200px;
+    margin: 0 auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -154,6 +154,7 @@
     <Compile Include="Controllers\ChucVuController.cs" />
     <Compile Include="Controllers\Ct_PhatController.cs" />
     <Compile Include="Controllers\Ct_ThuongController.cs" />
+    <Compile Include="Controllers\DuyetDonNghiController.cs" />
     <Compile Include="Controllers\LoaiPhatController.cs" />
     <Compile Include="Controllers\LoaiThuongController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\ThongKeLuongController.cs" />
     <Compile Include="Controllers\ThongTinController.cs" />
+    <Compile Include="Controllers\XinNghiPhepController.cs" />
     <Compile Include="Extensions\NotificationExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -183,6 +185,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Ct_Thuong.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DonNghiPhep.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoaiPhat.cs">
@@ -235,6 +240,7 @@
     <Compile Include="Models\ViewModel\ChucVuViewModel.cs" />
     <Compile Include="Models\ViewModel\Ct_PhatViewModel.cs" />
     <Compile Include="Models\ViewModel\Ct_ThuongViewModel.cs" />
+    <Compile Include="Models\ViewModel\DonNghiPhepViewModel.cs" />
     <Compile Include="Models\ViewModel\LoaiPhatViewModel.cs" />
     <Compile Include="Models\ViewModel\LoaiThuongViewModel.cs" />
     <Compile Include="Models\ViewModel\LuongCoBanViewModel.cs" />
@@ -381,6 +387,15 @@
     <Content Include="Views\QuyDinhTG\Details.cshtml" />
     <Content Include="Views\QuyDinhTG\Edit.cshtml" />
     <Content Include="Views\QuyDinhTG\Index.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Create.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Delete.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Details.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Edit.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Index.cshtml" />
+    <Content Include="Views\XinNghiPhep\Create.cshtml" />
+    <Content Include="Views\XinNghiPhep\Details.cshtml" />
+    <Content Include="Views\XinNghiPhep\Edit.cshtml" />
+    <Content Include="Views\XinNghiPhep\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />

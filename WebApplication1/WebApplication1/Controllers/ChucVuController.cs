@@ -156,10 +156,11 @@ namespace WebApplication1.Controllers
                         if (chucVu != null)
                         {
                             chucVu.TrangThai = false;
-                            db.SaveChanges();
+                           
                         }
                     }
                 }
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }

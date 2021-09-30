@@ -51,6 +51,18 @@
     <Property Name="NguoiSua" Type="nvarchar" MaxLength="500" />
     <Property Name="NgaySua" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="DonNghiPhep">
+    <Key>
+      <PropertyRef Name="MaDonNghiPhep" />
+    </Key>
+    <Property Name="MaDonNghiPhep" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaNhanVien" Type="int" Nullable="false" />
+    <Property Name="NgayNghi" Type="date" Nullable="false" />
+    <Property Name="CaNghi" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="LyDo" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TrangThai" Type="bit" Nullable="false" />
+    <Property Name="NguoiDuyet" Type="nvarchar" MaxLength="500" />
+  </EntityType>
   <EntityType Name="LoaiPhat">
     <Key>
       <PropertyRef Name="MaLoaiPhat" />
@@ -229,6 +241,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DonNghiPhep_NhanVien">
+    <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="1" />
+    <End Role="DonNghiPhep" Type="Self.DonNghiPhep" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="MaNhanVien" />
+      </Principal>
+      <Dependent Role="DonNghiPhep">
+        <PropertyRef Name="MaNhanVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_LuongCoBan_LuongCoBan">
     <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="1" />
     <End Role="LuongCoBan" Type="Self.LuongCoBan" Multiplicity="*" />
@@ -318,6 +342,7 @@
     <EntitySet Name="ChucVu" EntityType="Self.ChucVu" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ct_Phat" EntityType="Self.Ct_Phat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ct_Thuong" EntityType="Self.Ct_Thuong" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DonNghiPhep" EntityType="Self.DonNghiPhep" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoaiPhat" EntityType="Self.LoaiPhat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LoaiThuong" EntityType="Self.LoaiThuong" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LuongCoBan" EntityType="Self.LuongCoBan" Schema="dbo" store:Type="Tables" />
@@ -347,6 +372,10 @@
     <AssociationSet Name="FK_Ct_Thuong_Thuong" Association="Self.FK_Ct_Thuong_Thuong">
       <End Role="LoaiThuong" EntitySet="LoaiThuong" />
       <End Role="Ct_Thuong" EntitySet="Ct_Thuong" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DonNghiPhep_NhanVien" Association="Self.FK_DonNghiPhep_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanVien" />
+      <End Role="DonNghiPhep" EntitySet="DonNghiPhep" />
     </AssociationSet>
     <AssociationSet Name="FK_LuongCoBan_LuongCoBan" Association="Self.FK_LuongCoBan_LuongCoBan">
       <End Role="NhanVien" EntitySet="NhanVien" />

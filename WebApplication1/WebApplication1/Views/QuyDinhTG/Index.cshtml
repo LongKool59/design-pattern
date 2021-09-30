@@ -8,17 +8,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .truncated-box {
-        width: 200px;
-        margin: 0 auto;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>
 <div class="list-employee">
     <h1>QUY ĐỊNH THỜI GIAN</h1>
 
@@ -79,13 +68,11 @@
                 <td>
                     <div class="truncated-box">
 
-                    @Html.DisplayFor(modelItem => item.GhiChu)
+                        @Html.DisplayFor(modelItem => item.GhiChu)
                     </div>
                 </td>
                 <td>
-                    @*@Html.ActionLink("Edit", "Edit", new { id = item.MaQuyDinh }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.MaQuyDinh }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.MaQuyDinh })*@
+
                     <a href='@Url.Action("Details","QuyDinhTG", new { id = item.MaQuyDinh })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
                     <a href='@Url.Action("Edit","QuyDinhTG", new { id = item.MaQuyDinh })' class="btn-edit" style="color:black"><i class="fas fa-pen-alt"></i></a>
 

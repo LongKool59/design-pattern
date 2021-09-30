@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +17,7 @@ namespace WebApplication1.Models.ViewModel
         [DisplayName("Mã loại phạt")]
         public int MaLoaiPhat { get; set; }
         [DisplayName("Tên loại phạt")]
+        [Required(ErrorMessage = "Tên loại phạt không được trống...")]
         public string TenLoaiPhat { get; set; }
         [DisplayName("Giá trị")]
         public int GiaTri { get; set; }

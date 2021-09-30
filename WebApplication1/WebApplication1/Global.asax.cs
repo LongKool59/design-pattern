@@ -22,26 +22,26 @@ namespace WebApplication1
             DateTime dayOfW = DateTime.Today;
             JobManager.Initialize(new MyRegistry());
             QLNhanSuEntities ql = new QLNhanSuEntities();
-            if(dayOfW.DayOfWeek != DayOfWeek.Saturday && dayOfW.DayOfWeek != DayOfWeek.Sunday)
-            {
-                var chamcong = ql.ChamCongs.Where(s => s.Ngay == B.Date).FirstOrDefault();
-                if (chamcong == null)
-                {
-                    var nhanvien = ql.NhanViens.Where(s => s.TrangThai == true && s.MaNhanVien != 1001);
-                    foreach (var nv in nhanvien)
-                    {
-                        //ChamCong cham = new ChamCong();
-                        //cham.MaNhanVien = nv.MaNhanVien;
-                        //cham.Ngay = B;
-                        //ql.ChamCongs.Add(cham);
-                        ChamCong cham = new ChamCong();
-                        cham.MaNhanVien = nv.MaNhanVien;
-                        cham.Ngay = B;
-                        ql.ChamCongs.Add(cham);
-                    }
-                    ql.SaveChanges();
-                }
-            }
+            //if(dayOfW.DayOfWeek != DayOfWeek.Saturday && dayOfW.DayOfWeek != DayOfWeek.Sunday)
+            //{
+            //    var chamcong = ql.ChamCongs.Where(s => s.Ngay == B.Date).FirstOrDefault();
+            //    if (chamcong == null)
+            //    {
+            //        var nhanvien = ql.NhanViens.Where(s => s.TrangThai == true && s.MaNhanVien != 1001);
+            //        foreach (var nv in nhanvien)
+            //        {
+            //            //ChamCong cham = new ChamCong();
+            //            //cham.MaNhanVien = nv.MaNhanVien;
+            //            //cham.Ngay = B;
+            //            //ql.ChamCongs.Add(cham);
+            //            ChamCong cham = new ChamCong();
+            //            cham.MaNhanVien = nv.MaNhanVien;
+            //            cham.Ngay = B;
+            //            ql.ChamCongs.Add(cham);
+            //        }
+            //        ql.SaveChanges();
+            //    }
+            //}
             
 
             int month, year;

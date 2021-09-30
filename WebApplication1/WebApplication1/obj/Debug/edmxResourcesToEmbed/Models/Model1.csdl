@@ -151,6 +151,7 @@
     <NavigationProperty Name="Nghis" Relationship="Self.FK_Nghi_NhanVien" FromRole="NhanVien" ToRole="Nghi" />
     <NavigationProperty Name="PhongBan" Relationship="Self.FK_NhanVien_PhongBan" FromRole="NhanVien" ToRole="PhongBan" />
     <NavigationProperty Name="TaiKhoan" Relationship="Self.FK_TaiKhoan_NhanVien" FromRole="NhanVien" ToRole="TaiKhoan" />
+    <NavigationProperty Name="DonNghiPheps" Relationship="QLNhanSuModel.FK_DonNghiPhep_NhanVien" FromRole="NhanVien" ToRole="DonNghiPhep" />
   </EntityType>
   <EntityType Name="PhanQuyen">
     <Key>
@@ -391,6 +392,11 @@
       <End Role="TaiKhoan" EntitySet="TaiKhoans" />
     </AssociationSet>
     <EntitySet Name="QuyDinhThoiGians" EntityType="QLNhanSuModel.QuyDinhThoiGian" />
+    <EntitySet Name="DonNghiPheps" EntityType="QLNhanSuModel.DonNghiPhep" />
+    <AssociationSet Name="FK_DonNghiPhep_NhanVien" Association="QLNhanSuModel.FK_DonNghiPhep_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanViens" />
+      <End Role="DonNghiPhep" EntitySet="DonNghiPheps" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="QuyDinhThoiGian">
     <Key>
@@ -401,4 +407,29 @@
     <Property Name="GiaTri" Type="Time" Nullable="false" Precision="1" />
     <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
+  <EntityType Name="DonNghiPhep">
+    <Key>
+      <PropertyRef Name="MaDonNghiPhep" />
+    </Key>
+    <Property Name="MaDonNghiPhep" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaNhanVien" Type="Int32" Nullable="false" />
+    <Property Name="NgayNghi" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="CaNghi" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LyDo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+    <Property Name="NguoiDuyet" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="NhanVien" Relationship="QLNhanSuModel.FK_DonNghiPhep_NhanVien" FromRole="DonNghiPhep" ToRole="NhanVien" />
+  </EntityType>
+  <Association Name="FK_DonNghiPhep_NhanVien">
+    <End Type="QLNhanSuModel.NhanVien" Role="NhanVien" Multiplicity="1" />
+    <End Type="QLNhanSuModel.DonNghiPhep" Role="DonNghiPhep" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="MaNhanVien" />
+      </Principal>
+      <Dependent Role="DonNghiPhep">
+        <PropertyRef Name="MaNhanVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

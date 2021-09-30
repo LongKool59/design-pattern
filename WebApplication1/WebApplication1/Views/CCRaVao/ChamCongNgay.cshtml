@@ -127,18 +127,13 @@
             {
                 QLNhanSuEntities db = new QLNhanSuEntities();
                 var maNhanVien = Session["MaNhanVien"].ToString();
-                TimeSpan? checkInTime = DateTime.Now.TimeOfDay;
-                for (int i = 0; i < Model.Count; i++)
-                {
-                    if (Model[i].MaNhanVien.ToString().Equals(maNhanVien) && Model[i].Ngay == DateTime.Today)
-                    {
-                        checkInTime = Model[i].ThoiGianVao;
-                    }
-                }
-                
+                TimeSpan? checkInTime = null;
+                var ngayHomNay = DateTime.Today;
+                var nhanVienChamCong = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay == ngayHomNay).SingleOrDefault();
+
                 <td>
                     @*Nếu chưa check in thì mới hiện button check in*@
-                    @if (checkInTime == null)
+                    @if (nhanVienChamCong == null)
                     {
                         DateTime dayOfW = DateTime.Today;
                         if (dayOfW.DayOfWeek != DayOfWeek.Saturday && dayOfW.DayOfWeek != DayOfWeek.Sunday)
@@ -154,12 +149,9 @@
                 <td>
                     <p id="checkInTime">
                         @{
-                            foreach (var item in db.ChamCongs)
+                            if(nhanVienChamCong != null)
                             {
-                                if (item.MaNhanVien.ToString().Equals(maNhanVien) && item.Ngay == DateTime.Today)
-                                {
-                                    checkInTime = item.ThoiGianVao;
-                                }
+                                checkInTime = nhanVienChamCong.ThoiGianVao;
                             }
                             string inTime = checkInTime.HasValue ? checkInTime.Value.ToString("hh\\:mm\\:ss") : "";
                         }
@@ -198,12 +190,12 @@
                 <td>
                     <p id="checkOutTime">
                         @{
-                            foreach (var item in db.ChamCongs)
-                            {
-                                if (item.MaNhanVien.ToString().Equals(maNhanVien) && item.Ngay == DateTime.Today)
-                                {
-                                    checkOutTime = item.ThoiGianRa;
-                                }
+                            var ngayHomNay = DateTime.Today;
+                            var nhanVienChamCong = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay == ngayHomNay).SingleOrDefault();
+                            checkOutTime = null;
+                       
+                            if(nhanVienChamCong != null) {
+                                checkOutTime = nhanVienChamCong.ThoiGianRa;
                             }
                             string outTime = checkOutTime.HasValue ? checkOutTime.Value.ToString("hh\\:mm\\:ss") : "";
                         }

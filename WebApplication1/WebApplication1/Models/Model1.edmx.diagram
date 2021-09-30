@@ -31,6 +31,8 @@
         <AssociationConnector Association="QLNhanSuModel.FK_TaiKhoan_NhanVien" ManuallyRouted="false" />
         <AssociationConnector Association="QLNhanSuModel.FK_TaiKhoan_PhanQuyen" ManuallyRouted="false" />
         <EntityTypeShape EntityType="QLNhanSuModel.QuyDinhThoiGian" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="QLNhanSuModel.DonNghiPhep" Width="1.5" PointX="5.25" PointY="25.75" />
+        <AssociationConnector Association="QLNhanSuModel.FK_DonNghiPhep_NhanVien" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
