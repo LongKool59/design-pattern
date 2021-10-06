@@ -16,7 +16,7 @@
             @using (Html.BeginForm("Index", "PhanQuyen", FormMethod.Get))
             {
                 <div class="row">
-                    <a href='@Url.Action("Create", "PhanQuyen")' class="btn add-employee"><i class="fas fa-plus"></i> Thêm quyền</a>
+                    @*<a href='@Url.Action("Create", "PhanQuyen")' class="btn add-employee"><i class="fas fa-plus"></i> Thêm quyền</a>*@
                     <div class="form-check d-flex">
                         <span class="search-title">Tìm kiếm theo : </span>
                         <label class="radio-inline">
@@ -41,7 +41,7 @@
             @Html.AntiForgeryToken()
             <table class="table">
                 <tr class="table-title">
-                    <th><input type="checkbox" id="checkAll" /></th>
+                    @*<th><input type="checkbox" id="checkAll" /></th>*@
                     <th>
                         @*@Html.DisplayNameFor(model => model.MaQuyen)*@<label>Mã quyền</label>
                     </th>
@@ -57,32 +57,35 @@
                 @for (int i = 0; i < Model.Count; i++)
                 {
                     <tr>
-                        <td>@Html.CheckBoxFor(modelItem => Model[i].IsChecked, new { @class = "checkItem" })</td>
+                        @*<td>@Html.CheckBoxFor(modelItem => Model[i].IsChecked, new { @class = "checkItem" })</td>*@
                         <td>
                             @Html.DisplayFor(modelItem => Model[i].MaQuyen)
                             @Html.HiddenFor(modelItem => Model[i].MaQuyen)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => Model[i].TenQuyen)
-                            @Html.HiddenFor(modelItem => Model[i].TenQuyen)
+                            <div class="truncated-box">
+                                @Html.DisplayFor(modelItem => Model[i].TenQuyen)
+                                @Html.HiddenFor(modelItem => Model[i].TenQuyen)
+                            </div>
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => Model[i].GhiChu)
-                            @Html.HiddenFor(modelItem => Model[i].GhiChu)
+                            <div class="truncated-box">
+                                @Html.DisplayFor(modelItem => Model[i].GhiChu)
+                                @Html.HiddenFor(modelItem => Model[i].GhiChu)
+                            </div>
                         </td>
                         <td>
                             @{
-                                if (Model[i].MaQuyen == 1 || Model[i].MaQuyen == 2 || Model[i].MaQuyen == 3 || Model[i].MaQuyen == 4)
-                                {
+                                @*if (Model[i].MaQuyen == 1 || Model[i].MaQuyen == 2 || Model[i].MaQuyen == 3 || Model[i].MaQuyen == 4)
+                                    {
 
-                                    <a href='@Url.Action("Details","PhanQuyen", new { id = Model[i].MaQuyen })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
-                                    @*<input class="btn-detail" type="button" value="Chi tiết" onclick="window.location.href= '@Url.Action("Details", "PhanQuyen", new { id = Model[i].MaQuyen })'" />*@
-                                }
-                                else
-                                {
-                                    <a href='@Url.Action("Details","PhanQuyen", new { id = Model[i].MaQuyen })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
-                                    <a href='@Url.Action("Edit","PhanQuyen", new { id = Model[i].MaQuyen })' class="btn-edit" style="color:black"><i class="fas fa-pen-alt"></i></a>
-                                }
+                                        <a href='@Url.Action("Details","PhanQuyen", new { id = Model[i].MaQuyen })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
+                                    }
+                                    else
+                                    {
+                                    }*@
+                                <a href='@Url.Action("Details","PhanQuyen", new { id = Model[i].MaQuyen })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
+                                <a href='@Url.Action("Edit","PhanQuyen", new { id = Model[i].MaQuyen })' class="btn-edit" style="color:black"><i class="fas fa-pen-alt"></i></a>
                             }
                         </td>
                     </tr>
@@ -98,11 +101,11 @@
 
               })
 
-            <div class="row container button-footer">
-                <div class="left-button">
-                    <button type="submit" class="btn btn-delete_employee mr-2" onclick="return confirm('Bạn chắc chắn xóa chứ?')"><i class="fas fa-user-minus"></i> Xóa quyền</button>
-                </div>
-            </div>
+            @*<div class="row container button-footer">
+                    <div class="left-button">
+                        <button type="submit" class="btn btn-delete_employee mr-2" onclick="return confirm('Bạn chắc chắn xóa chứ?')"><i class="fas fa-user-minus"></i> Xóa quyền</button>
+                    </div>
+                </div>*@
         }
     </div>
 

@@ -149,6 +149,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Builder\ConcreteBuilder\ChucVuViewModelBuilder.cs" />
+    <Compile Include="Builder\ConcreteBuilder\PhongBanBuilder.cs" />
+    <Compile Include="Builder\IBuilder\IChucVuViewModelBuilder.cs" />
+    <Compile Include="Builder\IBuilder\IPhongBanBuilder.cs" />
     <Compile Include="Controllers\CCRaVaoController.cs" />
     <Compile Include="Controllers\ChamCongController.cs" />
     <Compile Include="Controllers\ChucVuController.cs" />
@@ -404,6 +408,7 @@
     <Content Include="Views\QuyDinhKhac\Details.cshtml" />
     <Content Include="Views\QuyDinhKhac\Edit.cshtml" />
     <Content Include="Views\QuyDinhKhac\Index.cshtml" />
+    <Content Include="Views\ThongKeLuong\Details_DSLuongTheoNhanVien.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />

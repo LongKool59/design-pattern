@@ -1,6 +1,6 @@
 ﻿@model WebApplication1.Models.ViewModel.LuongThangViewModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Details_DSLuongTheoNhanVien";
     Layout = "~/Views/Shared/_LayoutTaiChinh.cshtml";
 }
 <style>
@@ -19,7 +19,7 @@
         margin-bottom: 20px;
     }
 
-     .tongluong {
+    .tongluong {
         margin: 0;
         position: absolute;
         top: 50%;
@@ -32,14 +32,14 @@
         color: #ff5902;
         margin-left: 30%;
         margin-top: 5%;
-        font-size:35px
+        font-size: 35px
     }
 
     .td-title {
         text-align: right;
     }
 
-     .bottom-title {
+    .bottom-title {
         height: 75px;
         position: relative;
     }
@@ -49,9 +49,10 @@
     }
 
     .table-ct_luong {
-        font-size:23px;
+        font-size: 23px;
         margin: 0 auto;
     }
+
     .thang-nam-title {
         font-size: 27px;
         text-align: center;
@@ -62,25 +63,26 @@
         background-color: white;
         color: black;
         padding: 0.5rem 1rem;
-        margin-left:9%;
-        border-color:#1200ff
-        
+        margin-left: 9%;
+        border-color: #1200ff
     }
+
     .btn-close {
         background-color: white;
         color: black;
         padding: 0.5rem 1rem;
         border-color: red
     }
+
     .fa-file-download {
         color: #03ff00;
         font-size: 30px
     }
+
     .fa-window-close {
         color: red;
         font-size: 30px
     }
-   
 </style>
 <h1 class="function-page-title">CHI TIẾT LƯƠNG</h1>
 <div class="table-content">
@@ -142,15 +144,17 @@
     <div class="bottom-title">
         <h4 class="tongluong">Tổng lương: @tongLuong VNĐ</h4>
     </div>
+
     @{
         var page = TempData["page"];
         var month = TempData["month"];
         var year = TempData["year"];
-        var MaPB = TempData["MaPB"];
-     }
+        var loaiTimKiem = TempData["loaiTimKiem"];
+        var tenTimKiem = TempData["tenTimKiem"];
+    }
     <div class="footer-function">
-        <a class="btn btn-close" href="/ThongKeLuong/TheoPhongBan?page=@page&month=@month&year=@year&MaPB=@MaPB"><i class="fas fa-window-close"></i></a>
+        <a class="btn btn-close" href="/ThongKeLuong/TheoNhanVien?page=@page&month=@month&year=@year&loaiTimKiem=@loaiTimKiem&tenTimKiem=@tenTimKiem"><i class="fas fa-window-close"></i></a>
         <a class="btn btn-print-salary" href="/ThongKeLuong/Print/?id=@Model.MaLuong_Thang&maNV=@Model.LuongCoBan.MaNhanVien&month=@Model.ThangNam.Month&year=@Model.ThangNam.Year" target="_blank"><i class="fas fa-file-download"></i></a>
     </div>
-   
+
 </div>

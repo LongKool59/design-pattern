@@ -25,6 +25,12 @@ namespace WebApplication1.Controllers
             IQueryable<ChamCong> chamCongs;
             List<ChamCongViewModel> chamCongViewModel;
             string tenPB = "";
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["fromDate"] = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd") : null;
+            TempData["toDate"] = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? Convert.ToDateTime(toDate).ToString("yyyy-MM-dd") : null; ;
+
             try
             {
                 if (MaPB != null)
@@ -276,6 +282,7 @@ namespace WebApplication1.Controllers
         // GET: ChamCong/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

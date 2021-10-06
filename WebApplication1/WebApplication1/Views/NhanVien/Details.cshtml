@@ -157,5 +157,5 @@
 </div>
 <p class="footer-function" style="bottom:0;float:none;clear: both;position: relative;">
     @Html.ActionLink("Sửa", "Edit", new { id = Model.MaNhanVien }) |
-    @Html.ActionLink("Quay lại danh sách", "Index")
+    @Html.ActionLink("Quay lại danh sách", "Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] })
 </p>

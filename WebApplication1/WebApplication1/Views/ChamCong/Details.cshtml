@@ -63,5 +63,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"], MaPB = TempData["MaPB"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"]})
 </p>

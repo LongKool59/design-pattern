@@ -27,6 +27,10 @@ namespace WebApplication1.Controllers
             IQueryable<NhanVien> nhanViens;
             QLNhanSuEntities db = new QLNhanSuEntities();
             List<NhanVienViewModel> nhanVienViewModels;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
             try
             {
                 if (trangThai == "TatCa")
@@ -223,6 +227,7 @@ namespace WebApplication1.Controllers
         // GET: NhanVien/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -239,6 +244,8 @@ namespace WebApplication1.Controllers
         // GET: NhanVien/Create
         public ActionResult Create()
         {
+            TempData.Keep();
+
             ViewBag.MaChucVu = new SelectList(db.ChucVus.Where(x => x.TrangThai == true), "MaChucVu", "TenChucVu");
             ViewBag.MaPB = new SelectList(db.PhongBans.Where(x => x.MaPB != 12), "MaPB", "TenPB");
             ViewBag.MaNhanVien = new SelectList(db.TaiKhoans, "MaNhanVien", "TenTK");
@@ -302,7 +309,7 @@ namespace WebApplication1.Controllers
                         db.SaveChanges();
                     }
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                 }
             }
 
@@ -339,9 +346,11 @@ namespace WebApplication1.Controllers
                 IsBodyHtml = true
             }) smtp.Send(message);
         }
+        
         // GET: NhanVien/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -365,13 +374,14 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(NhanVienViewModel nhanVienViewModel)
         {
+
             NhanVien nhanVien;
             if (ModelState.IsValid)
             {
                 nhanVien = nhanVienViewModel;
                 db.Entry(nhanVien).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
             }
             ViewBag.MaChucVu = new SelectList(db.ChucVus.Where(x => x.TrangThai == true), "MaChucVu", "TenChucVu", nhanVienViewModel.MaChucVu);
             ViewBag.MaPB = new SelectList(db.PhongBans.Where(x => x.MaPB != 12), "MaPB", "TenPB", nhanVienViewModel.MaPB);
@@ -410,7 +420,7 @@ namespace WebApplication1.Controllers
                             }
                         }
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                     }
                     catch
                     {
@@ -437,7 +447,7 @@ namespace WebApplication1.Controllers
                             if (checkTrangThai != null)
                             {
                                 this.AddNotification("Không thể thêm thưởng cho nhân viên nghỉ việc!", NotificationType.ERROR);
-                                return RedirectToAction("Index");
+                                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                             }
                             foreach (var item in checkIsChecked)
                             {
@@ -483,7 +493,7 @@ namespace WebApplication1.Controllers
                             if (checkTrangThai != null)
                             {
                                 this.AddNotification("Không thể thêm phạt cho nhân viên nghỉ việc!", NotificationType.ERROR);
-                                return RedirectToAction("Index");
+                                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                             }
                         }
                         TempData["listNhanVien"] = listNV;
@@ -514,6 +524,8 @@ namespace WebApplication1.Controllers
 
         public ActionResult ThemThuongNhanVien()
         {
+            TempData.Keep();
+
             ViewBag.MaLoaiThuong = new SelectList(db.LoaiThuongs.Where(x => x.TrangThai == true), "MaLoaiThuong", "TenLoaiThuong");
             return View();
         }
@@ -540,11 +552,13 @@ namespace WebApplication1.Controllers
                 }
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
         }
 
         public ActionResult ThemPhatNhanVien()
         {
+            TempData.Keep();
+
             ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats.Where(x => x.TrangThai == true && !x.TenLoaiPhat.Equals("Nghỉ", StringComparison.OrdinalIgnoreCase) && !x.TenLoaiPhat.Equals("Đi trễ", StringComparison.OrdinalIgnoreCase)), "MaLoaiPhat", "TenLoaiPhat");
             return View();
         }
@@ -570,7 +584,7 @@ namespace WebApplication1.Controllers
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
         }
 
     }
