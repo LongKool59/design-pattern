@@ -588,3 +588,4 @@ D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\W
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.CopyComplete
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.dll
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.pdb
+D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.AssemblyReference.cache
