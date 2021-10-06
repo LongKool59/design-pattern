@@ -391,3 +391,8 @@ có chiều rộng dưới 600px */
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+textarea {
+    height: 80px;
+    width: 100%;
+}

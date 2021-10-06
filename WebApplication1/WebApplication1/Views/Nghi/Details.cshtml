@@ -63,11 +63,12 @@
             @Html.DisplayFor(model => model.GhiChu)
         </dd>
 
-       
+
 
     </dl>
 </div>
 <p class="footer-function">
-    @Html.ActionLink("Sửa", "Edit", new { id = Model.MaNhanVien, ngayNghi = Model.NgayNghi }) |
-    @Html.ActionLink("Quay lại danh sách", "Index")
+    @*@Html.ActionLink("Sửa", "Edit", new { id = Model.MaNhanVien, ngayNghi = Model.NgayNghi }) |*@
+    @Html.ActionLink("Quay lại danh sách", "Index", new { page = ViewBag.page, fromDate = ViewBag.fromDate, toDate = ViewBag.toDate, MaPB = ViewBag.MaPB, trangThai = ViewBag.trangThai })
+
 </p>

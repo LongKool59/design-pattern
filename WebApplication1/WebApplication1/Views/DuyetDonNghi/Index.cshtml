@@ -1,64 +1,167 @@
-﻿@model IEnumerable<WebApplication1.Models.DonNghiPhep>
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<WebApplication1.Models.ViewModel.DonNghiPhepViewModel>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h1 class="function-page-title">DUYỆT ĐƠN NGHỈ PHÉP</h1>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.NgayNghi)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CaNghi)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LyDo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TrangThai)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NguoiDuyet)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NhanVien.HoTen)
-        </th>
-        <th></th>
-    </tr>
+<html>
+<body>
+    <div class="list-employee">
+        <div class="list-detail">
+            @using (Html.BeginForm("Index", "DuyetDonNghi", FormMethod.Get))
+            {
+                <div class="row">
+                    <div class="form-check d-flex">
+                        <span class="search-title">Ngày bắt đầu: </span>
+                        @Html.TextBox("fromDate", null, new { placeholder = "MM/dd/YYYY", type = "date" })
+                        <span class="search-title" style="margin-left:20px">Ngày kết thúc: </span>
+                        @Html.TextBox("toDate", null, new { placeholder = "MM/dd/YYYY", type = "date" })
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.NgayNghi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CaNghi)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LyDo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TrangThai)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NguoiDuyet)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NhanVien.HoTen)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MaDonNghiPhep }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MaDonNghiPhep }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MaDonNghiPhep })
-        </td>
-    </tr>
-}
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="form-check d-flex">
+                        <span class="search-title">Trạng thái : </span>
+                        <label class="radio-inline">
+                            @Html.RadioButton("trangThai", "TatCa", true, new { @class = "mr-2" })
+                            <span> Tất cả</span>
+                        </label>
+                        <label class="radio-inline">
+                            @Html.RadioButton("trangThai", "HoatDong", false, new { @class = "mr-2" })
+                            <span> Đã duyệt</span>
 
-</table>
+                        </label>
+                        <label class="radio-inline">
+                            @Html.RadioButton("trangThai", "VoHieuHoa", false, new { @class = "mr-2" })
+                            <span> Chưa duyệt</span>
+
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <button class="btn btn-search" type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
+                    <a href='@Url.Action("Index", "DuyetDonNghi")' class="btn btn-reload" style="color:black"><i class="fas fa-sync-alt"></i> Tải lại</a>
+                </div>
+            }
+        </div>
+        <br />
+        @Html.Partial("_Notifications")
+        @using (Html.BeginForm("XuLyDonNghiPhep", "DuyetDonNghi", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <table class="table">
+                <tr class="table-title">
+                    <th><input type="checkbox" id="checkAll" /></th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().MaNhanVien)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().NgayNghi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().CaNghi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().LyDo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.First().TrangThai)
+                    </th>
+
+                    <th>Chức năng</th>
+                </tr>
+
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    <tr>
+                        <td>@Html.CheckBoxFor(modelItem => Model[i].IsChecked, new { @class = "checkItem" })</td>
+                        @Html.HiddenFor(modelItem => Model[i].MaDonNghiPhep)
+                        @Html.HiddenFor(modelItem => Model[i].MaNhanVien)
+                        @Html.HiddenFor(modelItem => Model[i].NgayNghi)
+                        @Html.HiddenFor(modelItem => Model[i].CaNghi)
+                        @Html.HiddenFor(modelItem => Model[i].LyDo)
+                        @Html.HiddenFor(modelItem => Model[i].TrangThai)
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].MaNhanVien)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].NgayNghi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model[i].CaNghi)
+                        </td>
+                        <td>
+                            <div class="truncated-box">
+                                @Html.DisplayFor(modelItem => Model[i].LyDo)
+                            </div>
+                        </td>
+                        <td>
+                            @{
+                                if (Model[i].TrangThai == true)
+                                {
+                                    @:Đã duyệt
+                                }
+                                else
+                                {
+                                    @:Chưa duyệt
+                                }
+                            }
+                        </td>
+
+                        <td>
+                            <a href='@Url.Action("Details","DuyetDonNghi", new { id =  Model[i].MaDonNghiPhep })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+
+            @Html.PagedListPager(Model,
+              page => Url.Action("Index", new { page, fromDate = Request.QueryString["fromDate"], toDate = Request.QueryString["toDate"], trangThai = Request.QueryString["trangThai"] }),
+              new PagedListRenderOptions()
+              {
+                  Display = PagedListDisplayMode.IfNeeded,
+                  DisplayPageCountAndCurrentLocation = true,
+
+              })
+
+            <div class="row container button-footer">
+                <div class="left-button">
+                    <button type="submit" name="submit" value="duyetDon" class="btn btn-success mr-2" onclick="return confirm('Bạn chắc chắn duyệt những đơn này chứ?')"><i class="fas fa-check"></i> Duyệt đơn</button>
+                    <button type="submit" name="submit" value="boDuyetDon" class="btn btn-delete_employee mr-2" onclick="return confirm('Bạn chắc chắn bỏ duyệt những đơn này chứ?')"><i class="fas fa-times"></i> Bỏ duyệt</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+        $("#checkAll").change(function () {
+            $(".checkItem").prop("checked", $(this).prop("checked"))
+        })
+        $(".checkItem").change(function () {
+            if ($(this).prop("checked") == false) {
+                $("#checkAll").prop("checked", false)
+            }
+            if ($(".checkItem:checked").length == $(".checkItem").length) {
+                $("#checkAll").prop("checked", true)
+            }
+        })
+    </script>
+
+</body>
+
+</html>

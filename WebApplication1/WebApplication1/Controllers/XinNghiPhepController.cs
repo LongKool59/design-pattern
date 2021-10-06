@@ -105,6 +105,14 @@ namespace WebApplication1.Controllers
             int maNhanVien = Convert.ToInt32(Session["MaNhanVien"].ToString());
             if (ModelState.IsValid)
             {
+                TimeSpan thoiGianKetThucCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 4).Select(x => x.GiaTri).Single();
+                var dsDonNghiPhepHomNay = db.DonNghiPheps.Where(x => x.NgayNghi == DateTime.Today).ToList();
+                if (DateTime.Now.TimeOfDay > thoiGianKetThucCaChieu && donNghiPhepViewModel.NgayNghi == ngayHomNay)
+                {
+                    this.AddNotification("Đã quá giờ quy định làm việc lúc " + thoiGianKetThucCaChieu+ " .Không thể tạo đơn xin nghỉ phép ngày hôm nay!", NotificationType.WARNING);
+                    return View(donNghiPhepViewModel);
+                }
+
                 List<DonNghiPhep> donNghiPhepTrongNgay = db.DonNghiPheps.Where(x => x.MaNhanVien == maNhanVien && x.NgayNghi == donNghiPhepViewModel.NgayNghi).ToList();
                 if (donNghiPhepTrongNgay == null)
                 {

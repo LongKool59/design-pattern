@@ -584,7 +584,6 @@ D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\W
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\bin\xunit.core.xml
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\bin\xunit.execution.desktop.xml
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.AssemblyReference.cache
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.CoreCompileInputs.cache
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.CopyComplete
 D:\HUFLIT\2021_2022-hk1\mau-thiet-ke-phan-mem\ly-thuyet\project\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.dll
