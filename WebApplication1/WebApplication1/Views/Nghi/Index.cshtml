@@ -16,7 +16,6 @@
     <div class="list-detail">
         @using (Html.BeginForm("Index", "Nghi", FormMethod.Get, new { onsubmit = "check()" }))
         {
-
             <div class="row">
                 <div class="form-check d-flex">
                     <span class="search-title">Ngày bắt đầu: </span>
@@ -62,7 +61,7 @@
     {
         <table class="table">
             <tr class="table-title">
-                <th><input type="checkbox" id="checkAll" /></th>
+                @*<th><input type="checkbox" id="checkAll" /></th>*@
                 <th>
                     @*@Html.DisplayNameFor(model => model.MaNhanVien)*@<label>Mã nhân viên</label>
                 </th>
@@ -84,7 +83,7 @@
             @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
-                    <td>@Html.CheckBoxFor(modelItem => Model[i].IsChecked, new { @class = "checkItem" })</td>
+                    @*<td>@Html.CheckBoxFor(modelItem => Model[i].IsChecked, new { @class = "checkItem" })</td>*@
                     <td>
                         @Html.DisplayFor(modelItem => Model[i].MaNhanVien)
                         @Html.HiddenFor(modelItem => Model[i].MaNhanVien)
@@ -110,8 +109,8 @@
                     </td>
 
                     <td>
-                        <a href='@Url.Action("Details", "Nghi", new { id = Model[i].MaNhanVien, ngayNghi = Model[i].NgayNghi })' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
-                        <a href='@Url.Action("Edit", "Nghi", new { id = Model[i].MaNhanVien, ngayNghi = Model[i].NgayNghi })' class="btn-edit" style="color:black"><i class="fas fa-pen-alt"></i></a>
+                        <a href='@Url.Action("Details", "Nghi", new { id = Model[i].MaNhanVien, ngayNghi = Model[i].NgayNghi})' class="btn-detail" style="color:black"><i class="fas fa-eye"></i></a>
+                        @*<a href='@Url.Action("Edit", "Nghi", new { id = Model[i].MaNhanVien, ngayNghi = Model[i].NgayNghi })' class="btn-edit" style="color:black"><i class="fas fa-pen-alt"></i></a>*@
                     </td>
                 </tr>
 
@@ -130,6 +129,11 @@
                 <input type="hidden" value="@DateTime.Now" name="NgaySua" id="NgaySua" />
             }
         }
+       
+            var a = Request.QueryString["fromDate"];
+            var b = Request.QueryString["toDate"];
+
+        
         @Html.PagedListPager(Model,
                        page => Url.Action("Index", new { page, fromDate = Request.QueryString["fromDate"], toDate = Request.QueryString["toDate"], MaPB = Request.QueryString["MaPB"], trangThai = Request.QueryString["trangThai"] }),
                        new PagedListRenderOptions()
@@ -138,11 +142,11 @@
                            DisplayPageCountAndCurrentLocation = true,
 
                        })
-        <div class="row container button-footer">
+        @*<div class="row container button-footer">
             <div class="left-button">
                 <button type="submit" class="btn btn-success mr-2" onclick="return confirm('Bạn chắc chắn duyệt chứ?')" style="margin-left:40%"><i class="fas fa-save"></i> Lưu</button>
             </div>
-        </div>
+        </div>*@
     }
 </div>
 <script src="~/Scripts/jquery-3.4.1.js"></script>
