@@ -16,54 +16,47 @@ namespace WebApplication1
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        QLNhanSuEntities ql = new QLNhanSuEntities();
+
         protected void Application_Start()
         {
-            DateTime B = DateTime.Now;
-            DateTime dayOfW = DateTime.Today;
             JobManager.Initialize(new MyRegistry());
-            QLNhanSuEntities ql = new QLNhanSuEntities();
-            //if(dayOfW.DayOfWeek != DayOfWeek.Saturday && dayOfW.DayOfWeek != DayOfWeek.Sunday)
-            //{
-            //    var chamcong = ql.ChamCongs.Where(s => s.Ngay == B.Date).FirstOrDefault();
-            //    if (chamcong == null)
-            //    {
-            //        var nhanvien = ql.NhanViens.Where(s => s.TrangThai == true && s.MaNhanVien != 1001);
-            //        foreach (var nv in nhanvien)
-            //        {
-            //            //ChamCong cham = new ChamCong();
-            //            //cham.MaNhanVien = nv.MaNhanVien;
-            //            //cham.Ngay = B;
-            //            //ql.ChamCongs.Add(cham);
-            //            ChamCong cham = new ChamCong();
-            //            cham.MaNhanVien = nv.MaNhanVien;
-            //            cham.Ngay = B;
-            //            ql.ChamCongs.Add(cham);
-            //        }
-            //        ql.SaveChanges();
-            //    }
-            //}
-            
 
+            TinhLuongThangChoNhanVien();
+            TaoDSNhanVienNghiTrongNgay();
+
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        
+        public void TinhLuongThangChoNhanVien()
+        {
+            DateTime now = DateTime.Now;
             int month, year;
-            if (B.Month == 1)
+            if (now.Month == 1)
             {
                 month = 12;
-                year = B.Year - 1;
+                year = now.Year - 1;
             }
             else
             {
-                month = B.Month - 1;
-                year = B.Year;
+                month = now.Month - 1;
+                year = now.Year;
             }
             var day = DateTime.DaysInMonth(year, month);
             DateTime ngayCuoiThang = new DateTime(year, month, day);
             var luong = ql.LuongThangs.Where(s => s.ThangNam.Month.ToString() == month.ToString() && s.ThangNam.Year.ToString() == year.ToString()).FirstOrDefault();
             if (luong == null)
             {
-
                 var nhanvien = ql.NhanViens.Where(s => s.TrangThai == true && s.MaNhanVien != 1001);
-                foreach (var nv in nhanvien)
+                foreach (var nv in nhanvien.ToList())
                 {
+                    PhatNhanVienNghi(nv, month, year, ngayCuoiThang);
+                    PhatNhanVienDiTre(nv, month, year, ngayCuoiThang);
+
                     int gtthuong = 0;
                     int gtphat = 0;
                     int giolam = 0;
@@ -81,11 +74,7 @@ namespace WebApplication1
                         gtphat = gtphat + giatriphat.GiaTri;
                     }
                     var cc = ql.ChamCongs.Where(s => s.MaNhanVien == nv.MaNhanVien && s.Ngay.Month.ToString() == month.ToString() && s.Ngay.Year.ToString() == year.ToString() && s.TrangThai != null);
-                    if (cc.Count() == 0)
-                    {
-
-                    }
-                    else
+                    if (cc.Count() > 0)
                     {
                         foreach (var c in cc)
                         {
@@ -94,7 +83,7 @@ namespace WebApplication1
                                 giolam = (int)(giolam + c.ThoiGianLamViec);
                                 giotangca = (int)(giotangca + c.ThoiGianTangCa);
                             }
-                        
+
                         }
                     }
                     var luongcoban = ql.LuongCoBans.Where(s => s.MaNhanVien == nv.MaNhanVien && s.TrangThai == true).SingleOrDefault();
@@ -114,70 +103,234 @@ namespace WebApplication1
                 }
                 ql.SaveChanges();
             }
+        }
 
-            //sau 10h nếu app đc khởi động mà chấm công hôm nay, những ai chưa chấm công nếu trạng thái là null, thì thay thành "Nghỉ"
-            //đồng thời thêm nhân viên đó vào bảng nghỉ
-            TimeSpan thoiGianKhongChoVao = DateTime.Parse("10:00 AM").TimeOfDay;
-            if (DateTime.Now.TimeOfDay > thoiGianKhongChoVao)
+        public void PhatNhanVienNghi(NhanVien nhanVien, int month, int year, DateTime ngayCuoiThang)
+        {
+            var soNgayNghiPhepToiDa = ql.QuyDinhKhacs.Where(x => x.MaQuyDinh == 1).Select(x => x.GiaTri).Single();
+            var soNgayNghiKhongPhepToiDa = ql.QuyDinhKhacs.Where(x => x.MaQuyDinh == 2).Select(x => x.GiaTri).Single();
+            var soNgayNghiCoPhepCuaNhanVien = ql.Nghis.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.Phep == true && x.NgayNghi.Month == month && x.NgayNghi.Year == year);
+            var soNgayNghiKhongPhepCuaNhanVien = ql.Nghis.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.Phep == false && x.NgayNghi.Month == month && x.NgayNghi.Year == year);
+
+            if (soNgayNghiCoPhepCuaNhanVien.Count() > soNgayNghiPhepToiDa)
             {
-                var nvList = ql.ChamCongs.Where(s => s.TrangThai == null && s.Ngay == DateTime.Today).ToList();
-                if (nvList.Count > 0)
-                {
-                    foreach (var b in nvList)
-                    {
-                        b.TrangThai = "Nghỉ";
+                ThemPhatNghi(nhanVien, ngayCuoiThang);
+            }
 
-                        //thêm dữ liệu nhân viên nghỉ vào bảng Nghỉ
-                        Nghi nhanVienNghi = new Nghi();
-                        nhanVienNghi.MaNhanVien = b.MaNhanVien;
-                        nhanVienNghi.NgayNghi = DateTime.Today;
-                        nhanVienNghi.Phep = false;
-                        nhanVienNghi.NgaySua = DateTime.Now;
-                        nhanVienNghi.GhiChu = "Hôm nay nghỉ";
-                        ql.Nghis.Add(nhanVienNghi);
-                    }
+            if (soNgayNghiKhongPhepCuaNhanVien.Count() > soNgayNghiKhongPhepToiDa)
+            {
+                ThemPhatNghi(nhanVien, ngayCuoiThang);
+            }
+
+        }
+        public void ThemPhatNghi(NhanVien nhanVien, DateTime ngayCuoiThang)
+        {
+            var tenPhat = ql.LoaiPhats.Where(s => s.TenLoaiPhat == "Nghỉ" && s.TrangThai == true).FirstOrDefault();
+            if (tenPhat != null)
+            {
+                Ct_Phat phat = new Ct_Phat();
+                phat.MaNhanVien = nhanVien.MaNhanVien;
+                phat.MaLoaiPhat = tenPhat.MaLoaiPhat;
+                phat.NgayPhat = ngayCuoiThang;
+                phat.NguoiPhat = "Hệ thống";
+                phat.NguoiSua = "Hệ thống";
+                phat.NgaySua = ngayCuoiThang;
+                phat.TrangThai = true;
+                ql.Ct_Phat.Add(phat);
+                ql.SaveChanges();
+            }
+        } 
+
+        public void PhatNhanVienDiTre(NhanVien nhanVien, int month, int year, DateTime ngayCuoiThang)
+        {
+            var soLanDiTreToiDa = ql.QuyDinhKhacs.Where(x => x.MaQuyDinh == 3).Select(x => x.GiaTri).Single();
+            var soLanDiTreCuaNhanVien = ql.ChamCongs.Where(x => x.MaNhanVien == nhanVien.MaNhanVien &&x.TrangThai == "Đi trễ" && x.Ngay.Month == month && x.Ngay.Year == year);
+            var a = soLanDiTreCuaNhanVien.Count();
+            if (soLanDiTreCuaNhanVien.Count() > soLanDiTreToiDa)
+            {
+                var tenPhat = ql.LoaiPhats.Where(s => s.TenLoaiPhat == "Đi trễ" && s.TrangThai == true).FirstOrDefault();
+                if (tenPhat != null)
+                {
+                    Ct_Phat phat = new Ct_Phat();
+                    phat.MaNhanVien = nhanVien.MaNhanVien;
+                    phat.MaLoaiPhat = tenPhat.MaLoaiPhat;
+                    phat.NgayPhat = ngayCuoiThang;
+                    phat.NguoiPhat = "Hệ thống";
+                    phat.NguoiSua = "Hệ thống";
+                    phat.NgaySua = ngayCuoiThang;
+                    phat.TrangThai = true;
+                    ql.Ct_Phat.Add(phat);
                     ql.SaveChanges();
                 }
             }
+        }
 
-            //kiểm tra sau 16h nếu nhân viên nghỉ thì thêm phạt nhân viên đó, mà nếu đã có phạt rồi thì ko phạt nữa
-            TimeSpan thoiGianThemPhatNhanVienNghi = DateTime.Parse("04:00 PM").TimeOfDay;
-            var mocThoiGian16h = DateTime.Today.AddHours(16);
-            if (DateTime.Now.TimeOfDay > thoiGianThemPhatNhanVienNghi)
+        public void TaoDSNhanVienNghiTrongNgay()
+        {
+            TimeSpan thoiGianKetThucCaSang = ql.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 2).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianBatDauCaChieu = ql.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 3).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianKetThucCaChieu = ql.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 4).Select(x => x.GiaTri).Single();
+            string nghiCaSangCoLyDo = "Nghỉ ca sáng - Lý do: ";
+            string nghiCaChieuCoLyDo = "Nghỉ ca chiều - Lý do: ";
+            string nghiCaNgayCoLyDo = "Nghỉ cả ngày - Lý do: ";
+            string nghiCaSangKhongLyDo = "Nghỉ ca sáng";
+            string nghiCaChieuKhongLyDo = "Nghỉ ca chiều";
+            string nghiCaNgayKhongLyDo = "Nghỉ cả ngày";
+            string caSang = "Ca sáng";
+            string caChieu = "Ca chiều";
+            string caNgay = "Cả ngày";
+            DateTime homNay = DateTime.Today;
+
+            var dsNhanVienNghi = ql.Nghis.Where(x => x.NgayNghi == DateTime.Today).ToList();
+            if (dsNhanVienNghi.Count == 0)
             {
-                //list chấm công nhân viên có trạng thái nghỉ không phép trong ngày hôm nay
-                var nvChamCongList = ql.Nghis.Where(x => x.Phep == false && x.NgayNghi == DateTime.Today.Date).ToList();
-                foreach (var b in nvChamCongList)
+                if (homNay.DayOfWeek != DayOfWeek.Saturday && homNay.DayOfWeek != DayOfWeek.Sunday)
                 {
-                    var ct_PhatNhanVienNghi = ql.Ct_Phat.Where(x => x.LoaiPhat.TenLoaiPhat == "Nghỉ" && x.MaNhanVien == b.MaNhanVien && x.NgayPhat == mocThoiGian16h).SingleOrDefault();
-                    if (ct_PhatNhanVienNghi == null)
+                    if (DateTime.Now.TimeOfDay > thoiGianKetThucCaChieu)
                     {
-                        var tenphat = ql.LoaiPhats.Where(s => s.TenLoaiPhat == "Nghỉ" && s.TrangThai == true).SingleOrDefault();
-                        if (tenphat != null)
+                        var dsNhanVien = ql.NhanViens.Where(x => x.TrangThai == true && x.MaNhanVien != 1001 && x.TaiKhoan.PhanQuyen.MaQuyen != 4).ToList();
+                        foreach (var nhanVien in dsNhanVien)
                         {
-                            Ct_Phat phat = new Ct_Phat();
-                            phat.MaNhanVien = b.MaNhanVien;
-                            phat.MaLoaiPhat = tenphat.MaLoaiPhat;
-                            phat.NgayPhat = DateTime.Today.AddHours(16);
-                            phat.NguoiPhat = "Hệ thống";
-                            phat.NguoiSua = "Hệ thống";
-                            phat.NgaySua = DateTime.Today.AddHours(16);
-                            phat.TrangThai = true;
-                            ql.Ct_Phat.Add(phat);
+                            var chamCongTrongNgay = ql.ChamCongs.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.Ngay == DateTime.Today).SingleOrDefault();
+                            Nghi nhanVienNghi = new Nghi();
 
+                            if (chamCongTrongNgay == null)
+                            {
+
+                                nhanVienNghi.MaNhanVien = nhanVien.MaNhanVien;
+                                nhanVienNghi.NgayNghi = DateTime.Today;
+                                nhanVienNghi.NgaySua = DateTime.Now;
+
+                                var dsDonNghiPhepTrongNgayCuaNhanVien = ql.DonNghiPheps.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.NgayNghi == DateTime.Today && x.TrangThai == true).ToList();
+                                if (dsDonNghiPhepTrongNgayCuaNhanVien.Count == 0)
+                                {
+                                    nhanVienNghi.Phep = false;
+                                    nhanVienNghi.GhiChu = nghiCaNgayKhongLyDo;
+                                }
+                                else if (dsDonNghiPhepTrongNgayCuaNhanVien.Count == 1)
+                                {
+                                    foreach (var donNghiPhep in dsDonNghiPhepTrongNgayCuaNhanVien)
+                                    {
+                                        nhanVienNghi.NguoiDuyet = donNghiPhep.NguoiDuyet;
+                                        if (donNghiPhep.CaNghi == caSang)
+                                        {
+                                            nhanVienNghi.Phep = false;
+                                            nhanVienNghi.GhiChu = nghiCaSangCoLyDo + donNghiPhep.LyDo + " + " + nghiCaChieuKhongLyDo;
+                                        }
+                                        else if (donNghiPhep.CaNghi == caChieu)
+                                        {
+                                            nhanVienNghi.Phep = false;
+                                            nhanVienNghi.GhiChu = nghiCaChieuCoLyDo + donNghiPhep.LyDo + " + " + nghiCaSangKhongLyDo;
+                                        }
+                                        else
+                                        {
+                                            nhanVienNghi.Phep = true;
+                                            nhanVienNghi.GhiChu = nghiCaNgayCoLyDo + donNghiPhep.LyDo;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    string lyDoCaSang = "";
+                                    string lyDoCaChieu = "";
+                                    string nguoiDuyetCaSang = "";
+                                    string nguoiDuyetCaChieu = "";
+
+                                    foreach (var donNghiPhep in dsDonNghiPhepTrongNgayCuaNhanVien)
+                                    {
+                                        if (donNghiPhep.CaNghi == caSang)
+                                        {
+                                            lyDoCaSang = donNghiPhep.LyDo;
+                                            nguoiDuyetCaSang = donNghiPhep.NguoiDuyet;
+                                        }
+                                        else
+                                        {
+                                            lyDoCaChieu = donNghiPhep.LyDo;
+                                            nguoiDuyetCaChieu = donNghiPhep.NguoiDuyet;
+                                        }
+                                    }
+
+                                    nhanVienNghi.Phep = true;
+                                    nhanVienNghi.NguoiDuyet = nguoiDuyetCaSang + " + " + nguoiDuyetCaChieu;
+                                    nhanVienNghi.GhiChu = nghiCaSangCoLyDo + lyDoCaSang + " + " + nghiCaChieuCoLyDo + lyDoCaChieu;
+                                }
+                            }
+                            else
+                            {
+                                //var dsDonNghiPhepTrongNgayCuaNhanVien = ql.DonNghiPheps.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.NgayNghi == DateTime.Today && x.TrangThai == true).FirstOrDefault();
+                                if (chamCongTrongNgay.ThoiGianVao <= thoiGianKetThucCaSang && chamCongTrongNgay.ThoiGianRa >= thoiGianBatDauCaChieu)
+                                {
+                                    continue;
+                                }
+
+                                nhanVienNghi.MaNhanVien = nhanVien.MaNhanVien;
+                                nhanVienNghi.NgayNghi = DateTime.Today;
+                                nhanVienNghi.NgaySua = DateTime.Now;
+                                var donNghiPhepCaSangCuaNhanVien = ql.DonNghiPheps.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.NgayNghi == DateTime.Today && x.TrangThai == true && x.CaNghi == caSang).FirstOrDefault();
+                                var donNghiPhepCaChieuCuaNhanVien = ql.DonNghiPheps.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.NgayNghi == DateTime.Today && x.TrangThai == true && x.CaNghi == caChieu).FirstOrDefault();
+                                var donNghiPhepCaNgayCuaNhanVien = ql.DonNghiPheps.Where(x => x.MaNhanVien == nhanVien.MaNhanVien && x.NgayNghi == DateTime.Today && x.TrangThai == true && x.CaNghi == caNgay).FirstOrDefault();
+
+                                if (chamCongTrongNgay.ThoiGianRa >= thoiGianKetThucCaSang && chamCongTrongNgay.ThoiGianRa < thoiGianBatDauCaChieu)
+                                {
+
+                                    if (donNghiPhepCaChieuCuaNhanVien == null)
+                                    {
+                                        if (donNghiPhepCaNgayCuaNhanVien == null)
+                                        {
+                                            nhanVienNghi.Phep = false;
+                                            nhanVienNghi.GhiChu = nghiCaChieuKhongLyDo;
+                                        }
+                                        else
+                                        {
+                                            nhanVienNghi.Phep = true;
+                                            nhanVienNghi.GhiChu = nghiCaChieuCoLyDo + donNghiPhepCaNgayCuaNhanVien.LyDo;
+                                            nhanVienNghi.NguoiDuyet = donNghiPhepCaNgayCuaNhanVien.NguoiDuyet;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        nhanVienNghi.Phep = true;
+                                        nhanVienNghi.GhiChu = nghiCaChieuCoLyDo + donNghiPhepCaChieuCuaNhanVien.LyDo;
+                                        nhanVienNghi.NguoiDuyet = donNghiPhepCaChieuCuaNhanVien.NguoiDuyet;
+                                    }
+                                }
+                                else if (chamCongTrongNgay.ThoiGianVao >= thoiGianKetThucCaSang && chamCongTrongNgay.ThoiGianVao < thoiGianKetThucCaChieu)
+                                {
+
+                                    if (donNghiPhepCaSangCuaNhanVien == null)
+                                    {
+                                        if (donNghiPhepCaNgayCuaNhanVien == null)
+                                        {
+                                            nhanVienNghi.Phep = false;
+                                            nhanVienNghi.GhiChu = nghiCaSangKhongLyDo;
+                                        }
+                                        else
+                                        {
+                                            nhanVienNghi.Phep = true;
+                                            nhanVienNghi.GhiChu = nghiCaSangCoLyDo + donNghiPhepCaNgayCuaNhanVien.LyDo;
+                                            nhanVienNghi.NguoiDuyet = donNghiPhepCaNgayCuaNhanVien.NguoiDuyet;
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        nhanVienNghi.Phep = true;
+                                        nhanVienNghi.GhiChu = nghiCaSangCoLyDo + donNghiPhepCaSangCuaNhanVien.LyDo;
+                                        nhanVienNghi.NguoiDuyet = donNghiPhepCaSangCuaNhanVien.NguoiDuyet;
+                                    }
+                                }
+                                else
+                                {
+                                    nhanVienNghi.Phep = false;
+                                    nhanVienNghi.GhiChu = nghiCaNgayKhongLyDo;
+                                }
+                            }
+                            ql.Nghis.Add(nhanVienNghi);
+                            ql.SaveChanges();
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
                 }
-                ql.SaveChanges();
             }
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 
@@ -185,62 +338,16 @@ namespace WebApplication1
     {
         public MyRegistry()
         {
-            Action someMethod = new Action(() =>
+            QLNhanSuEntities ql = new QLNhanSuEntities();
+            TimeSpan thoiGianTaoDSNVNghi = ql.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 5).Select(x => x.GiaTri).Single();
+            MvcApplication mvcApplication = new MvcApplication();
+
+            Action taoDSNhanVienNghiVaTinhLuongThang = new Action(() =>
             {
-                QLNhanSuEntities ql = new QLNhanSuEntities();
-                var nv = ql.ChamCongs.Where(s => s.TrangThai == null && s.Ngay == DateTime.Today);
-                foreach (var b in nv)
-                {
-                    b.TrangThai = "Nghỉ";
-
-                    Nghi nhanVienNghi = new Nghi();
-                    nhanVienNghi.MaNhanVien = b.MaNhanVien;
-                    nhanVienNghi.NgayNghi = DateTime.Today;
-                    nhanVienNghi.Phep = false;
-                    nhanVienNghi.NgaySua = DateTime.Now;
-                    nhanVienNghi.GhiChu = "Hôm nay nghỉ";
-                    ql.Nghis.Add(nhanVienNghi);
-                }
-                ql.SaveChanges();
-
+                mvcApplication.TaoDSNhanVienNghiTrongNgay();
+                mvcApplication.TinhLuongThangChoNhanVien();
             });
-            this.Schedule(someMethod).ToRunEvery(0).Days().At(10, 00);
-
-
-            Action taophat = new Action(() =>
-            {
-                DateTime B = DateTime.Now;
-                QLNhanSuEntities ql = new QLNhanSuEntities();
-                var mocThoiGian16h = DateTime.Today.AddHours(16);
-                var listNhanVienNghiKhongPhep = ql.Nghis.Where(x => x.Phep == false && x.NgayNghi == DateTime.Today.Date);
-                //var nv = ql.ChamCongs.Where(s => s.TrangThai == "Nghỉ" && s.Ngay == DateTime.Today);
-                foreach (var b in listNhanVienNghiKhongPhep)
-                {
-                    var ct_PhatNhanVienNghi = ql.Ct_Phat.Where(x => x.LoaiPhat.TenLoaiPhat == "Nghỉ" && x.MaNhanVien == b.MaNhanVien && x.NgayPhat == mocThoiGian16h).SingleOrDefault();
-                    if (ct_PhatNhanVienNghi == null)
-                    {
-                        var tenphat = ql.LoaiPhats.Where(s => s.TenLoaiPhat == "Nghỉ" && s.TrangThai == true).SingleOrDefault();
-                        if (tenphat != null)
-                        {
-                            Ct_Phat phat = new Ct_Phat();
-                            phat.MaNhanVien = b.MaNhanVien;
-                            phat.MaLoaiPhat = tenphat.MaLoaiPhat;
-                            phat.NgayPhat = DateTime.Today.AddHours(16);
-                            phat.NguoiPhat = "Hệ thống";
-                            phat.NguoiSua = "Hệ thống";
-                            phat.NgaySua = DateTime.Today.AddHours(16);
-                            phat.TrangThai = true;
-                            ql.Ct_Phat.Add(phat);
-
-                        }
-                    }
-                }
-                ql.SaveChanges();
-            });
-            this.Schedule(taophat).ToRunEvery(0).Days().At(16, 00);
-            //DateTime B = DateTime.Now;
-
-
+            this.Schedule(taoDSNhanVienNghiVaTinhLuongThang).ToRunEvery(0).Days().At(thoiGianTaoDSNVNghi.Hours, thoiGianTaoDSNVNghi.Minutes);
         }
     }
 }

@@ -20,9 +20,9 @@ namespace WebApplication1.Models
             this.ChamCongs = new HashSet<ChamCong>();
             this.Ct_Phat = new HashSet<Ct_Phat>();
             this.Ct_Thuong = new HashSet<Ct_Thuong>();
+            this.DonNghiPheps = new HashSet<DonNghiPhep>();
             this.LuongCoBans = new HashSet<LuongCoBan>();
             this.Nghis = new HashSet<Nghi>();
-            this.DonNghiPheps = new HashSet<DonNghiPhep>();
         }
     
         public int MaNhanVien { get; set; }
@@ -51,12 +51,12 @@ namespace WebApplication1.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ct_Thuong> Ct_Thuong { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DonNghiPhep> DonNghiPheps { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LuongCoBan> LuongCoBans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Nghi> Nghis { get; set; }
         public virtual PhongBan PhongBan { get; set; }
         public virtual TaiKhoan TaiKhoan { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DonNghiPhep> DonNghiPheps { get; set; }
     }
 }

@@ -1,16 +1,29 @@
-﻿@model WebApplication1.Models.DonNghiPhep
+﻿@model WebApplication1.Models.ViewModel.DonNghiPhepViewModel
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h1 class="function-page-title">CHI TIẾT ĐƠN NGHỈ PHÉP</h1>
 
 <div>
-    <h4>DonNghiPhep</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NhanVienViewModel.MaNhanVien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NhanVien.MaNhanVien)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NhanVienViewModel.HoTen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NhanVien.HoTen)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.NgayNghi)
         </dt>
@@ -40,7 +53,16 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TrangThai)
+            @{
+                if (Model.TrangThai == true)
+                {
+                    @:Đã duyệt
+                }
+                else
+                {
+                    @:Chưa duyệt
+                }
+            }
         </dd>
 
         <dt>
@@ -51,17 +73,8 @@
             @Html.DisplayFor(model => model.NguoiDuyet)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.NhanVien.HoTen)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.NhanVien.HoTen)
-        </dd>
-
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.MaDonNghiPhep }) |
-    @Html.ActionLink("Back to List", "Index")
+<p class="footer-function">
+    @Html.ActionLink("Quay lại danh sách", "Index", new { page = ViewBag.page, fromDate = ViewBag.fromDate, toDate = ViewBag.toDate, trangThai = ViewBag.trangThai })
 </p>

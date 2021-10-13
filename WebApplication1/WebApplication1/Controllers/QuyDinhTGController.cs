@@ -106,44 +106,52 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 quyDinhThoiGian = quyDinhTGViewModel;
-                var giaTriMaQuyDinh3 = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 3).Select(x => x.GiaTri).Single();
+                var batDauCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 3).Select(x => x.GiaTri).Single();
+                var ketThucCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 4).Select(x => x.GiaTri).Single();
                 switch (quyDinhThoiGian.MaQuyDinh)
                 {
                     case 1:
-                        var giaTriMaQuyDinh2 = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 2).Select(x => x.GiaTri).Single();
-                        if(quyDinhThoiGian.GiaTri > giaTriMaQuyDinh2)
+                        var ketThucCaSang = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 2).Select(x => x.GiaTri).Single();
+                        if(quyDinhThoiGian.GiaTri > ketThucCaSang)
                         {
-                            this.AddNotification("Giờ bắt đầu ca sáng không được lớn hơn giờ kết thúc ca sáng (" + giaTriMaQuyDinh2 + ")!", NotificationType.ERROR);
+                            this.AddNotification("Giờ bắt đầu ca sáng không được lớn hơn giờ kết thúc ca sáng (" + ketThucCaSang + ")!", NotificationType.ERROR);
                             return RedirectToAction("Edit", quyDinhTGViewModel);
                         }
                         break;
                     case 2:
-                        var giaTriMaQuyDinh1 = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 1).Select(x => x.GiaTri).Single();
+                        var batDauCaSang = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 1).Select(x => x.GiaTri).Single();
 
-                        if (quyDinhThoiGian.GiaTri < giaTriMaQuyDinh1)
+                        if (quyDinhThoiGian.GiaTri < batDauCaSang)
                         {
-                            this.AddNotification("Giờ kết thúc ca sáng không được nhỏ hơn giờ bắt đầu ca sáng (" + giaTriMaQuyDinh1 + ")!", NotificationType.ERROR);
+                            this.AddNotification("Giờ kết thúc ca sáng không được nhỏ hơn giờ bắt đầu ca sáng (" + batDauCaSang + ")!", NotificationType.ERROR);
                             return RedirectToAction("Edit", quyDinhTGViewModel);
                         }
-                        else if(quyDinhThoiGian.GiaTri >= giaTriMaQuyDinh3)
+                        else if(quyDinhThoiGian.GiaTri > batDauCaChieu)
                         {
-                            this.AddNotification("Giờ kết thúc ca sáng không được lớn hơn hoặc bằng giờ bắt đầu ca chiều (" + giaTriMaQuyDinh3 + ")!", NotificationType.ERROR);
+                            this.AddNotification("Giờ kết thúc ca sáng không được lớn hơn hoặc bằng giờ bắt đầu ca chiều (" + batDauCaChieu + ")!", NotificationType.ERROR);
                             return RedirectToAction("Edit", quyDinhTGViewModel);
                         }
                         break;
                     case 3:
-                        var giaTriMaQuyDinh4 = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 4).Select(x => x.GiaTri).Single();
-                        if (quyDinhThoiGian.GiaTri > giaTriMaQuyDinh4)
+                        
+                        if (quyDinhThoiGian.GiaTri > ketThucCaChieu)
                         {
-                            this.AddNotification("Giờ bắt đầu ca chiều không được lớn hơn giờ kết thúc ca chiều (" + giaTriMaQuyDinh4 + ")!", NotificationType.ERROR);
+                            this.AddNotification("Giờ bắt đầu ca chiều không được lớn hơn giờ kết thúc ca chiều (" + ketThucCaChieu + ")!", NotificationType.ERROR);
                             return RedirectToAction("Edit", quyDinhTGViewModel);
                         }
                         break;
                     case 4:
                        
-                        if (quyDinhThoiGian.GiaTri < giaTriMaQuyDinh3)
+                        if (quyDinhThoiGian.GiaTri < batDauCaChieu)
                         {
-                            this.AddNotification("Giờ kết thúc ca chiều không được nhỏ hơn giờ bắt đầu ca chiều (" + giaTriMaQuyDinh3 + ")!", NotificationType.ERROR);
+                            this.AddNotification("Giờ kết thúc ca chiều không được nhỏ hơn giờ bắt đầu ca chiều (" + batDauCaChieu + ")!", NotificationType.ERROR);
+                            return RedirectToAction("Edit", quyDinhTGViewModel);
+                        }
+                        break;
+                    case 5:
+                        if (quyDinhThoiGian.GiaTri < ketThucCaChieu)
+                        {
+                            this.AddNotification("Giờ thêm nhân viên nghỉ vào danh sách không được nhỏ hơn giờ kết thúc ca chiều (" + ketThucCaChieu + ")!", NotificationType.ERROR);
                             return RedirectToAction("Edit", quyDinhTGViewModel);
                         }
                         break;

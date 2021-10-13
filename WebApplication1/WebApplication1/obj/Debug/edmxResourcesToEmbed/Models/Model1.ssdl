@@ -61,7 +61,7 @@
     <Property Name="CaNghi" Type="nvarchar" MaxLength="200" Nullable="false" />
     <Property Name="LyDo" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TrangThai" Type="bit" Nullable="false" />
-    <Property Name="NguoiDuyet" Type="nvarchar" MaxLength="500" />
+    <Property Name="NguoiDuyet" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="LoaiPhat">
     <Key>
@@ -161,6 +161,15 @@
     <Property Name="SoDT" Type="nvarchar" MaxLength="50" />
     <Property Name="NguoiSua" Type="nvarchar" MaxLength="500" />
     <Property Name="NgaySua" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="QuyDinhKhac">
+    <Key>
+      <PropertyRef Name="MaQuyDinh" />
+    </Key>
+    <Property Name="MaQuyDinh" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenQuyDinh" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GiaTri" Type="int" Nullable="false" />
+    <Property Name="GhiChu" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="QuyDinhThoiGian">
     <Key>
@@ -351,6 +360,7 @@
     <EntitySet Name="NhanVien" EntityType="Self.NhanVien" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PhanQuyen" EntityType="Self.PhanQuyen" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PhongBan" EntityType="Self.PhongBan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="QuyDinhKhac" EntityType="Self.QuyDinhKhac" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuyDinhThoiGian" EntityType="Self.QuyDinhThoiGian" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TaiKhoan" EntityType="Self.TaiKhoan" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_ChamCong_NhanVien" Association="Self.FK_ChamCong_NhanVien">
