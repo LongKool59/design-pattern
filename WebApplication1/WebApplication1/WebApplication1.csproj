@@ -163,6 +163,7 @@
     <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Controllers\PhanQuyenController.cs" />
     <Compile Include="Controllers\PhongBanController.cs" />
+    <Compile Include="Controllers\QuyDinhKhacController.cs" />
     <Compile Include="Controllers\QuyDinhTGController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\ThongKeLuongController.cs" />
@@ -229,6 +230,9 @@
     <Compile Include="Models\PhongBan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuyDinhKhac.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\QuyDinhThoiGian.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -249,6 +253,7 @@
     <Compile Include="Models\ViewModel\NhanVienViewModel.cs" />
     <Compile Include="Models\ViewModel\PhanQuyenViewModel.cs" />
     <Compile Include="Models\ViewModel\PhongBanViewModel.cs" />
+    <Compile Include="Models\ViewModel\QuyDinhKhacViewModel.cs" />
     <Compile Include="Models\ViewModel\QuyDinhTGViewModel.cs" />
     <Compile Include="Models\ViewModel\TaiKhoanViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -396,6 +401,9 @@
     <Content Include="Views\XinNghiPhep\Details.cshtml" />
     <Content Include="Views\XinNghiPhep\Edit.cshtml" />
     <Content Include="Views\XinNghiPhep\Index.cshtml" />
+    <Content Include="Views\QuyDinhKhac\Details.cshtml" />
+    <Content Include="Views\QuyDinhKhac\Edit.cshtml" />
+    <Content Include="Views\QuyDinhKhac\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />

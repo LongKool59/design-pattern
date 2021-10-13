@@ -20,6 +20,17 @@ namespace WebApplication1.Controllers
         // GET: Nghi
         public ActionResult Index(int? page, DateTime? fromDate, DateTime? toDate,string MaPB, string trangThai)
         {
+            //TempData.Add("page", page);
+            //TempData.Add("fromDate", fromDate);
+            //TempData.Add("toDate", toDate);
+            //TempData.Add("MaPB", MaPB);
+            //TempData.Add("trangThai", trangThai);
+            TempData["page"] = page;
+            TempData["fromDate"] = fromDate;
+            TempData["toDate"] = toDate;
+            TempData["MaPB"] = MaPB;
+            TempData["trangThai"] = trangThai;
+
             ViewBag.MaPB = new SelectList(db.PhongBans.OrderByDescending(x=>x.TenPB), "MaPB", "TenPB", "12");
             int pageNumber = (page ?? 1);
             int pageSize = 10;
@@ -266,7 +277,7 @@ namespace WebApplication1.Controllers
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"], MaPB = TempData["MaPB"], trangThai = TempData["trangThai"] });
             }
             catch
             {
