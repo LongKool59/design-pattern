@@ -346,6 +346,7 @@ namespace WebApplication1.Controllers
                 IsBodyHtml = true
             }) smtp.Send(message);
         }
+        
         // GET: NhanVien/Edit/5
         public ActionResult Edit(int? id)
         {
