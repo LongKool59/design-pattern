@@ -307,7 +307,7 @@ namespace WebApplication1.Controllers
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn loại thưởng để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
                 }
                 foreach (var item in loaiThuongViewModels)
                 {
