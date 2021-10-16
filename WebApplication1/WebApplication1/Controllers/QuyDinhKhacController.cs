@@ -20,7 +20,9 @@ namespace WebApplication1.Controllers
         // GET: QuyDinhKhac
         public ActionResult Index(int? page, string loaiTimKiem, string tenTimKiem)
         {
-
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
             IQueryable<QuyDinhKhac> quyDinhKhacs;
             int pageNumber = page ?? 1;
             int pageSize = 10;
@@ -66,6 +68,7 @@ namespace WebApplication1.Controllers
         // GET: QuyDinhKhac/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -82,6 +85,7 @@ namespace WebApplication1.Controllers
         // GET: QuyDinhKhac/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -107,7 +111,7 @@ namespace WebApplication1.Controllers
                 QuyDinhKhac quyDinhKhac = quyDinhKhacViewModel;
                 db.Entry(quyDinhKhac).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(quyDinhKhacViewModel);
         }
