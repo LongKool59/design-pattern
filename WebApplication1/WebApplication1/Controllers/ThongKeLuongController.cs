@@ -25,12 +25,16 @@ namespace WebApplication1.Controllers
         }
         public ActionResult TheoPhongBan(int? page, int? month, int? year, string MaPB)
         {
-
+            TempData["page"] = page;
+            TempData["month"] = month;
+            TempData["year"] = year;
+            TempData["MaPB"] = MaPB;
             ViewBag.MaPB = new SelectList(db.PhongBans.OrderByDescending(x => x.TenPB), "MaPB", "TenPB", "12");
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             IQueryable<LuongThang> luongThangs;
             List<LuongThangViewModel> luongThangViewModels;
+            string tenPhongBan = "";
             try
             {
                 if (MaPB == "12")
@@ -39,84 +43,71 @@ namespace WebApplication1.Controllers
                     if (year != null && month != null)
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);   
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", năm: " + year + ", phòng ban: Tất cả.", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year != null && month == null)
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo năm: " + year + ", phòng ban: Tất cả.", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year == null && month != null)
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);   
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", phòng ban: Tất cả.", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo phòng ban: Tất cả.", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else if (MaPB != null)
                 {
-
+                    tenPhongBan = db.PhongBans.Where(x => x.MaPB.ToString() == MaPB).Select(x => x.TenPB).Single();
                     if (year != null && month != null)
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", năm: " + year + ", phòng ban: " + tenPhongBan + ".", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year != null && month == null)
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo năm: " + year + ", phòng ban: " + tenPhongBan + ".", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year == null && month != null)
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x); 
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", phòng ban: " + tenPhongBan + ".", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else
                     {
                         TruyenPara(month, year, MaPB);
-
-                        luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo phòng ban: " + tenPhongBan + ".", NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 TruyenPara(month, year, MaPB);
 
-                luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
+                luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
+                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
                 return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện lại!", NotificationType.ERROR);
-                luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
+                luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
+                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
                 return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
@@ -133,6 +124,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public ActionResult TheoNhanVien(int? page, int? month, int? year, string loaiTimKiem, string tenTimKiem)
         {
+            TempData["page"] = page;
+            TempData["month"] = month;
+            TempData["year"] = year;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             IQueryable<LuongThang> luongThangs;
@@ -144,35 +140,29 @@ namespace WebApplication1.Controllers
                     if (year != null && month != null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);   
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", năm: " + year + ", loại tìm kiếm: Mã nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year != null && month == null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo năm: " + year + ", loại tìm kiếm: Mã nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year == null && month != null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", loại tìm kiếm: Mã nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);   
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo loại tìm kiếm: Mã nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
 
                 }
                 else if (loaiTimKiem == "TenNhanVien")
@@ -180,83 +170,87 @@ namespace WebApplication1.Controllers
                     if (year != null && month != null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", năm: " + year + ", loại tìm kiếm: Tên nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month && x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year != null && month == null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x); 
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo năm: " + year + ", loại tìm kiếm: Tên nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year == null && month != null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x); 
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", loại tìm kiếm: Tên nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo loại tìm kiếm: Tên nhân viên, từ khóa tìm kiếm: " + tenTimKiem, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.LuongCoBan.NhanVien.HoTen.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
                 else
                 {
                     if (year != null && month != null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month + ", năm: " + year, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year != null && month == null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo năm: " + year, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else if (year == null && month != null)
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x); 
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        this.AddNotification("Kết quả tìm kiếm theo tháng: " + month, NotificationType.INFO);
+                        luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
                     else
                     {
                         TruyenPara2(month, year, loaiTimKiem, tenTimKiem);
-
-                        luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
-                        luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);  
-                        return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
+                        luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
                     }
+                    luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
+                    return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
             }
             catch
             {
                 this.AddNotification("Không tìm thấy từ khóa yêu cầu. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
-                luongThangs = db.LuongThangs;
-                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);   
+                luongThangs = db.LuongThangs.OrderBy(x => x.LuongCoBan.NhanVien.HoTen).ThenByDescending(x => x.ThangNam);
+                luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
                 return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
             }
 
         }
 
         public ActionResult Details(int? id)
+        {
+            TempData.Keep();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            LuongThang luongThang = db.LuongThangs.Find(id);
+            if (luongThang == null)
+            {
+                return HttpNotFound();
+            }
+            TempData["MaNV"] = luongThang.LuongCoBan.MaNhanVien;
+            LuongThangViewModel luongThangViewModel = luongThang;
+            return View(luongThangViewModel);
+        }
+
+        public ActionResult Details_DSLuongTheoNhanVien(int? id)
         {
             if (id == null)
             {
@@ -302,7 +296,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public void TruyenViewBagPhongBan(int?month, int? year, int? MaPB)
+        public void TruyenViewBagPhongBan(int? month, int? year, int? MaPB)
         {
             ViewBag.month = month;
             ViewBag.year1 = year;
@@ -312,7 +306,7 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                var phongBan = db.PhongBans.Where(x=>x.MaPB == MaPB).SingleOrDefault();
+                var phongBan = db.PhongBans.Where(x => x.MaPB == MaPB).SingleOrDefault();
                 if (phongBan != null)
                     ViewBag.TenPB = phongBan.TenPB.ToString();
             }
@@ -325,7 +319,7 @@ namespace WebApplication1.Controllers
             {
                 if (year != null && month != null)
                 {
-                    TruyenViewBagPhongBan(month,year, MaPB);
+                    TruyenViewBagPhongBan(month, year, MaPB);
 
 
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.ThangNam.Year == year).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
@@ -334,7 +328,7 @@ namespace WebApplication1.Controllers
                 }
                 else if (year != null && month == null)
                 {
-                    TruyenViewBagPhongBan(month,year, MaPB);
+                    TruyenViewBagPhongBan(month, year, MaPB);
 
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
                     luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
@@ -342,7 +336,7 @@ namespace WebApplication1.Controllers
                 }
                 else if (year == null && month != null)
                 {
-                    TruyenViewBagPhongBan(month,year, MaPB);
+                    TruyenViewBagPhongBan(month, year, MaPB);
 
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
                     luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
@@ -357,7 +351,7 @@ namespace WebApplication1.Controllers
             {
                 if (year != null && month != null)
                 {
-                    TruyenViewBagPhongBan(month,year, MaPB);
+                    TruyenViewBagPhongBan(month, year, MaPB);
 
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.ThangNam.Year == year && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
                     luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
@@ -365,7 +359,7 @@ namespace WebApplication1.Controllers
                 }
                 else if (year != null && month == null)
                 {
-                    TruyenViewBagPhongBan(month,year, MaPB);
+                    TruyenViewBagPhongBan(month, year, MaPB);
 
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Year == year && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
                     luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
@@ -373,7 +367,7 @@ namespace WebApplication1.Controllers
                 }
                 else if (year == null && month != null)
                 {
-                    TruyenViewBagPhongBan(month,year, MaPB);
+                    TruyenViewBagPhongBan(month, year, MaPB);
 
                     luongThangs = db.LuongThangs.Where(x => x.ThangNam.Month == month && x.LuongCoBan.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).OrderBy(x => x.LuongCoBan.NhanVien.HoTen);
                     luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
