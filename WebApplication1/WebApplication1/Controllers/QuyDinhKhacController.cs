@@ -32,9 +32,9 @@ namespace WebApplication1.Controllers
                 if (loaiTimKiem == "MaQuyDinh")
                 {
                     if (tenTimKiem == "" || tenTimKiem == null)
-                    {
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã quy định!", NotificationType.WARNING);
-                    }
+                    else
+                        this.AddNotification("Kết quả tìm kiếm theo mã quy định: " + tenTimKiem, NotificationType.INFO);
                     quyDinhKhacs = db.QuyDinhKhacs.Where(x => x.MaQuyDinh.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenQuyDinh);
                     quyDinhKhacViewModels = quyDinhKhacs.ToList().ConvertAll<QuyDinhKhacViewModel>(x => x);
                     return View("Index", quyDinhKhacViewModels.ToPagedList(pageNumber, pageSize));
@@ -42,9 +42,9 @@ namespace WebApplication1.Controllers
                 else if (loaiTimKiem == "TenQuyDinh")
                 {
                     if (tenTimKiem == "" || tenTimKiem == null)
-                    {
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên quy định!", NotificationType.WARNING);
-                    }
+                    else
+                        this.AddNotification("Kết quả tìm kiếm theo tên quy định: " + tenTimKiem, NotificationType.INFO);
                     quyDinhKhacs = db.QuyDinhKhacs.Where(x => x.TenQuyDinh.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenQuyDinh);
                     quyDinhKhacViewModels = quyDinhKhacs.ToList().ConvertAll<QuyDinhKhacViewModel>(x => x);
                     return View("Index", quyDinhKhacViewModels.ToPagedList(pageNumber, pageSize));
