@@ -23,6 +23,11 @@ namespace WebApplication1.Controllers
             int pageSize = 10;
             IQueryable<LoaiThuong> loaiThuongs;
             List<LoaiThuongViewModel> loaiThuongViewModels;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
+
             try
             {
                 QLNhanSuEntities db = new QLNhanSuEntities();
@@ -168,6 +173,7 @@ namespace WebApplication1.Controllers
         // GET: LoaiThuong/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -184,6 +190,7 @@ namespace WebApplication1.Controllers
         // GET: LoaiThuong/Create
         public ActionResult Create()
         {
+            TempData.Keep();
             LoaiThuongViewModel loaiThuongViewModel = new LoaiThuongViewModel();
             return View(loaiThuongViewModel);
         }
@@ -225,7 +232,7 @@ namespace WebApplication1.Controllers
                     db.LoaiThuongs.Add(loaiThuong);
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(loaiThuongViewModel);
         }
@@ -233,6 +240,7 @@ namespace WebApplication1.Controllers
         // GET: LoaiThuong/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -283,7 +291,7 @@ namespace WebApplication1.Controllers
                 }
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(loaiThuongViewModel);
         }
@@ -315,7 +323,7 @@ namespace WebApplication1.Controllers
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             catch
             {

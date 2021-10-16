@@ -66,5 +66,5 @@
 }
 
 <div class="footer-function">
-    @Html.ActionLink("Quay lại danh sách", "Index")
+    @Html.ActionLink("Quay lại danh sách", "Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] })
 </div>
