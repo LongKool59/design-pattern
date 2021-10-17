@@ -67,7 +67,7 @@ namespace WebApplication1.Controllers
                     luongThangViewModels = luongThangs.ToList().ConvertAll<LuongThangViewModel>(x => x);
                     return View(luongThangViewModels.ToPagedList(pageNumber, pageSize));
                 }
-                else if (MaPB != null)
+                else if (MaPB != null && MaPB != "")
                 {
                     tenPhongBan = db.PhongBans.Where(x => x.MaPB.ToString() == MaPB).Select(x => x.TenPB).Single();
                     if (year != null && month != null)
