@@ -25,6 +25,11 @@ namespace WebApplication1.Controllers
             int pageNumber = page ?? 1;
             int pageSize = 10;
             List<LoaiPhatViewModel> loaiPhatViewModels;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
+
             try
             {
                 QLNhanSuEntities db = new QLNhanSuEntities();
@@ -171,6 +176,8 @@ namespace WebApplication1.Controllers
         // GET: LoaiPhat/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -187,6 +194,7 @@ namespace WebApplication1.Controllers
         // GET: LoaiPhat/Create
         public ActionResult Create()
         {
+            TempData.Keep();
             LoaiPhatViewModel loaiPhatViewModel = new LoaiPhatViewModel();
             return View(loaiPhatViewModel);
         }
@@ -228,7 +236,7 @@ namespace WebApplication1.Controllers
                     db.LoaiPhats.Add(loaiPhat);
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
 
             return View(loaiPhatViewModel);
@@ -237,6 +245,7 @@ namespace WebApplication1.Controllers
         // GET: LoaiPhat/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -287,7 +296,7 @@ namespace WebApplication1.Controllers
                 }
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(loaiPhatViewModel);
         }
@@ -303,7 +312,7 @@ namespace WebApplication1.Controllers
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn loại phạt để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
                 }
                 foreach (var item in loaiPhatViewModels)
                 {
@@ -312,7 +321,7 @@ namespace WebApplication1.Controllers
                         if(item.TenLoaiPhat == "Nghỉ" || item.TenLoaiPhat == "Đi trễ")
                         {
                             this.AddNotification("Không thể xóa vì loại phạt Đi trễ hoặc Nghỉ là loại phạt mặc định!", NotificationType.WARNING);
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
                         }
                         int maLoaiPhat = item.MaLoaiPhat;
                         LoaiPhat loaiPhat = db.LoaiPhats.Where(x => x.MaLoaiPhat == maLoaiPhat).SingleOrDefault();
@@ -324,7 +333,7 @@ namespace WebApplication1.Controllers
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             catch
             {

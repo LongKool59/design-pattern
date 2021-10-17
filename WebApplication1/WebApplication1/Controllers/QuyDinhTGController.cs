@@ -20,6 +20,9 @@ namespace WebApplication1.Controllers
         // GET: QuyDinhTG
         public ActionResult Index(int? page, string loaiTimKiem, string tenTimKiem)
         {
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
             IQueryable<QuyDinhThoiGian> quyDinhThoiGians;
             int pageNumber = page ?? 1;
             int pageSize = 10;
@@ -29,9 +32,9 @@ namespace WebApplication1.Controllers
                 if (loaiTimKiem == "MaQuyDinh")
                 {
                     if (tenTimKiem == "" || tenTimKiem == null)
-                    {
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã quy định!", NotificationType.WARNING);
-                    }
+                    else
+                        this.AddNotification("Kết quả tìm kiếm theo mã quy định: " + tenTimKiem, NotificationType.INFO);
                     quyDinhThoiGians = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenQuyDinh);
                     quyDinhTGViewModels = quyDinhThoiGians.ToList().ConvertAll<QuyDinhTGViewModel>(x => x);
                     return View("Index", quyDinhTGViewModels.ToPagedList(pageNumber, pageSize));
@@ -39,9 +42,9 @@ namespace WebApplication1.Controllers
                 else if (loaiTimKiem == "TenQuyDinh")
                 {
                     if (tenTimKiem == "" || tenTimKiem == null)
-                    {
                         this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên quy định!", NotificationType.WARNING);
-                    }
+                    else
+                        this.AddNotification("Kết quả tìm kiếm theo tên quy định: " + tenTimKiem, NotificationType.INFO);
                     quyDinhThoiGians = db.QuyDinhThoiGians.Where(x => x.TenQuyDinh.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenQuyDinh);
                     quyDinhTGViewModels = quyDinhThoiGians.ToList().ConvertAll<QuyDinhTGViewModel>(x => x);
                     return View("Index", quyDinhTGViewModels.ToPagedList(pageNumber, pageSize));
@@ -66,6 +69,7 @@ namespace WebApplication1.Controllers
         // GET: QuyDinhTG/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -82,6 +86,7 @@ namespace WebApplication1.Controllers
         // GET: QuyDinhTG/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -159,7 +164,7 @@ namespace WebApplication1.Controllers
                     
                 db.Entry(quyDinhThoiGian).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(quyDinhTGViewModel);
         }
