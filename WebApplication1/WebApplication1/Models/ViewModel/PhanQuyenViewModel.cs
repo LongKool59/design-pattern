@@ -17,7 +17,6 @@ namespace WebApplication1.Models.ViewModel
         [DisplayName("Mã quyền")]
         public int MaQuyen { get; set; }
         [DisplayName("Tên quyền")]
-        [Required(ErrorMessage = "Tên quyền không được trống...")]
         public string TenQuyen { get; set; }
         [DisplayName("Ghi chú")]
         public string GhiChu { get; set; }
