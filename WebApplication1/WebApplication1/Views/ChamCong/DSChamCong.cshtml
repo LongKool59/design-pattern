@@ -1,0 +1,85 @@
+﻿@model IEnumerable<WebApplication1.Models.ViewModel.ChamCongViewModel>
+
+@{
+    ViewBag.Title = "DSChamCong";
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+
+<h1 class="function-page-title">DANH SÁCH CHẤM CÔNG</h1>
+
+<div class="list-employee">
+    <div>
+        <p><b>FromDate:</b> @ViewBag.fromDate </p>
+        <p><b>ToDate:</b> @ViewBag.toDate </p>
+    </div>
+    @Html.Partial("_Notifications")
+    <br />
+    <table class="table">
+        <tr class="table-title">
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.MaNhanVien)*@<label>Mã NV</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.NhanVien.HoTen)*@<label>Họ tên</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.Ngay)*@<label>Ngày</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.ThoiGianVao)*@<label>Thời gian vào</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.ThoiGianRa)*@<label>Thời gian ra</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.ThoiGianLamViec)*@<label>Thời gian làm việc</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.ThoiGianTangCa)*@<label>Tăng ca</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.TrangThai)*@<label>Trạng thái</label>
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.MaNhanVien)
+        </td>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.NhanVien.HoTen)
+        </td>
+        <td class="inner-body-content">
+            @Html.FormatValue("MM-yyyy", item.Ngay.ToString("MM-dd-yyyy"))
+        </td>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.ThoiGianVao)
+        </td>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.ThoiGianRa)
+        </td>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.ThoiGianLamViec)
+        </td>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.ThoiGianTangCa)
+        </td>
+        <td class="inner-body-content">
+            @Html.DisplayFor(modelItem => item.TrangThai)
+        </td>
+    </tr>
+        }
+
+    </table>
+</div>
+<style>
+    .inner-body-title, .inner-body-content {
+        text-align: center;
+    }
+</style>
+
+
+
+

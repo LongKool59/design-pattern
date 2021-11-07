@@ -1,0 +1,93 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IEnumerable<WebApplication1.Models.ViewModel.Ct_PhatViewModel>
+@{
+    ViewBag.Title = "DsChiTietPhat";
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+<style>
+    .table-ct_thuongphat {
+        margin-left: 17%;
+    }
+
+    .row-table {
+        margin-bottom: 20px;
+    }
+
+    .table-content, .top-title {
+        min-width: 100%;
+    }
+
+    .table-ct_thuongphat {
+        font-size: 23px;
+        margin: 0 auto;
+    }
+
+    .table-ct_thuongphat, th, td, tr {
+        border: 2px solid black;
+    }
+
+    .thang-nam-title {
+        font-size: 27px;
+        text-align: center;
+        text-decoration: underline dashed blue;
+    }
+
+    h1.function-page-title {
+        font-weight: 600;
+        font-size: 2.9rem;
+        text-align: center
+    }
+
+    .inner-body-content {
+        text-align: center;
+    }
+</style>
+<h1 class="function-page-title" style="text-align:center">CHI TIẾT PHẠT CỦA NHÂN VIÊN</h1>
+@Html.Partial("_Notifications")
+<div class="table-content">
+    <div class="top-title">
+        <p class="thang-nam-title">Tháng <strong>@ViewBag.month</strong> Năm  <strong>@ViewBag.year</strong></p>
+    </div>
+    <table class="table-ct_thuongphat">
+        <tr class="row-table">
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.MaNhanVien)*@<label>Mã NV</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.NhanVien.HoTen)*@<label>Họ tên</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.Ngay)*@<label>Tháng Năm</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.Ngay)*@<label>Tên loại phạt</label>
+            </th>
+            <th class="inner-body-title">
+                @*@Html.DisplayNameFor(model => model.ThoiGianVao)*@<label>Giá trị phạt</label>
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="inner-body-content">
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td class="inner-body-content">
+                    @Html.DisplayFor(modelItem => item.NhanVien.HoTen)
+                </td>
+                <td class="inner-body-content">
+                    @Html.FormatValue("MM-yyyy", item.NgayPhat.ToString("MM-yyyy"))
+                </td>
+                <td class="inner-body-content">
+                    @Html.DisplayFor(modelItem => item.LoaiPhat.TenLoaiPhat)
+                </td>
+                <td class="inner-body-content">
+                    @Html.DisplayFor(modelItem => item.LoaiPhat.GiaTri)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

@@ -405,6 +405,9 @@
     <Content Include="Views\QuyDinhKhac\Edit.cshtml" />
     <Content Include="Views\QuyDinhKhac\Index.cshtml" />
     <Content Include="Views\ThongKeLuong\Details_DSLuongTheoNhanVien.cshtml" />
+    <Content Include="Views\ChamCong\DSChamCong.cshtml" />
+    <Content Include="Views\ThongTin\DsChiTietPhat.cshtml" />
+    <Content Include="Views\ThongTin\DsChiTietThuong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />

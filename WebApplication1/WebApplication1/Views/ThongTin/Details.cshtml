@@ -76,6 +76,21 @@
         background-color: white;
         color: black;
         padding: 0.5rem 1rem;
+        margin-left: 9%;
+        border-color: red
+    }
+    .btn-award {
+        background-color: white;
+        color: black;
+        padding: 0.5rem 1rem;
+        margin-left: 9%;
+        border-color: black
+    }
+    .btn-phat {
+        background-color: white;
+        color: black;
+        padding: 0.5rem 1rem;
+        margin-left: 9%;
         border-color: red
     }
 
@@ -154,5 +169,7 @@
     <div class="footer-function">
         <a class="btn btn-close" href="/ThongTin/XemBangLuong"><i class="fas fa-window-close"></i></a>
         <a class="btn btn-print-salary" href="/ThongKeLuong/Print/?id=@Model.MaLuong_Thang&maNV=@Model.LuongCoBan.MaNhanVien&month=@Model.ThangNam.Month&year=@Model.ThangNam.Year" target="_blank"><i class="fas fa-file-download"></i></a>
+        <a class="btn btn-phat" href="/ThongTin/PrintCTPhat?month=@Model.ThangNam.Month&year=@Model.ThangNam.Year&maNV=@Model.LuongCoBan.MaNhanVien"><i class="fas fa-exclamation-triangle"></i></a>
+        <a class="btn btn-award" href="/ThongTin/PrintCTThuong?month=@Model.ThangNam.Month&year=@Model.ThangNam.Year&maNV=@Model.LuongCoBan.MaNhanVien"><i class="fas fa-award"></i></a>
     </div>
 </div>

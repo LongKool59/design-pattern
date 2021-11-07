@@ -262,6 +262,8 @@ namespace WebApplication1.Controllers
                 return HttpNotFound();
             }
             TempData["MaNV"] = luongThang.LuongCoBan.MaNhanVien;
+            TempData["month"] = luongThang.ThangNam.Month;
+            TempData["nam"] = luongThang.ThangNam.Year;
             LuongThangViewModel luongThangViewModel = luongThang;
             return View(luongThangViewModel);
         }
@@ -509,5 +511,6 @@ namespace WebApplication1.Controllers
             }
         }
         #endregion in ra danh sách lương tháng của nhiều nhân viên (theo nhân viên)
+
     }
 }

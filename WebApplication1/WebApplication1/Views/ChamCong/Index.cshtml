@@ -44,6 +44,7 @@
                 <input class="input-search" type="text" placeholder="Nhập từ khóa tìm kiếm..." name="tenTimKiem" />
                 <button class="btn btn-search" type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
                 <a href='@Url.Action("Index", "ChamCong")' class="btn btn-reload" style="color:black"><i class="fas fa-sync-alt"></i> Tải lại</a>
+                <a href="/ChamCong/PrintDSChamCong/?fromDate=@TempData["fromDate"]&toDate=@TempData["toDate"]&MaPB=@ViewBag.MaPB&loaiTimKiem=@TempData["loaiTimKiem"]&tenTimKiem=@TempData["tenTimKiem"]" class="btn btn-print-all" style="color:black" target="_blank"><i class="fas fa-print"></i> Xuất danh sách</a>
             </div>
         }
     </div>

@@ -10,6 +10,8 @@ using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
 using WebApplication1.Extensions;
 using PagedList;
+using Rotativa;
+
 namespace WebApplication1.Controllers
 {
     public class ChamCongController : Controller
@@ -151,7 +153,7 @@ namespace WebApplication1.Controllers
                     chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
                     return View(chamCongViewModel.ToPagedList(pageNumber, pageSize));
                 }
-                else if(MaPB != null)
+                else if (MaPB != null)
                 {
                     if (fromDate > toDate)
                     {
@@ -172,7 +174,7 @@ namespace WebApplication1.Controllers
                         else if (loaiTimKiem == "TenNhanVien")
                         {
                             if (tenTimKiem == null || tenTimKiem == "")
-                            
+
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             else
                                 this.AddNotification("Kết quả tìm kiếm theo phòng ban: " + tenPB + ", tên nhân viên:  " + tenTimKiem + "!", NotificationType.INFO);
@@ -303,5 +305,251 @@ namespace WebApplication1.Controllers
             }
             base.Dispose(disposing);
         }
+        #region in ra danh sách chấm công
+        public void TruyenViewBagChamCong(DateTime? fromDate, DateTime? toDate, string MaPB, string loaiTimKiem, string tenTimKiem)
+        {
+            ViewBag.fromDate = fromDate;
+            ViewBag.toDate = toDate;
+            ViewBag.loaiTimKiem = loaiTimKiem;
+            ViewBag.tenTimKiem = tenTimKiem;
+            if (MaPB == "12")
+            {
+                ViewBag.TenPB = "Tất cả";
+            }
+            else
+            {
+                var phongBan = db.PhongBans.Where(x => x.MaPB.ToString() == MaPB).SingleOrDefault();
+                if (phongBan != null)
+                    ViewBag.TenPB = phongBan.TenPB.ToString();
+            }
+        }
+        public ActionResult PrintDSChamCong(DateTime? fromDate, DateTime? toDate, string MaPB, string loaiTimKiem, string tenTimKiem)
+        {
+            return new ActionAsPdf("DSChamCong", new { fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem }) { FileName = "DSChamCong_Tu_" + fromDate + "_Den_" + toDate + "_MaPB_"+MaPB+"_LoaiTimKiem_" + loaiTimKiem + "_TenTimKiem_" + tenTimKiem + ".pdf" };
+        }
+        public ActionResult DSChamCong(DateTime? fromDate, DateTime? toDate, string MaPB, string loaiTimKiem, string tenTimKiem)
+        {
+            TempData.Keep();
+            IQueryable<ChamCong> chamCongs;
+            List<ChamCongViewModel> chamCongViewModel;
+            if (MaPB == "12")
+            {
+                TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                if (fromDate > toDate)
+                {
+                    TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                    chamCongs = db.ChamCongs.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                    chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                    return View(chamCongViewModel);
+                }
+                else if (fromDate == null && toDate == null)
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+                else if (fromDate != null && toDate == null)
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+                else if (fromDate == null && toDate != null)
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay <= toDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay <= toDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay <= toDate).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+                else
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+            }
+            else if (MaPB != "12")
+            {
+                TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                if (fromDate > toDate)
+                {
+                    TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                    chamCongs = db.ChamCongs.Include(n => n.NhanVien).Where(x => x.NhanVien.HoTen.Contains("/*-+-*/-+-*/")).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                    chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                    return View(chamCongViewModel);
+                }
+                else if (fromDate == null && toDate == null)
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+                else if (fromDate != null && toDate == null)
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+                else if (fromDate == null && toDate != null)
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay <= toDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay <= toDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay <= toDate).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+                else
+                {
+                    if (loaiTimKiem == "MaNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else if (loaiTimKiem == "TenNhanVien" && tenTimKiem != null)
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                    else
+                    {
+                        TruyenViewBagChamCong(fromDate, toDate, MaPB, loaiTimKiem, tenTimKiem);
+                        chamCongs = db.ChamCongs.Where(x => x.Ngay >= fromDate && x.Ngay <= toDate).Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+                        chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+                        return View(chamCongViewModel);
+                    }
+                }
+            }
+            chamCongs = db.ChamCongs.Include(n => n.NhanVien).OrderByDescending(x => x.Ngay).ThenBy(x => x.NhanVien.HoTen);
+            chamCongViewModel = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
+            return View(chamCongViewModel);
+        }
+        #endregion in ra danh sách chấm công
     }
 }

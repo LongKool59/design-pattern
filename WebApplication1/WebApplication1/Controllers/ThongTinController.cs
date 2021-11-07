@@ -129,5 +129,39 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction("ThongTinTaiKhoan");
         }
+        #region in ra chi tiết phạt của nhân viên
+        public ActionResult PrintCTPhat(int? month, int? year, int? maNV)
+        {
+            return new ActionAsPdf("InChiTietPhat", new { month, year, maNV }) { FileName = "ChiTietPhat_MaNV_" + maNV + "_Thang_" + month + "_Nam_" + year + ".pdf" };
+        }
+        public ActionResult DsChiTietPhat(int? month, int? year, int? maNV)
+        {
+            TempData.Keep();
+            IQueryable<Ct_Phat> ct_Phats;
+            List<Ct_PhatViewModel> ct_PhatViewModels;
+            ViewBag.month = month;
+            ViewBag.year = year;
+            ct_Phats = db.Ct_Phat.Where(x => x.MaNhanVien == maNV && x.NgayPhat.Month == month && x.NgayPhat.Year == year);
+            ct_PhatViewModels = ct_Phats.ToList().ConvertAll<Ct_PhatViewModel>(x => x);
+            return View(ct_PhatViewModels);
+        }
+        #endregion in ra chi tiết phạt của nhân viên
+
+        public ActionResult PrintCTThuong(int? month, int? year, int? maNV)
+        {
+            return new ActionAsPdf("DsChiTietThuong", new { month, year, maNV }) { FileName = "ChiTietThuong_MaNV_" + maNV + "_Thang_" + month + "_Nam_" + year + ".pdf" };
+        }
+
+        public ActionResult DsChiTietThuong(int? month, int? year, int? maNV)
+        {
+            TempData.Keep();
+            IQueryable<Ct_Thuong> ct_Thuongs;
+            List<Ct_ThuongViewModel> ct_ThuongViewModels;
+            ViewBag.month = month;
+            ViewBag.year = year;
+            ct_Thuongs = db.Ct_Thuong.Where(x => x.MaNhanVien == maNV && x.NgayThuong.Month == month && x.NgayThuong.Year == year);
+            ct_ThuongViewModels = ct_Thuongs.ToList().ConvertAll<Ct_ThuongViewModel>(x => x);
+            return View(ct_ThuongViewModels);
+        }
     }
 }
