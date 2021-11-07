@@ -132,7 +132,7 @@ namespace WebApplication1.Controllers
         #region in ra chi tiết phạt của nhân viên
         public ActionResult PrintCTPhat(int? month, int? year, int? maNV)
         {
-            return new ActionAsPdf("InChiTietPhat", new { month, year, maNV }) { FileName = "ChiTietPhat_MaNV_" + maNV + "_Thang_" + month + "_Nam_" + year + ".pdf" };
+            return new ActionAsPdf("DsChiTietPhat", new { month, year, maNV }) { FileName = "ChiTietPhat_MaNV_" + maNV + "_Thang_" + month + "_Nam_" + year + ".pdf" };
         }
         public ActionResult DsChiTietPhat(int? month, int? year, int? maNV)
         {
