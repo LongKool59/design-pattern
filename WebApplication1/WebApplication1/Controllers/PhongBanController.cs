@@ -22,7 +22,9 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index(int? page, string loaiTimKiem, string tenTimKiem)
         {
-
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
             IQueryable<PhongBan> phongBans;
@@ -73,7 +75,7 @@ namespace WebApplication1.Controllers
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn phòng ban để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
                 }
                 foreach (var item in phongBanViewModels)
                 {
@@ -89,7 +91,7 @@ namespace WebApplication1.Controllers
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             catch
             {
@@ -100,6 +102,7 @@ namespace WebApplication1.Controllers
         // GET: PhongBan/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -116,6 +119,7 @@ namespace WebApplication1.Controllers
         // GET: PhongBan/Create
         public ActionResult Create()
         {
+            TempData.Keep();
             return View();
         }
 
@@ -137,7 +141,7 @@ namespace WebApplication1.Controllers
 
                 db.PhongBans.Add(phongBan);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
 
             return View(phongBanViewModel);
@@ -146,6 +150,7 @@ namespace WebApplication1.Controllers
         // GET: PhongBan/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -172,7 +177,7 @@ namespace WebApplication1.Controllers
                 phongBan = phongBanViewModel;
                 db.Entry(phongBan).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(phongBanViewModel);
         }

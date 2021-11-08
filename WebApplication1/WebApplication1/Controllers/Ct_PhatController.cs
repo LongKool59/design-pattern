@@ -24,7 +24,13 @@ namespace WebApplication1.Controllers
             IQueryable<Ct_Phat> ct_P;
             QLNhanSuEntities db = new QLNhanSuEntities();
             List<Ct_PhatViewModel> ct_PhatViewModels;
-            if(submit != null)
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
+            TempData["submit"] = submit;
+
+            if (submit != null)
             {
                 if(submit == "timKiem")
                 {
@@ -424,6 +430,7 @@ namespace WebApplication1.Controllers
         // GET: Ct_Phat/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -440,6 +447,7 @@ namespace WebApplication1.Controllers
         // GET: Ct_Phat/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -467,7 +475,7 @@ namespace WebApplication1.Controllers
                 Ct_Phat ct_Phat = ct_PhatViewModel;
                 db.Entry(ct_Phat).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"], submit = TempData["submit"] });
             }
             ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats.Where(x => x.TrangThai == true), "MaLoaiPhat", "TenLoaiPhat", ct_PhatViewModel.MaLoaiPhat);
             ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", ct_PhatViewModel.MaNhanVien);
@@ -512,7 +520,7 @@ namespace WebApplication1.Controllers
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"], submit = TempData["submit"] });
             }
             catch
             {

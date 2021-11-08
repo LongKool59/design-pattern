@@ -76,5 +76,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] })
 </div>

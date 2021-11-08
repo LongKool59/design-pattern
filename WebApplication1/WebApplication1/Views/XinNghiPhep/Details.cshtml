@@ -63,5 +63,5 @@
     </dl>
 </div>
 <p class="footer-function">
-    @Html.ActionLink("Quay lại danh sách", "Index")
+    @Html.ActionLink("Quay lại danh sách", "Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] })
 </p>

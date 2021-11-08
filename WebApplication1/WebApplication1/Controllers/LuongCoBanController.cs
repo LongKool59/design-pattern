@@ -26,6 +26,12 @@ namespace WebApplication1.Controllers
             int pageSize = 10;
             IQueryable<LuongCoBan> luongCoBans;
             List<LuongCoBanViewModel> luongCoBanViewModels;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
+            TempData["MaPB"] = MaPB;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            string tenPhongBan = "";
             try
             {
                 if (trangThai == "TatCa")
@@ -38,8 +44,10 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Tất cả, phòng ban: Tất cả, mã nhân viên: " + tenTimKiem, NotificationType.INFO);
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else if (loaiTimKiem == "TenNhanVien")
@@ -48,8 +56,11 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Tất cả, phòng ban: Tất cả, tên nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
@@ -61,14 +72,18 @@ namespace WebApplication1.Controllers
                     }
                     else
                     {
+                        tenPhongBan = db.PhongBans.Where(x => x.MaPB.ToString() == MaPB).Select(x => x.TenPB).Single();
                         if (loaiTimKiem == "MaNhanVien")
                         {
                             if (tenTimKiem == null || tenTimKiem == "")
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Tất cả, phòng ban: " + tenPhongBan + ", mã nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else if (loaiTimKiem == "TenNhanVien")
@@ -77,14 +92,16 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Tất cả, phòng ban: " + tenPhongBan + ", tên nhân viên: " + tenTimKiem, NotificationType.INFO);
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             luongCoBans = db.LuongCoBans.Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString())).Include(l => l.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -99,8 +116,10 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Hoạt động, phòng ban: Tất cả, mã nhân viên: " + tenTimKiem, NotificationType.INFO);
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.TrangThai == true && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else if (loaiTimKiem == "TenNhanVien")
@@ -109,27 +128,35 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Hoạt động, phòng ban: Tất cả, tên nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.TrangThai == true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.TrangThai == true).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
+                        tenPhongBan = db.PhongBans.Where(x => x.MaPB.ToString() == MaPB).Select(x => x.TenPB).Single();
+
                         if (loaiTimKiem == "MaNhanVien")
                         {
                             if (tenTimKiem == null || tenTimKiem == "")
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Hoạt động, phòng ban: " + tenPhongBan + ", mã nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.TrangThai == true && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);  
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else if (loaiTimKiem == "TenNhanVien")
@@ -138,14 +165,17 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Hoạt động, phòng ban: " + tenPhongBan + ", tên nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.TrangThai == true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.TrangThai == true).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -160,8 +190,11 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Vô hiệu hóa, phòng ban: Tất cả, mã nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.TrangThai != true && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);  
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else if (loaiTimKiem == "TenNhanVien")
@@ -170,27 +203,35 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Vô hiệu hóa, phòng ban: Tất cả, tên nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.TrangThai != true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);  
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.TrangThai != true).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
+                        tenPhongBan = db.PhongBans.Where(x => x.MaPB.ToString() == MaPB).Select(x => x.TenPB).Single();
+
                         if (loaiTimKiem == "MaNhanVien")
                         {
                             if (tenTimKiem == null || tenTimKiem == "")
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Vô hiệu hóa, phòng ban: " + tenPhongBan + ", mã nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.TrangThai != true && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else if (loaiTimKiem == "TenNhanVien")
@@ -199,28 +240,31 @@ namespace WebApplication1.Controllers
                             {
                                 this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             }
+                            else
+                                this.AddNotification("Kết quả tìm kiếm theo trạng thái: Vô hiệu hóa, phòng ban: " + tenPhongBan + ", tên nhân viên: " + tenTimKiem, NotificationType.INFO);
+
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.TrangThai != true && x.NhanVien.HoTen.Contains(tenTimKiem.ToString())).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals(MaPB.ToString()) && x.TrangThai != true).OrderBy(x => x.NhanVien.HoTen);
-                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x); 
+                            luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                             return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                 }
 
                 luongCoBans = db.LuongCoBans.Include(l => l.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);  
+                luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                 return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
             }
             catch
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
                 luongCoBans = db.LuongCoBans.Where(x => x.NhanVien.PhongBan.MaPB.ToString().Equals("*/-+-*/-+*/")).Include(l => l.NhanVien).OrderBy(x => x.NhanVien.HoTen);
-                luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);  
+                luongCoBanViewModels = luongCoBans.ToList().ConvertAll<LuongCoBanViewModel>(x => x);
                 return View(luongCoBanViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
@@ -228,6 +272,7 @@ namespace WebApplication1.Controllers
         // GET: LuongCoBan/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -244,6 +289,7 @@ namespace WebApplication1.Controllers
         // GET: LuongCoBan/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -269,7 +315,7 @@ namespace WebApplication1.Controllers
             {
                 //db.Entry(luongCoBan).State = EntityState.Modified;
                 var luongCoBanList = db.LuongCoBans.Where(x => x.MaNhanVien == luongCoBanViewModel.MaNhanVien);
-                foreach(var item in luongCoBanList)
+                foreach (var item in luongCoBanList)
                 {
                     item.TrangThai = false;
                 }
@@ -281,7 +327,7 @@ namespace WebApplication1.Controllers
                 newLuongCB.NgaySua = DateTime.Now;
                 db.LuongCoBans.Add(newLuongCB);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], MaPB = TempData["MaPB"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", luongCoBanViewModel.MaNhanVien);
             return View(luongCoBanViewModel);

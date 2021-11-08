@@ -20,6 +20,9 @@ namespace WebApplication1.Controllers
         // GET: XinNghiPhep
         public ActionResult Index(int? page, DateTime? fromDate, DateTime? toDate)
         {
+            TempData["page"] = page;
+            TempData["fromDate"] = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd") : null;
+            TempData["toDate"] = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? Convert.ToDateTime(toDate).ToString("yyyy-MM-dd") : null;
             IQueryable<DonNghiPhep> donNghiPheps;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
@@ -38,25 +41,25 @@ namespace WebApplication1.Controllers
                 {
                     if (fromDate == null && toDate == null)
                     {
-                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.MaNhanVien.ToString() == maNhanVien).OrderBy(x => x.NgayNghi);
+                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.MaNhanVien.ToString() == maNhanVien).OrderByDescending(x => x.NgayNghi);
                         donNghiPhepViewModels = donNghiPheps.ToList().ConvertAll<DonNghiPhepViewModel>(x => x);
                         return View(donNghiPhepViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else if (fromDate != null && toDate == null)
                     {
-                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.MaNhanVien.ToString() == maNhanVien).OrderBy(x => x.NgayNghi);
+                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.MaNhanVien.ToString() == maNhanVien).OrderByDescending(x => x.NgayNghi);
                         donNghiPhepViewModels = donNghiPheps.ToList().ConvertAll<DonNghiPhepViewModel>(x => x);
                         return View(donNghiPhepViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else if (fromDate == null && toDate != null)
                     {
-                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.NgayNghi <= toDate && x.MaNhanVien.ToString() == maNhanVien).OrderBy(x => x.NgayNghi);
+                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.NgayNghi <= toDate && x.MaNhanVien.ToString() == maNhanVien).OrderByDescending(x => x.NgayNghi);
                         donNghiPhepViewModels = donNghiPheps.ToList().ConvertAll<DonNghiPhepViewModel>(x => x);
                         return View(donNghiPhepViewModels.ToPagedList(pageNumber, pageSize));
                     }
                     else
                     {
-                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.MaNhanVien.ToString() == maNhanVien).OrderBy(x => x.NgayNghi);
+                        donNghiPheps = db.DonNghiPheps.Include(n => n.NhanVien).Where(x => x.NgayNghi >= fromDate && x.NgayNghi <= toDate && x.MaNhanVien.ToString() == maNhanVien).OrderByDescending(x => x.NgayNghi);
                         donNghiPhepViewModels = donNghiPheps.ToList().ConvertAll<DonNghiPhepViewModel>(x => x);
                         return View(donNghiPhepViewModels.ToPagedList(pageNumber, pageSize));
                     }
@@ -74,6 +77,7 @@ namespace WebApplication1.Controllers
         // GET: XinNghiPhep/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -90,6 +94,7 @@ namespace WebApplication1.Controllers
         // GET: XinNghiPhep/Create
         public ActionResult Create()
         {
+            TempData.Keep();
             return View();
         }
 
@@ -153,7 +158,7 @@ namespace WebApplication1.Controllers
                         db.DonNghiPheps.Add(donNghiPhep);
                         db.SaveChanges();
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] });
                 }
                 else
                 {
@@ -197,7 +202,7 @@ namespace WebApplication1.Controllers
                     donNghiPhep = donNghiPhepViewModel;
                     db.DonNghiPheps.Add(donNghiPhep);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] });
                 }
             }
 
@@ -207,6 +212,7 @@ namespace WebApplication1.Controllers
         // GET: XinNghiPhep/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -231,7 +237,7 @@ namespace WebApplication1.Controllers
             {
                 db.Entry(donNghiPhep).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] });
             }
             ViewBag.MaNhanVien = new SelectList(db.NhanViens, "MaNhanVien", "HoTen", donNghiPhep.MaNhanVien);
             return View(donNghiPhep);
@@ -248,14 +254,14 @@ namespace WebApplication1.Controllers
                 if (donNghiPhepChecked.Count == 0)
                 {
                     this.AddNotification("Vui lòng chọn đơn nghỉ phép để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] });
                 }
 
                 var donNghiPhepDaDuyet = donNghiPhepViewModels.Where(x => x.TrangThai == true && x.IsChecked == true).FirstOrDefault();
                 if (donNghiPhepDaDuyet != null)
                 {
                     this.AddNotification("Vui lòng chỉ chọn đơn nghỉ phép chưa duyệt để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] });
                 }
                 foreach (var item in donNghiPhepChecked)
                 {
@@ -266,7 +272,7 @@ namespace WebApplication1.Controllers
                     }
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], fromDate = TempData["fromDate"], toDate = TempData["toDate"] });
             }
             catch
             {
