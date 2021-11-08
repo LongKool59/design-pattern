@@ -36,7 +36,7 @@ namespace WebApplication1.Models.ViewModel
         public string NguoiSua { get; set; }
         [DisplayName("Ngày sửa")]
         public System.DateTime NgaySua { get; set; }
-
+        
         public static implicit operator ChucVuViewModel(ChucVu chucVu)
         {
             return new ChucVuViewModel

@@ -149,6 +149,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Builder\ConcreteBuilder\ChucVuViewModelBuilder.cs" />
+    <Compile Include="Builder\ConcreteBuilder\PhongBanBuilder.cs" />
+    <Compile Include="Builder\IBuilder\IChucVuViewModelBuilder.cs" />
+    <Compile Include="Builder\IBuilder\IPhongBanBuilder.cs" />
     <Compile Include="Controllers\CCRaVaoController.cs" />
     <Compile Include="Controllers\ChamCongController.cs" />
     <Compile Include="Controllers\ChucVuController.cs" />

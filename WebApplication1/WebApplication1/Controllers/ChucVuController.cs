@@ -11,6 +11,8 @@ using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
+using WebApplication1.Builder.ConcreteBuilder;
+using WebApplication1.Builder.IBuilder;
 
 namespace WebApplication1.Controllers
 {
@@ -220,9 +222,17 @@ namespace WebApplication1.Controllers
                         }
                         oldTenChucVu = item.TenChucVu;
                     }
-                    chucVuViewModel.TenChucVu = oldTenChucVu;
-                    chucVuViewModel.TrangThai = true;
-                    ChucVu chucVu = chucVuViewModel;
+
+                    var _chucVuViewModel = new ChucVuViewModelBuilder()
+                        .AddTenChucVu(oldTenChucVu)
+                        .AddHeSoChucVu(chucVuViewModel.HeSoChucVu)
+                        .AddPhuCap(chucVuViewModel.PhuCap)
+                        .AddTrangThai(true)
+                        .AddNguoiSua(chucVuViewModel.NguoiSua)
+                        .AddNgaySua(chucVuViewModel.NgaySua)
+                        .Build();   
+
+                    ChucVu chucVu = _chucVuViewModel;
                     db.ChucVus.Add(chucVu);
                     db.SaveChanges();
 
@@ -235,8 +245,16 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    chucVuViewModel.TrangThai = true;
-                    ChucVu chucVu = chucVuViewModel;
+                    var _chucVuViewModel = new ChucVuViewModelBuilder()
+                       .AddTenChucVu(chucVuViewModel.TenChucVu)
+                       .AddHeSoChucVu(chucVuViewModel.HeSoChucVu)
+                       .AddPhuCap(chucVuViewModel.PhuCap)
+                       .AddTrangThai(true)
+                       .AddNguoiSua(chucVuViewModel.NguoiSua)
+                       .AddNgaySua(chucVuViewModel.NgaySua)
+                       .Build();
+
+                    ChucVu chucVu = _chucVuViewModel;
                     db.ChucVus.Add(chucVu);
                 }
                 db.SaveChanges();

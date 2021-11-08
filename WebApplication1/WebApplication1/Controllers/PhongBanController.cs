@@ -10,7 +10,8 @@ using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
-
+using WebApplication1.Builder.IBuilder;
+using WebApplication1.Builder.ConcreteBuilder;
 namespace WebApplication1.Controllers
 {
     public class PhongBanController : Controller
@@ -125,10 +126,15 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(PhongBanViewModel phongBanViewModel)
         {
-            PhongBan phongBan;
             if (ModelState.IsValid)
             {
-                phongBan = phongBanViewModel;
+                var phongBan = new PhongBanBuilder()
+                    .AddTenPhongBan(phongBanViewModel.TenPB)
+                    .AddSoDT(phongBanViewModel.SoDT)
+                    .AddNgaySua(phongBanViewModel.NgaySua)
+                    .AddNguoiSua(phongBanViewModel.NguoiSua)
+                    .Build();
+
                 db.PhongBans.Add(phongBan);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -171,7 +177,7 @@ namespace WebApplication1.Controllers
             return View(phongBanViewModel);
         }
 
-       
+
 
         protected override void Dispose(bool disposing)
         {
