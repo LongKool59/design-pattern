@@ -7,7 +7,8 @@ body {
 }
 
 .navbar {
-    background-color: #06cc28;
+    background-color: #5AB9EA;
+    color: white;
     border: none;
     margin-bottom: 0 !important;
     border-radius: 0 !important;
@@ -130,7 +131,8 @@ a[data-toggle="collapse"] {
 h1.function-page-title {
     font-size: 2.2rem;
     font-weight: 400;
-    background-color: #8080808c;
+    color: black;
+    background-color: #84CEEB;
     text-align: center;
     padding: 1.5rem 0;
     background: linear-gradient(to bottom, #71f3f9, #2193d6);
@@ -264,7 +266,8 @@ i.fas.fa-eye::before {
 
 
 .table-title {
-    background-color: rgb(0 255 33 / 0.55);
+    background-color:  #C1C8E4;
+    color: black;
 }
 
 .control-label {
