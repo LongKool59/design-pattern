@@ -33,7 +33,7 @@ body {
 .sidebar {
     min-width: 20%;
     max-width: 20%;
-    background-color: black;
+    background-color: #5AB9EA;
     padding-bottom: 50%;
     color: #fff;
     transition: all 0.3s;
@@ -79,13 +79,13 @@ body {
     }
 
         .sidebar ul li a:hover {
-            color: #7386D5;
-            background: #fff;
+            color: #C1C8E4;
+            background: #5680E9;
         }
 
         .sidebar ul li a.active {
             color: #fff;
-            background: #00b116;
+            background: #8860D0;
             font-weight: bold;
         }
 
