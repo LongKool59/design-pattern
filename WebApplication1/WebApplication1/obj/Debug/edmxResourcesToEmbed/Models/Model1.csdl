@@ -57,6 +57,19 @@
     <NavigationProperty Name="NhanVien" Relationship="Self.FK_Ct_Thuong_NhanVien" FromRole="Ct_Thuong" ToRole="NhanVien" />
     <NavigationProperty Name="LoaiThuong" Relationship="Self.FK_Ct_Thuong_Thuong" FromRole="Ct_Thuong" ToRole="LoaiThuong" />
   </EntityType>
+  <EntityType Name="DonNghiPhep">
+    <Key>
+      <PropertyRef Name="MaDonNghiPhep" />
+    </Key>
+    <Property Name="MaDonNghiPhep" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaNhanVien" Type="Int32" Nullable="false" />
+    <Property Name="NgayNghi" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="CaNghi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LyDo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+    <Property Name="NguoiDuyet" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="NhanVien" Relationship="Self.FK_DonNghiPhep_NhanVien" FromRole="DonNghiPhep" ToRole="NhanVien" />
+  </EntityType>
   <EntityType Name="LoaiPhat">
     <Key>
       <PropertyRef Name="MaLoaiPhat" />
@@ -147,6 +160,7 @@
     <NavigationProperty Name="ChucVu" Relationship="Self.FK_NhanVien_ChucVu" FromRole="NhanVien" ToRole="ChucVu" />
     <NavigationProperty Name="Ct_Phat" Relationship="Self.FK_Ct_Phat_NhanVien" FromRole="NhanVien" ToRole="Ct_Phat" />
     <NavigationProperty Name="Ct_Thuong" Relationship="Self.FK_Ct_Thuong_NhanVien" FromRole="NhanVien" ToRole="Ct_Thuong" />
+    <NavigationProperty Name="DonNghiPheps" Relationship="Self.FK_DonNghiPhep_NhanVien" FromRole="NhanVien" ToRole="DonNghiPhep" />
     <NavigationProperty Name="LuongCoBans" Relationship="Self.FK_LuongCoBan_LuongCoBan" FromRole="NhanVien" ToRole="LuongCoBan" />
     <NavigationProperty Name="Nghis" Relationship="Self.FK_Nghi_NhanVien" FromRole="NhanVien" ToRole="Nghi" />
     <NavigationProperty Name="PhongBan" Relationship="Self.FK_NhanVien_PhongBan" FromRole="NhanVien" ToRole="PhongBan" />
@@ -171,6 +185,24 @@
     <Property Name="NguoiSua" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="NgaySua" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="NhanViens" Relationship="Self.FK_NhanVien_PhongBan" FromRole="PhongBan" ToRole="NhanVien" />
+  </EntityType>
+  <EntityType Name="QuyDinhKhac">
+    <Key>
+      <PropertyRef Name="MaQuyDinh" />
+    </Key>
+    <Property Name="MaQuyDinh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenQuyDinh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GiaTri" Type="Int32" Nullable="false" />
+    <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="QuyDinhThoiGian">
+    <Key>
+      <PropertyRef Name="MaQuyDinh" />
+    </Key>
+    <Property Name="MaQuyDinh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenQuyDinh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GiaTri" Type="Time" Nullable="false" Precision="1" />
+    <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="TaiKhoan">
     <Key>
@@ -256,6 +288,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DonNghiPhep_NhanVien">
+    <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="1" />
+    <End Role="DonNghiPhep" Type="Self.DonNghiPhep" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhanVien">
+        <PropertyRef Name="MaNhanVien" />
+      </Principal>
+      <Dependent Role="DonNghiPhep">
+        <PropertyRef Name="MaNhanVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_LuongCoBan_LuongCoBan">
     <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="1" />
     <End Role="LuongCoBan" Type="Self.LuongCoBan" Multiplicity="*" />
@@ -333,6 +377,7 @@
     <EntitySet Name="ChucVus" EntityType="Self.ChucVu" />
     <EntitySet Name="Ct_Phat" EntityType="Self.Ct_Phat" />
     <EntitySet Name="Ct_Thuong" EntityType="Self.Ct_Thuong" />
+    <EntitySet Name="DonNghiPheps" EntityType="Self.DonNghiPhep" />
     <EntitySet Name="LoaiPhats" EntityType="Self.LoaiPhat" />
     <EntitySet Name="LoaiThuongs" EntityType="Self.LoaiThuong" />
     <EntitySet Name="LuongCoBans" EntityType="Self.LuongCoBan" />
@@ -341,6 +386,8 @@
     <EntitySet Name="NhanViens" EntityType="Self.NhanVien" />
     <EntitySet Name="PhanQuyens" EntityType="Self.PhanQuyen" />
     <EntitySet Name="PhongBans" EntityType="Self.PhongBan" />
+    <EntitySet Name="QuyDinhKhacs" EntityType="Self.QuyDinhKhac" />
+    <EntitySet Name="QuyDinhThoiGians" EntityType="Self.QuyDinhThoiGian" />
     <EntitySet Name="TaiKhoans" EntityType="Self.TaiKhoan" />
     <AssociationSet Name="FK_ChamCong_NhanVien" Association="Self.FK_ChamCong_NhanVien">
       <End Role="NhanVien" EntitySet="NhanViens" />
@@ -365,6 +412,10 @@
     <AssociationSet Name="FK_Ct_Thuong_Thuong" Association="Self.FK_Ct_Thuong_Thuong">
       <End Role="LoaiThuong" EntitySet="LoaiThuongs" />
       <End Role="Ct_Thuong" EntitySet="Ct_Thuong" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DonNghiPhep_NhanVien" Association="Self.FK_DonNghiPhep_NhanVien">
+      <End Role="NhanVien" EntitySet="NhanViens" />
+      <End Role="DonNghiPhep" EntitySet="DonNghiPheps" />
     </AssociationSet>
     <AssociationSet Name="FK_LuongCoBan_LuongCoBan" Association="Self.FK_LuongCoBan_LuongCoBan">
       <End Role="NhanVien" EntitySet="NhanViens" />

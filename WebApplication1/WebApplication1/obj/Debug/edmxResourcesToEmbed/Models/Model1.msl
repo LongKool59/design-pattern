@@ -55,6 +55,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="DonNghiPheps">
+      <EntityTypeMapping TypeName="QLNhanSuModel.DonNghiPhep">
+        <MappingFragment StoreEntitySet="DonNghiPhep">
+          <ScalarProperty Name="MaDonNghiPhep" ColumnName="MaDonNghiPhep" />
+          <ScalarProperty Name="MaNhanVien" ColumnName="MaNhanVien" />
+          <ScalarProperty Name="NgayNghi" ColumnName="NgayNghi" />
+          <ScalarProperty Name="CaNghi" ColumnName="CaNghi" />
+          <ScalarProperty Name="LyDo" ColumnName="LyDo" />
+          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+          <ScalarProperty Name="NguoiDuyet" ColumnName="NguoiDuyet" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="LoaiPhats">
       <EntityTypeMapping TypeName="QLNhanSuModel.LoaiPhat">
         <MappingFragment StoreEntitySet="LoaiPhat">
@@ -158,6 +171,26 @@
           <ScalarProperty Name="SoDT" ColumnName="SoDT" />
           <ScalarProperty Name="NguoiSua" ColumnName="NguoiSua" />
           <ScalarProperty Name="NgaySua" ColumnName="NgaySua" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuyDinhKhacs">
+      <EntityTypeMapping TypeName="QLNhanSuModel.QuyDinhKhac">
+        <MappingFragment StoreEntitySet="QuyDinhKhac">
+          <ScalarProperty Name="MaQuyDinh" ColumnName="MaQuyDinh" />
+          <ScalarProperty Name="TenQuyDinh" ColumnName="TenQuyDinh" />
+          <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
+          <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuyDinhThoiGians">
+      <EntityTypeMapping TypeName="QLNhanSuModel.QuyDinhThoiGian">
+        <MappingFragment StoreEntitySet="QuyDinhThoiGian">
+          <ScalarProperty Name="MaQuyDinh" ColumnName="MaQuyDinh" />
+          <ScalarProperty Name="TenQuyDinh" ColumnName="TenQuyDinh" />
+          <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
+          <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

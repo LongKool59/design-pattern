@@ -43,10 +43,10 @@ body {
         margin-left: 10%;
     }
 
-    .sidebar .sidebar-header {
-        padding: 20px;
-        background-color: black;
-    }
+.sidebar .sidebar-header {
+    padding: 20px;
+    background-color: #5AB9EA;
+}
 
         .sidebar .sidebar-header h3 {
             font-size: 2rem;

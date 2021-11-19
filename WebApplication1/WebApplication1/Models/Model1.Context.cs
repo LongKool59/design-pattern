@@ -29,6 +29,7 @@ namespace WebApplication1.Models
         public virtual DbSet<ChucVu> ChucVus { get; set; }
         public virtual DbSet<Ct_Phat> Ct_Phat { get; set; }
         public virtual DbSet<Ct_Thuong> Ct_Thuong { get; set; }
+        public virtual DbSet<DonNghiPhep> DonNghiPheps { get; set; }
         public virtual DbSet<LoaiPhat> LoaiPhats { get; set; }
         public virtual DbSet<LoaiThuong> LoaiThuongs { get; set; }
         public virtual DbSet<LuongCoBan> LuongCoBans { get; set; }
@@ -37,6 +38,8 @@ namespace WebApplication1.Models
         public virtual DbSet<NhanVien> NhanViens { get; set; }
         public virtual DbSet<PhanQuyen> PhanQuyens { get; set; }
         public virtual DbSet<PhongBan> PhongBans { get; set; }
+        public virtual DbSet<QuyDinhKhac> QuyDinhKhacs { get; set; }
+        public virtual DbSet<QuyDinhThoiGian> QuyDinhThoiGians { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
     }
 }
