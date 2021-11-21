@@ -33,9 +33,9 @@ body {
 .sidebar {
     min-width: 20%;
     max-width: 20%;
-    background-color: #FFA07A;
+    background-color: #5AB9EA;
     padding-bottom: 50%;
-    color: #fff;
+    color: #000000;
     transition: all 0.3s;
 }
 
@@ -45,7 +45,7 @@ body {
 
 .sidebar .sidebar-header {
     padding: 20px;
-    background-color: #FFA07A;
+    background-color: #5AB9EA;
 }
 
         .sidebar .sidebar-header h3 {
