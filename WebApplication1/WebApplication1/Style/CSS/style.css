@@ -70,13 +70,13 @@ body {
         padding: 10px;
     }
 
-    .sidebar ul li a {
-        padding: 10px;
-        font-size: 1.1em;
-        display: block;
-        color: white;
-        text-decoration: none;
-    }
+.sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    color: #000000;
+    text-decoration: none;
+}
 
         .sidebar ul li a:hover {
             color: #C1C8E4;
