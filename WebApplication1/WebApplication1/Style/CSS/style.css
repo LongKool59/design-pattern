@@ -59,6 +59,9 @@ body {
             font-size: 1.5rem;
             margin-left: 5%;
         }
+        .sidebar .sidebar-header a{
+            color: white;
+        }
 
     .sidebar ul.components {
         padding: 20px 0;
