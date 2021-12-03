@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers
 {
     public class QuyDinhKhacController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: QuyDinhKhac
         public ActionResult Index(int? page, string loaiTimKiem, string tenTimKiem)

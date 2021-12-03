@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers
 {
     public class NghiController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: Nghi
         public ActionResult Index(int? page, DateTime? fromDate, DateTime? toDate, string MaPB, string trangThai)

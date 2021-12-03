@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
 {
     public class LuongCoBanController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: LuongCoBan
         public ActionResult Index(int? page, string trangThai, string MaPB, string loaiTimKiem, string tenTimKiem)

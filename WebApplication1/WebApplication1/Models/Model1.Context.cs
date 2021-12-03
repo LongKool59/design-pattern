@@ -15,16 +15,21 @@ namespace WebApplication1.Models
     
     public partial class QLNhanSuEntities : DbContext
     {
-        public QLNhanSuEntities()
-            : base("name=QLNhanSuEntities")
+        private static QLNhanSuEntities instance;
+        private QLNhanSuEntities(): base("name=QLNhanSuEntities")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+        public static QLNhanSuEntities getInstance()
+        {
+            instance = new QLNhanSuEntities();
+            return instance;
+        }
+
         public virtual DbSet<ChamCong> ChamCongs { get; set; }
         public virtual DbSet<ChucVu> ChucVus { get; set; }
         public virtual DbSet<Ct_Phat> Ct_Phat { get; set; }
@@ -38,8 +43,8 @@ namespace WebApplication1.Models
         public virtual DbSet<NhanVien> NhanViens { get; set; }
         public virtual DbSet<PhanQuyen> PhanQuyens { get; set; }
         public virtual DbSet<PhongBan> PhongBans { get; set; }
+        public virtual DbSet<QuyDinhKhac> QuyDinhKhacs { get; set; }
         public virtual DbSet<QuyDinhThoiGian> QuyDinhThoiGians { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
-        public virtual DbSet<QuyDinhKhac> QuyDinhKhacs { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
 {
     public class ThongKeLuongController : Controller
     {
-        QLNhanSuEntities db = new QLNhanSuEntities();
+        QLNhanSuEntities db = QLNhanSuEntities.getInstance();
         // GET: ThongKeLuong
 
         public void TruyenPara(int? month, int? year, string MaPB)

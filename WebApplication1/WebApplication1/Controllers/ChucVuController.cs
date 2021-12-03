@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
 {
     public class ChucVuController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: ChucVu
         public ActionResult Index(string loaiTimKiem, string tenTimKiem, int? page, string trangThai)

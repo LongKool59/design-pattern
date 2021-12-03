@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers
 {
     public class LoaiThuongController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         public ActionResult Index(int? page, string trangThai, string loaiTimKiem, string tenTimKiem)
         {
@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
 
             try
             {
-                QLNhanSuEntities db = new QLNhanSuEntities();
+                QLNhanSuEntities db = QLNhanSuEntities.getInstance();
                 if (trangThai == "TatCa")
                 {
                     if (loaiTimKiem == "MaLoaiThuong")

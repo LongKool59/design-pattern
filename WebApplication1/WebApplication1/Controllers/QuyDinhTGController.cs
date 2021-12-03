@@ -13,9 +13,10 @@ using WebApplication1.Models.ViewModel;
 
 namespace WebApplication1.Controllers
 {
-    public class QuyDinhTGController : Controller
+    public class QuyDinhTGController : TemplateMethodController
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
+  
 
         // GET: QuyDinhTG
         public ActionResult Index(int? page, string loaiTimKiem, string tenTimKiem)
@@ -32,7 +33,7 @@ namespace WebApplication1.Controllers
                 if (loaiTimKiem == "MaQuyDinh")
                 {
                     if (tenTimKiem == "" || tenTimKiem == null)
-                        this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã quy định!", NotificationType.WARNING);
+                        PrintNotification();
                     else
                         this.AddNotification("Kết quả tìm kiếm theo mã quy định: " + tenTimKiem, NotificationType.INFO);
                     quyDinhThoiGians = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenQuyDinh);
@@ -42,7 +43,7 @@ namespace WebApplication1.Controllers
                 else if (loaiTimKiem == "TenQuyDinh")
                 {
                     if (tenTimKiem == "" || tenTimKiem == null)
-                        this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên quy định!", NotificationType.WARNING);
+                        PrintNotification2();
                     else
                         this.AddNotification("Kết quả tìm kiếm theo tên quy định: " + tenTimKiem, NotificationType.INFO);
                     quyDinhThoiGians = db.QuyDinhThoiGians.Where(x => x.TenQuyDinh.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenQuyDinh);
@@ -176,6 +177,15 @@ namespace WebApplication1.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected override void PrintNotification()
+        {
+            this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã quy định!", NotificationType.WARNING);
+        }
+        protected override void PrintNotification2()
+        {
+            this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên quy định!", NotificationType.WARNING);
         }
     }
 }

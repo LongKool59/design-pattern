@@ -10,7 +10,7 @@ namespace WebApplication1.Models.ViewModel
 {
     public partial class ChucVuViewModel
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
         public ChucVuViewModel()
         {
             this.NhanViens = new HashSet<NhanVien>();

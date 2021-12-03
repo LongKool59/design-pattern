@@ -16,7 +16,7 @@ namespace WebApplication1
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        QLNhanSuEntities ql = new QLNhanSuEntities();
+        QLNhanSuEntities ql = QLNhanSuEntities.getInstance();
 
         protected void Application_Start()
         {
@@ -338,7 +338,7 @@ namespace WebApplication1
     {
         public MyRegistry()
         {
-            QLNhanSuEntities ql = new QLNhanSuEntities();
+            QLNhanSuEntities ql = QLNhanSuEntities.getInstance();
             TimeSpan thoiGianTaoDSNVNghi = ql.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 5).Select(x => x.GiaTri).Single();
             MvcApplication mvcApplication = new MvcApplication();
 

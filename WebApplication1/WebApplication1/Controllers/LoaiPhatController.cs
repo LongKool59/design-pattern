@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
 {
     public class LoaiPhatController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: LoaiPhat
         public ActionResult Index(int? page, string trangThai, string loaiTimKiem, string tenTimKiem)
@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
 
             try
             {
-                QLNhanSuEntities db = new QLNhanSuEntities();
+                QLNhanSuEntities db = QLNhanSuEntities.getInstance();
                 
                 if (trangThai == "TatCa")
                 {

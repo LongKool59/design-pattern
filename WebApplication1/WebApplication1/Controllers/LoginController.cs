@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
 {
     public class LoginController : Controller
     {
-        QLNhanSuEntities database = new QLNhanSuEntities();
+        QLNhanSuEntities database = QLNhanSuEntities.getInstance();
         // GET: Login
         public ActionResult Login()
         {
@@ -159,7 +159,7 @@ namespace WebApplication1.Controllers
 
         public ActionResult ResetPassword(string id)
         {
-            QLNhanSuEntities database = new QLNhanSuEntities();
+            QLNhanSuEntities database = QLNhanSuEntities.getInstance();
             var taiKhoan = database.TaiKhoans.Where(s => s.ResetPasswordCode == id).FirstOrDefault();
             if(taiKhoan != null)
             {
@@ -181,7 +181,7 @@ namespace WebApplication1.Controllers
 
             if (ModelState.IsValid)
             {
-                QLNhanSuEntities database = new QLNhanSuEntities();
+                QLNhanSuEntities database = QLNhanSuEntities.getInstance();
                 var taiKhoan = database.TaiKhoans.Where(s => s.ResetPasswordCode == model.ResetCode).FirstOrDefault();
                 if(taiKhoan != null)
                 {

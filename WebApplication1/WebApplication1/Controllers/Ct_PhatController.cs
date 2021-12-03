@@ -16,13 +16,13 @@ namespace WebApplication1.Controllers
 {
     public class Ct_PhatController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: Ct_Phat
         public ActionResult Index(string loaiTimKiem, string tenTimKiem, int? page, string trangThai, string submit)
         {
             IQueryable<Ct_Phat> ct_P;
-            QLNhanSuEntities db = new QLNhanSuEntities();
+            QLNhanSuEntities db = QLNhanSuEntities.getInstance();
             List<Ct_PhatViewModel> ct_PhatViewModels;
             TempData["loaiTimKiem"] = loaiTimKiem;
             TempData["tenTimKiem"] = tenTimKiem;

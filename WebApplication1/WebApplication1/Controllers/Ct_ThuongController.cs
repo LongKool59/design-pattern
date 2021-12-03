@@ -15,11 +15,11 @@ namespace WebApplication1.Controllers
 {
     public class Ct_ThuongController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
         public ActionResult Index(string loaiTimKiem, string tenTimKiem, int? page, string trangThai, string submit)
         {
             IQueryable<Ct_Thuong> ct_T;
-            QLNhanSuEntities db = new QLNhanSuEntities();
+            QLNhanSuEntities db = QLNhanSuEntities.getInstance();
             List<Ct_ThuongViewModel> ct_ThuongViewModels;
             TempData["loaiTimKiem"] = loaiTimKiem;
             TempData["tenTimKiem"] = tenTimKiem;

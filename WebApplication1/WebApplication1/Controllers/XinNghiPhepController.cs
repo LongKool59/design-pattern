@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers
 {
     public class XinNghiPhepController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: XinNghiPhep
         public ActionResult Index(int? page, DateTime? fromDate, DateTime? toDate)

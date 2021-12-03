@@ -17,7 +17,7 @@ namespace WebApplication1.Controllers
 {
     public class NhanVienController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: NhanVien
         public ActionResult Index(string loaiTimKiem, string tenTimKiem, int? page, string trangThai)
@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers
             int pageNumber = page ?? 1;
             int pageSize = 10;
             IQueryable<NhanVien> nhanViens;
-            QLNhanSuEntities db = new QLNhanSuEntities();
+            QLNhanSuEntities db = QLNhanSuEntities.getInstance();
             List<NhanVienViewModel> nhanVienViewModels;
             TempData["loaiTimKiem"] = loaiTimKiem;
             TempData["tenTimKiem"] = tenTimKiem;

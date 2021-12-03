@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
 {
     public class ChamCongController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
 
         // GET: ChamCong
         public ActionResult Index(int? page, DateTime? fromDate, DateTime? toDate, string MaPB, string loaiTimKiem, string tenTimKiem)

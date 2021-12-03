@@ -13,7 +13,7 @@ namespace WebApplication1.Controllers
 {
     public class CCRaVaoController : Controller
     {
-        private QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = QLNhanSuEntities.getInstance();
         // GET: CCRaVao
         public ActionResult ChamCongNgay(int? page, int? month, int? year)
         {

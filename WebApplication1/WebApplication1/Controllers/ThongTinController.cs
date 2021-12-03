@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
 {
     public class ThongTinController : Controller
     {
-        QLNhanSuEntities db = new QLNhanSuEntities();
+        QLNhanSuEntities db = QLNhanSuEntities.getInstance();
         // GET: ThongTin
         public ActionResult ThongTinTaiKhoan()
         {
