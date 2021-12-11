@@ -232,17 +232,10 @@ namespace WebApplication1.Controllers
                     }
                     loaiPhatViewModel.TenLoaiPhat = oldTenLoaiPhat;
                     loaiPhatViewModel.TrangThai = true;
-
-                    HandleAddLoaiPhatModel(loaiPhatViewModel);
-                    //loaiPhat = loaiPhatViewModel;
-                    //db.LoaiPhats.Add(loaiPhat);
                 }
-                else
-                {
-                    HandleAddLoaiPhatModel(loaiPhatViewModel);
-                    //loaiPhat = loaiPhatViewModel;
-                    //db.LoaiPhats.Add(loaiPhat);
-                }
+                HandleAddLoaiPhatModel(loaiPhatViewModel);
+                //loaiPhat = loaiPhatViewModel;
+                //db.LoaiPhats.Add(loaiPhat);
                 db.SaveChanges();
                 return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }

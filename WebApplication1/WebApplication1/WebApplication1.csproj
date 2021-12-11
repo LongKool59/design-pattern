@@ -179,6 +179,8 @@
     <Compile Include="Controllers\ThongTinController.cs" />
     <Compile Include="Controllers\XinNghiPhepController.cs" />
     <Compile Include="Extensions\NotificationExtensions.cs" />
+    <Compile Include="FactoryMethod\ConcreteFactory\LoaiThuongFactory.cs" />
+    <Compile Include="FactoryMethod\Factory\Factory1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
