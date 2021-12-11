@@ -7,7 +7,8 @@ body {
 }
 
 .navbar {
-    background-color: #06cc28;
+    background-color: #5AB9EA;
+    color: white;
     border: none;
     margin-bottom: 0 !important;
     border-radius: 0 !important;
@@ -39,55 +40,55 @@ body {
     transition: all 0.3s;
 }
 
-    #sidebar.active {
-        margin-left: 10%;
+#sidebar.active {
+    margin-left: 10%;
+}
+
+.sidebar .sidebar-header {
+    padding: 20px;
+    background-color: black;
+}
+
+    .sidebar .sidebar-header h3 {
+        font-size: 2rem;
+        text-align: center;
+        text-transform: uppercase;
     }
 
-    .sidebar .sidebar-header {
-        padding: 20px;
-        background-color: black;
+    .sidebar .sidebar-header label {
+        display: inline-block;
+        font-size: 1.5rem;
+        margin-left: 5%;
     }
 
-        .sidebar .sidebar-header h3 {
-            font-size: 2rem;
-            text-align: center;
-            text-transform: uppercase;
-        }
+.sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
 
-        .sidebar .sidebar-header label {
-            display: inline-block;
-            font-size: 1.5rem;
-            margin-left: 5%;
-        }
+.sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
 
-    .sidebar ul.components {
-        padding: 20px 0;
-        border-bottom: 1px solid #47748b;
+.sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    color: white;
+    text-decoration: none;
+}
+
+    .sidebar ul li a:hover {
+        color: #7386D5;
+        background: #fff;
     }
 
-    .sidebar ul p {
+    .sidebar ul li a.active {
         color: #fff;
-        padding: 10px;
+        background: #00b116;
+        font-weight: bold;
     }
-
-    .sidebar ul li a {
-        padding: 10px;
-        font-size: 1.1em;
-        display: block;
-        color: white;
-        text-decoration: none;
-    }
-
-        .sidebar ul li a:hover {
-            color: #7386D5;
-            background: #fff;
-        }
-
-        .sidebar ul li a.active {
-            color: #fff;
-            background: #00b116;
-            font-weight: bold;
-        }
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -121,7 +122,7 @@ a[data-toggle="collapse"] {
 .list-employee > h1 {
     font-size: 2.2rem;
     font-weight: 400;
-    background-color: #8080808c;
+    background-color: white;
     text-align: center;
     padding: 1.5rem 0;
     background: linear-gradient(to bottom, #71f3f9, #2193d6);
@@ -130,10 +131,14 @@ a[data-toggle="collapse"] {
 h1.function-page-title {
     font-size: 2.2rem;
     font-weight: 400;
-    background-color: #8080808c;
+    color: black;
     text-align: center;
     padding: 1.5rem 0;
-    background: linear-gradient(to bottom, #71f3f9, #2193d6);
+    background: #84CEEB;
+}
+
+#function-page-title2 {
+    background: linear-gradient(to bottom,#FFFF00, #FF00FF);
 }
 
 dl.dl-horizontal {
@@ -172,9 +177,10 @@ dl.dl-horizontal {
     margin-right: 2rem;
 }
 
-.list-detail .btn-print-all{
-    background-color:#00fffc
+.list-detail .btn-print-all {
+    background-color: #00fffc
 }
+
 .form-group {
     margin-left: 15%;
 }
@@ -251,8 +257,6 @@ table.table {
 i.fas.fa-pen-alt::before {
     font-size: 25px;
     color: #FF7700;
- 
-    
 }
 
 i.fas.fa-eye::before {
@@ -264,7 +268,8 @@ i.fas.fa-eye::before {
 
 
 .table-title {
-    background-color: rgb(0 255 33 / 0.55);
+    background-color: #C1C8E4;
+    color: black;
 }
 
 .control-label {
@@ -343,8 +348,8 @@ input[type="radio"] {
     clear: both;
 }
 
-.body-content{
-    display:block;
+.body-content {
+    display: block;
 }
 /* Bố cục linh hoạt: ba cột xếp chồng lên nhau thay vì cạnh nhau khi màn hình
 có chiều rộng dưới 600px */
@@ -395,4 +400,3 @@ có chiều rộng dưới 600px */
 textarea {
     height: 80px;
     width: 100%;
-}

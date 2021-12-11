@@ -175,6 +175,7 @@
     <Compile Include="Controllers\QuyDinhKhacController.cs" />
     <Compile Include="Controllers\QuyDinhTGController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
+    <Compile Include="Controllers\TemplateMethodController.cs" />
     <Compile Include="Controllers\ThongKeLuongController.cs" />
     <Compile Include="Controllers\ThongTinController.cs" />
     <Compile Include="Controllers\XinNghiPhepController.cs" />
