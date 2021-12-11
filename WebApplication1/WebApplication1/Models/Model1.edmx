@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="QLNhanSuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="QLNhanSuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ChamCong">
           <Key>
             <PropertyRef Name="MaNhanVien" />
@@ -421,7 +421,8 @@
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QLNhanSuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -610,6 +611,15 @@
           <Property Name="NguoiSua" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="NgaySua" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="NhanViens" Relationship="Self.FK_NhanVien_PhongBan" FromRole="PhongBan" ToRole="NhanVien" />
+        </EntityType>
+        <EntityType Name="QuyDinhKhac">
+          <Key>
+            <PropertyRef Name="MaQuyDinh" />
+          </Key>
+          <Property Name="MaQuyDinh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenQuyDinh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GiaTri" Type="Int32" Nullable="false" />
+          <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="QuyDinhThoiGian">
           <Key>
@@ -802,6 +812,7 @@
           <EntitySet Name="NhanViens" EntityType="Self.NhanVien" />
           <EntitySet Name="PhanQuyens" EntityType="Self.PhanQuyen" />
           <EntitySet Name="PhongBans" EntityType="Self.PhongBan" />
+          <EntitySet Name="QuyDinhKhacs" EntityType="Self.QuyDinhKhac" />
           <EntitySet Name="QuyDinhThoiGians" EntityType="Self.QuyDinhThoiGian" />
           <EntitySet Name="TaiKhoans" EntityType="Self.TaiKhoan" />
           <AssociationSet Name="FK_ChamCong_NhanVien" Association="Self.FK_ChamCong_NhanVien">
@@ -856,17 +867,7 @@
             <End Role="PhanQuyen" EntitySet="PhanQuyens" />
             <End Role="TaiKhoan" EntitySet="TaiKhoans" />
           </AssociationSet>
-          <EntitySet Name="QuyDinhKhacs" EntityType="QLNhanSuModel.QuyDinhKhac" />
         </EntityContainer>
-        <EntityType Name="QuyDinhKhac">
-          <Key>
-            <PropertyRef Name="MaQuyDinh" />
-          </Key>
-          <Property Name="MaQuyDinh" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TenQuyDinh" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GiaTri" Type="Int32" Nullable="false" />
-          <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1046,6 +1047,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="QuyDinhKhacs">
+            <EntityTypeMapping TypeName="QLNhanSuModel.QuyDinhKhac">
+              <MappingFragment StoreEntitySet="QuyDinhKhac">
+                <ScalarProperty Name="MaQuyDinh" ColumnName="MaQuyDinh" />
+                <ScalarProperty Name="TenQuyDinh" ColumnName="TenQuyDinh" />
+                <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="QuyDinhThoiGians">
             <EntityTypeMapping TypeName="QLNhanSuModel.QuyDinhThoiGian">
               <MappingFragment StoreEntitySet="QuyDinhThoiGian">
@@ -1064,16 +1075,6 @@
                 <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
                 <ScalarProperty Name="MaQuyen" ColumnName="MaQuyen" />
                 <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="QuyDinhKhacs">
-            <EntityTypeMapping TypeName="QLNhanSuModel.QuyDinhKhac">
-              <MappingFragment StoreEntitySet="QuyDinhKhac">
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="GiaTri" ColumnName="GiaTri" />
-                <ScalarProperty Name="TenQuyDinh" ColumnName="TenQuyDinh" />
-                <ScalarProperty Name="MaQuyDinh" ColumnName="MaQuyDinh" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
