@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -16,8 +17,11 @@ namespace WebApplication1.Models.ViewModel
         [DisplayName("Mã loại thưởng")]
         public int MaLoaiThuong { get; set; }
         [DisplayName("Tên loại thưởng")]
+        [Required(ErrorMessage = "Tên loại thưởng không được trống...")]
         public string TenLoaiThuong { get; set; }
         [DisplayName("Giá trị")]
+        [Required(ErrorMessage = "Giá trị không được trống...")]
+        [Range(0, int.MaxValue, ErrorMessage = "Vui lòng nhập số nguyên dương...")]
         public int GiaTri { get; set; }
         [DisplayName("Trạng thái")]
         public bool TrangThai { get; set; }

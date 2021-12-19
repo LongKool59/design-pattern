@@ -11,6 +11,8 @@ using System.Web.Mvc;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModel;
+using WebApplication1.Builder.ConcreteBuilder;
+using WebApplication1.Builder.IBuilder;
 
 namespace WebApplication1.Controllers
 {
@@ -21,6 +23,10 @@ namespace WebApplication1.Controllers
         // GET: ChucVu
         public ActionResult Index(string loaiTimKiem, string tenTimKiem, int? page, string trangThai)
         {
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
             IQueryable<ChucVu> chucVus;
             int pageNumber = (page ?? 1);
             int pageSize = 10;
@@ -144,7 +150,7 @@ namespace WebApplication1.Controllers
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn chức vụ để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new {  loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                 }
 
                 foreach (var item in chucVuViewModels)
@@ -156,12 +162,13 @@ namespace WebApplication1.Controllers
                         if (chucVu != null)
                         {
                             chucVu.TrangThai = false;
-                            db.SaveChanges();
+                           
                         }
                     }
                 }
+                db.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
             }
             catch
             {
@@ -174,6 +181,7 @@ namespace WebApplication1.Controllers
         // GET: ChucVu/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -190,6 +198,7 @@ namespace WebApplication1.Controllers
         // GET: ChucVu/Create
         public ActionResult Create()
         {
+            TempData.Keep();
             ChucVuViewModel chucVuViewModel = new ChucVuViewModel();
             return View(chucVuViewModel);
         }
@@ -219,9 +228,17 @@ namespace WebApplication1.Controllers
                         }
                         oldTenChucVu = item.TenChucVu;
                     }
-                    chucVuViewModel.TenChucVu = oldTenChucVu;
-                    chucVuViewModel.TrangThai = true;
-                    ChucVu chucVu = chucVuViewModel;
+
+                    var _chucVuViewModel = new ChucVuViewModelBuilder()
+                        .AddTenChucVu(oldTenChucVu)
+                        .AddHeSoChucVu(chucVuViewModel.HeSoChucVu)
+                        .AddPhuCap(chucVuViewModel.PhuCap)
+                        .AddTrangThai(true)
+                        .AddNguoiSua(chucVuViewModel.NguoiSua)
+                        .AddNgaySua(chucVuViewModel.NgaySua)
+                        .Build();   
+
+                    ChucVu chucVu = _chucVuViewModel;
                     db.ChucVus.Add(chucVu);
                     db.SaveChanges();
 
@@ -234,12 +251,20 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    chucVuViewModel.TrangThai = true;
-                    ChucVu chucVu = chucVuViewModel;
+                    var _chucVuViewModel = new ChucVuViewModelBuilder()
+                       .AddTenChucVu(chucVuViewModel.TenChucVu)
+                       .AddHeSoChucVu(chucVuViewModel.HeSoChucVu)
+                       .AddPhuCap(chucVuViewModel.PhuCap)
+                       .AddTrangThai(true)
+                       .AddNguoiSua(chucVuViewModel.NguoiSua)
+                       .AddNgaySua(chucVuViewModel.NgaySua)
+                       .Build();
+
+                    ChucVu chucVu = _chucVuViewModel;
                     db.ChucVus.Add(chucVu);
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
             }
 
             return View(chucVuViewModel);
@@ -248,6 +273,7 @@ namespace WebApplication1.Controllers
         // GET: ChucVu/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -308,7 +334,7 @@ namespace WebApplication1.Controllers
                     db.ChucVus.Add(chucVu);
                 }
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
             }
             return View(chucVuViewModel);
         }

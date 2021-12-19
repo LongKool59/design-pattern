@@ -30,7 +30,8 @@ namespace WebApplication1.Models.ViewModel
                 ThoiGianRa = chamCong.ThoiGianRa,
                 ThoiGianLamViec = chamCong.ThoiGianLamViec,
                 ThoiGianTangCa = chamCong.ThoiGianTangCa,
-                TrangThai = chamCong.TrangThai
+                TrangThai = chamCong.TrangThai,
+                NhanVien = chamCong.NhanVien
             };
         }
         public static implicit operator ChamCong(ChamCongViewModel chamCongViewModel)
@@ -43,10 +44,12 @@ namespace WebApplication1.Models.ViewModel
                 ThoiGianRa = chamCongViewModel.ThoiGianRa,
                 ThoiGianLamViec = chamCongViewModel.ThoiGianLamViec,
                 ThoiGianTangCa = chamCongViewModel.ThoiGianTangCa,
-                TrangThai = chamCongViewModel.TrangThai
+                TrangThai = chamCongViewModel.TrangThai,
+                NhanVien = chamCongViewModel.NhanVien
             };
         }
 
         public virtual NhanVien NhanVien { get; set; }
+        public virtual NhanVienViewModel NhanVienViewModel { get; set; }
     }
 }

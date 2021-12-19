@@ -1,0 +1,49 @@
+﻿@model WebApplication1.Models.ViewModel.QuyDinhKhacViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="function-page-title">CHI TIẾT QUY ĐỊNH</h1>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MaQuyDinh)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaQuyDinh)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TenQuyDinh)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenQuyDinh)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GiaTri)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GiaTri)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GhiChu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GhiChu)
+        </dd>
+
+    </dl>
+</div>
+<p class="footer-function">
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.MaQuyDinh }) |
+    @Html.ActionLink("Quay lại danh sách", "Index", new { page = TempData["page"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"]})
+</p>

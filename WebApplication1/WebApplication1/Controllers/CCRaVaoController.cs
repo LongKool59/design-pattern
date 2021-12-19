@@ -13,7 +13,7 @@ namespace WebApplication1.Controllers
 {
     public class CCRaVaoController : Controller
     {
-        QLNhanSuEntities db = new QLNhanSuEntities();
+        private QLNhanSuEntities db = new QLNhanSuEntities();
         // GET: CCRaVao
         public ActionResult ChamCongNgay(int? page, int? month, int? year)
         {
@@ -29,9 +29,9 @@ namespace WebApplication1.Controllers
                 chamCongViewModels = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
                 return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
             }
-            else if(month == null && year != null)
+            else if (month == null && year != null)
             {
-                chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) &&  x.Ngay.Year == year);
+                chamCongs = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay.Year == year);
                 chamCongViewModels = chamCongs.ToList().ConvertAll<ChamCongViewModel>(x => x);
                 return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
             }
@@ -46,30 +46,40 @@ namespace WebApplication1.Controllers
             return View(chamCongViewModels.ToPagedList(pageNumber, pageSize));
         }
 
+
+
+
         [HttpPost]
         public ActionResult CheckIn()
         {
+            TimeSpan thoiGianBatDauCaSang = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 1).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianKetThucCaSang = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 2).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianBatDauCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 3).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianKetThucCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 4).Select(x => x.GiaTri).Single();
+
             var maNhanVien = Session["MaNhanVien"].ToString();
             var ngayHomNay = DateTime.Today;
-            var nhanVien = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay == ngayHomNay).SingleOrDefault();
-            if (nhanVien != null)
+            var nhanVienChamCong = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay == ngayHomNay).SingleOrDefault();
+            if (nhanVienChamCong == null)
             {
+                ChamCong chamCong = new ChamCong();
+                chamCong.MaNhanVien = Convert.ToInt32(maNhanVien);
+                chamCong.Ngay = ngayHomNay;
+                chamCong.ThoiGianVao = DateTime.Now.TimeOfDay;
 
-                nhanVien.ThoiGianVao = DateTime.Now.TimeOfDay;
-                TimeSpan thoiGianVaoQuyDinh = DateTime.Parse("8:00 AM").TimeOfDay;
-                TimeSpan thoiGianKhongChoVao = DateTime.Parse("10:00 AM").TimeOfDay;
-                if (nhanVien.ThoiGianVao < thoiGianVaoQuyDinh)
+                if (chamCong.ThoiGianVao < thoiGianBatDauCaSang || (chamCong.ThoiGianVao > thoiGianKetThucCaSang && chamCong.ThoiGianVao < thoiGianBatDauCaChieu))
                 {
-                    nhanVien.TrangThai = "Đúng giờ";
+                    chamCong.TrangThai = "Đúng giờ";
                 }
-                else if(nhanVien.ThoiGianVao < thoiGianKhongChoVao && nhanVien.ThoiGianVao > thoiGianVaoQuyDinh)
+                else if ((chamCong.ThoiGianVao > thoiGianBatDauCaSang && chamCong.ThoiGianVao < thoiGianKetThucCaSang) ||
+                    (chamCong.ThoiGianVao > thoiGianBatDauCaChieu && chamCong.ThoiGianVao < thoiGianKetThucCaChieu))
                 {
-                    nhanVien.TrangThai = "Đi trễ";
+                    chamCong.TrangThai = "Đi trễ";
                     var tenphat = db.LoaiPhats.Where(s => s.TenLoaiPhat == "Đi trễ" && s.TrangThai == true).SingleOrDefault();
                     if (tenphat != null)
                     {
                         Ct_Phat phat = new Ct_Phat();
-                        phat.MaNhanVien = nhanVien.MaNhanVien;
+                        phat.MaNhanVien = Convert.ToInt32(maNhanVien);
                         phat.MaLoaiPhat = tenphat.MaLoaiPhat;
                         phat.NgayPhat = DateTime.Now;
                         phat.NguoiPhat = "Hệ thống";
@@ -85,6 +95,7 @@ namespace WebApplication1.Controllers
                     this.AddNotification("Không được check in vì đã quá giờ quy định.", NotificationType.WARNING);
                     return RedirectToAction("ChamCongNgay");
                 }
+                db.ChamCongs.Add(chamCong);
                 db.SaveChanges();
             }
             return RedirectToAction("ChamCongNgay");
@@ -93,37 +104,99 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult CheckOut()
         {
-            TimeSpan thoiGianVaoQuyDinh = DateTime.Parse("8:00 AM").TimeOfDay;
-            TimeSpan thoiGianDuocPhepRa = DateTime.Parse("5:00 PM").TimeOfDay;
+            TimeSpan thoiGianBatDauCaSang = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 1).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianKetThucCaSang = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 2).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianBatDauCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 3).Select(x => x.GiaTri).Single();
+            TimeSpan thoiGianKetThucCaChieu = db.QuyDinhThoiGians.Where(x => x.MaQuyDinh == 4).Select(x => x.GiaTri).Single();
+
             var maNhanVien = Session["MaNhanVien"].ToString();
             var ngayHomNay = DateTime.Today;
             var nhanVien = db.ChamCongs.Where(x => x.MaNhanVien.ToString().Equals(maNhanVien) && x.Ngay == ngayHomNay).SingleOrDefault();
             if (nhanVien != null)
             {
-                if(DateTime.Now.TimeOfDay > thoiGianDuocPhepRa)
+                nhanVien.ThoiGianRa = DateTime.Now.TimeOfDay;
+                if (nhanVien.ThoiGianVao >= thoiGianKetThucCaSang && nhanVien.ThoiGianVao <= thoiGianBatDauCaChieu && nhanVien.ThoiGianRa <= thoiGianBatDauCaChieu)
                 {
-                    nhanVien.ThoiGianRa = DateTime.Now.TimeOfDay;
-                    //nếu nhân viên chấm công vào trước 8h sáng sẽ được tính full 8h làm việc
-                    if (nhanVien.ThoiGianVao < thoiGianVaoQuyDinh)
+                    this.AddNotification("Không được check out. Vì bạn vừa mới check in trong giờ nghỉ", NotificationType.WARNING);
+                    return RedirectToAction("ChamCongNgay");
+                }
+
+                int gioNghiTrua = 1;
+
+                if (nhanVien.ThoiGianVao < thoiGianBatDauCaSang)
+                {
+                    if (nhanVien.ThoiGianRa < thoiGianBatDauCaChieu)
+                    {
+                        var soGioLamViec = nhanVien.ThoiGianRa - thoiGianBatDauCaSang ;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours < 0 ? 0 : soGioLamViec.Value.Hours;
+                    }
+                    else if(nhanVien.ThoiGianRa >= thoiGianBatDauCaChieu && nhanVien.ThoiGianRa < thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = nhanVien.ThoiGianRa - thoiGianBatDauCaSang;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours - gioNghiTrua;
+                    }
+                    else if(nhanVien.ThoiGianRa > thoiGianKetThucCaChieu)
                     {
                         nhanVien.ThoiGianLamViec = 8;
                     }
-                    else //ngược lại, sẽ lấy mốc 17h trừ đi thời gian nhân viên vô và trừ thêm 1 tiếng nghỉ trưa để ra số giờ làm việc
+                }
+                else if (nhanVien.ThoiGianVao >= thoiGianBatDauCaSang && nhanVien.ThoiGianVao < thoiGianKetThucCaSang)
+                {
+                    if (nhanVien.ThoiGianRa < thoiGianBatDauCaChieu)
                     {
-                        
-                        var soGioLamViec = thoiGianDuocPhepRa - nhanVien.ThoiGianVao;
-                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours - 1;
-
+                        var soGioLamViec = nhanVien.ThoiGianRa - nhanVien.ThoiGianVao;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours;
                     }
-                    var thoiGianTangCa = nhanVien.ThoiGianRa - thoiGianDuocPhepRa;
-                    nhanVien.ThoiGianTangCa = thoiGianTangCa.Value.Hours;
-                    db.SaveChanges();
+                    else if (nhanVien.ThoiGianRa >= thoiGianBatDauCaChieu && nhanVien.ThoiGianRa < thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = nhanVien.ThoiGianRa - nhanVien.ThoiGianVao;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours - gioNghiTrua;
+                    }
+                    else if (nhanVien.ThoiGianRa > thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = thoiGianKetThucCaChieu - nhanVien.ThoiGianVao;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours - gioNghiTrua;
+                    }
+                }
+                else if(nhanVien.ThoiGianVao >= thoiGianKetThucCaSang && nhanVien.ThoiGianVao < thoiGianBatDauCaChieu)
+                {
+                    if (nhanVien.ThoiGianRa >= thoiGianBatDauCaChieu && nhanVien.ThoiGianRa < thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = nhanVien.ThoiGianRa - thoiGianBatDauCaChieu;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours;
+                    }
+                    else if (nhanVien.ThoiGianRa > thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = thoiGianKetThucCaChieu - thoiGianBatDauCaChieu;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Hours;
+                    }
+                }
+                else if(nhanVien.ThoiGianVao >= thoiGianBatDauCaChieu)
+                {
+                    if (nhanVien.ThoiGianRa >= thoiGianBatDauCaChieu && nhanVien.ThoiGianRa < thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = nhanVien.ThoiGianRa - nhanVien.ThoiGianVao;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours;
+                    }
+                    else if (nhanVien.ThoiGianRa > thoiGianKetThucCaChieu)
+                    {
+                        var soGioLamViec = thoiGianKetThucCaChieu - nhanVien.ThoiGianVao;
+                        nhanVien.ThoiGianLamViec = soGioLamViec.Value.Hours;
+                    }
+                }
+
+
+                var thoiGianTangCa = nhanVien.ThoiGianRa - thoiGianKetThucCaChieu;
+                if (thoiGianTangCa.Value.Hours <= 0)
+                {
+                    nhanVien.ThoiGianTangCa = 0;
                 }
                 else
                 {
-                    this.AddNotification("Không được check out trước 17h...", NotificationType.WARNING);
-                    return RedirectToAction("ChamCongNgay");
+                    nhanVien.ThoiGianTangCa = thoiGianTangCa.Value.Hours;
                 }
+                db.SaveChanges();
+
             }
             return RedirectToAction("ChamCongNgay");
         }

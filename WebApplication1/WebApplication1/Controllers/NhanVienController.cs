@@ -27,6 +27,10 @@ namespace WebApplication1.Controllers
             IQueryable<NhanVien> nhanViens;
             QLNhanSuEntities db = new QLNhanSuEntities();
             List<NhanVienViewModel> nhanVienViewModels;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
             try
             {
                 if (trangThai == "TatCa")
@@ -37,13 +41,13 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             nhanViens = db.NhanViens.Where(x => x.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);  
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -53,13 +57,13 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             nhanViens = db.NhanViens.Where(x => x.HoTen.Contains("+-*/abcdefgh")).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);  
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -69,20 +73,20 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo phòng ban!", NotificationType.WARNING);
                             nhanViens = db.NhanViens.Where(x => x.PhongBan.TenPB.Contains("+-*/abcdefgh")).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);  
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         nhanViens = db.NhanViens.Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                        nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                        nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                         return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
@@ -94,14 +98,14 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             nhanViens = db.NhanViens.Where(x => x.TrangThai == true && x.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);  
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
 
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.TrangThai == true && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -117,7 +121,7 @@ namespace WebApplication1.Controllers
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.TrangThai == true && x.HoTen.Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -133,7 +137,7 @@ namespace WebApplication1.Controllers
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.TrangThai == true && x.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -154,13 +158,13 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã nhân viên!", NotificationType.WARNING);
                             nhanViens = db.NhanViens.Where(x => x.TrangThai != true && x.MaNhanVien.ToString().StartsWith("+-*/abcdefgh")).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.TrangThai != true && x.MaNhanVien.ToString().Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -170,7 +174,7 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên nhân viên!", NotificationType.WARNING);
                             nhanViens = db.NhanViens.Where(x => x.TrangThai != true && x.HoTen.Contains("+-*/abcdefgh")).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
@@ -192,14 +196,14 @@ namespace WebApplication1.Controllers
                         else
                         {
                             nhanViens = db.NhanViens.Where(x => x.TrangThai != true && x.PhongBan.TenPB.Contains(tenTimKiem.ToString())).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                            nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                             return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         nhanViens = db.NhanViens.Where(x => x.TrangThai != true).Include(c => c.PhongBan).Include(c => c.ChucVu).OrderBy(x => x.HoTen);
-                        nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                        nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                         return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
@@ -214,7 +218,7 @@ namespace WebApplication1.Controllers
             {
                 this.AddNotification("Có lỗi xảy ra. Vui lòng thực hiện tìm kiếm lại!", NotificationType.ERROR);
                 nhanViens = db.NhanViens.Where(x => x.MaNhanVien.ToString().Equals("+-*/*-+-*/*-+")).Include(c => c.ChucVu).OrderBy(x => x.HoTen).OrderBy(x => x.HoTen);
-                nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x); 
+                nhanVienViewModels = nhanViens.ToList().ConvertAll<NhanVienViewModel>(x => x);
                 return View("Index", nhanVienViewModels.ToPagedList(pageNumber, pageSize));
             }
         }
@@ -223,6 +227,7 @@ namespace WebApplication1.Controllers
         // GET: NhanVien/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -239,8 +244,10 @@ namespace WebApplication1.Controllers
         // GET: NhanVien/Create
         public ActionResult Create()
         {
-            ViewBag.MaChucVu = new SelectList(db.ChucVus.Where(x=>x.TrangThai == true), "MaChucVu", "TenChucVu");
-            ViewBag.MaPB = new SelectList(db.PhongBans.Where(x=>x.MaPB != 12), "MaPB", "TenPB");
+            TempData.Keep();
+
+            ViewBag.MaChucVu = new SelectList(db.ChucVus.Where(x => x.TrangThai == true), "MaChucVu", "TenChucVu");
+            ViewBag.MaPB = new SelectList(db.PhongBans.Where(x => x.MaPB != 12), "MaPB", "TenPB");
             ViewBag.MaNhanVien = new SelectList(db.TaiKhoans, "MaNhanVien", "TenTK");
 
             ViewBag.MaQuyen = new SelectList(db.PhanQuyens.Where(x => !x.MaQuyen.Equals(3)), "MaQuyen", "TenQuyen");
@@ -302,7 +309,7 @@ namespace WebApplication1.Controllers
                         db.SaveChanges();
                     }
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                 }
             }
 
@@ -321,7 +328,7 @@ namespace WebApplication1.Controllers
             var toEmail = new MailAddress(email);
             var fromEmailPassword = "democnpmnc123";
             string subject = "Chào mừng bạn đến với công ty DEV";
-            string body = "Chào nhân viên mới. Sau đây là tài khoản để bạn đăng nhập vào website của công ty <br /> Tên tài khoản: " + tenTaiKhoan+" <br />Mật khẩu: " + matKhau + " <br /> Vui lòng đổi mật khẩu sau khi đăng nhập";
+            string body = "Chào nhân viên mới. Sau đây là tài khoản để bạn đăng nhập vào website của công ty <br /> Tên tài khoản: " + tenTaiKhoan + " <br />Mật khẩu: " + matKhau + " <br /> Vui lòng đổi mật khẩu sau khi đăng nhập";
 
             var smtp = new SmtpClient
             {
@@ -339,9 +346,11 @@ namespace WebApplication1.Controllers
                 IsBodyHtml = true
             }) smtp.Send(message);
         }
+        
         // GET: NhanVien/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -365,13 +374,14 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(NhanVienViewModel nhanVienViewModel)
         {
+
             NhanVien nhanVien;
             if (ModelState.IsValid)
             {
                 nhanVien = nhanVienViewModel;
                 db.Entry(nhanVien).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
             }
             ViewBag.MaChucVu = new SelectList(db.ChucVus.Where(x => x.TrangThai == true), "MaChucVu", "TenChucVu", nhanVienViewModel.MaChucVu);
             ViewBag.MaPB = new SelectList(db.PhongBans.Where(x => x.MaPB != 12), "MaPB", "TenPB", nhanVienViewModel.MaPB);
@@ -410,7 +420,7 @@ namespace WebApplication1.Controllers
                             }
                         }
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                     }
                     catch
                     {
@@ -427,7 +437,7 @@ namespace WebApplication1.Controllers
                         List<NhanVienViewModel> listNV = new List<NhanVienViewModel>();
                         var checkIsChecked = nhanVienViewModels.Where(x => x.IsChecked == true);
                         var checkTrangThai = checkIsChecked.Where(x => x.TrangThai == false).FirstOrDefault();
-                        if(checkIsChecked.Count() == 0)
+                        if (checkIsChecked.Count() == 0)
                         {
                             this.AddNotification("Vui lòng chọn nhân viên để thêm thưởng!", NotificationType.ERROR);
                             return RedirectToAction("Index");
@@ -437,16 +447,16 @@ namespace WebApplication1.Controllers
                             if (checkTrangThai != null)
                             {
                                 this.AddNotification("Không thể thêm thưởng cho nhân viên nghỉ việc!", NotificationType.ERROR);
-                                return RedirectToAction("Index");
+                                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                             }
                             foreach (var item in checkIsChecked)
                             {
-                                if(item.TrangThai == true)
+                                if (item.TrangThai == true)
                                 {
                                     listNV.Add(item);
                                 }
                             }
-                            
+
                         }
                         TempData["listNhanVien"] = listNV;
                         return RedirectToAction("ThemThuongNhanVien");
@@ -462,7 +472,7 @@ namespace WebApplication1.Controllers
                     try
                     {
                         db.Configuration.ValidateOnSaveEnabled = false;
-    
+
                         List<NhanVienViewModel> listNV = new List<NhanVienViewModel>();
                         var checkIsChecked = nhanVienViewModels.Where(x => x.IsChecked == true).ToList();
                         var checkTrangThai = checkIsChecked.Where(x => x.TrangThai == false).FirstOrDefault();
@@ -483,7 +493,7 @@ namespace WebApplication1.Controllers
                             if (checkTrangThai != null)
                             {
                                 this.AddNotification("Không thể thêm phạt cho nhân viên nghỉ việc!", NotificationType.ERROR);
-                                return RedirectToAction("Index");
+                                return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
                             }
                         }
                         TempData["listNhanVien"] = listNV;
@@ -514,6 +524,8 @@ namespace WebApplication1.Controllers
 
         public ActionResult ThemThuongNhanVien()
         {
+            TempData.Keep();
+
             ViewBag.MaLoaiThuong = new SelectList(db.LoaiThuongs.Where(x => x.TrangThai == true), "MaLoaiThuong", "TenLoaiThuong");
             return View();
         }
@@ -539,12 +551,14 @@ namespace WebApplication1.Controllers
                     db.SaveChanges();
                 }
             }
-         
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
         }
 
         public ActionResult ThemPhatNhanVien()
         {
+            TempData.Keep();
+
             ViewBag.MaLoaiPhat = new SelectList(db.LoaiPhats.Where(x => x.TrangThai == true && !x.TenLoaiPhat.Equals("Nghỉ", StringComparison.OrdinalIgnoreCase) && !x.TenLoaiPhat.Equals("Đi trễ", StringComparison.OrdinalIgnoreCase)), "MaLoaiPhat", "TenLoaiPhat");
             return View();
         }
@@ -570,7 +584,7 @@ namespace WebApplication1.Controllers
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] });
         }
 
     }

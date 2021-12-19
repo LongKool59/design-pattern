@@ -11,6 +11,11 @@ using WebApplication1.Models.ViewModel;
 using PagedList;
 using PagedList.Mvc;
 using WebApplication1.Extensions;
+using WebApplication1.CommandPattern.Invoker;
+using WebApplication1.CommandPattern.Receiver;
+using WebApplication1.CommandPattern.Interface;
+using WebApplication1.CommandPattern.ImplementInterface;
+
 
 namespace WebApplication1.Controllers
 {
@@ -25,10 +30,15 @@ namespace WebApplication1.Controllers
             int pageNumber = page ?? 1;
             int pageSize = 10;
             List<LoaiPhatViewModel> loaiPhatViewModels;
+            TempData["loaiTimKiem"] = loaiTimKiem;
+            TempData["tenTimKiem"] = tenTimKiem;
+            TempData["page"] = page;
+            TempData["trangThai"] = trangThai;
+
             try
             {
                 QLNhanSuEntities db = new QLNhanSuEntities();
-                
+
                 if (trangThai == "TatCa")
                 {
                     if (loaiTimKiem == "MaLoaiPhat")
@@ -37,13 +47,13 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã loại phạt!", NotificationType.WARNING);
                             loaiPhats = db.LoaiPhats.Where(x => x.MaLoaiPhat.ToString().StartsWith("+-*/abcdefgh")).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);  
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiPhats = db.LoaiPhats.Where(x => x.MaLoaiPhat.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);  
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -53,20 +63,20 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên loại phạt!", NotificationType.WARNING);
                             loaiPhats = db.LoaiPhats.Where(x => x.TenLoaiPhat.Contains("+-*/abcdefgh")).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);  
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiPhats = db.LoaiPhats.Where(x => x.TenLoaiPhat.Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);  
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         loaiPhats = db.LoaiPhats.OrderBy(x => x.TenLoaiPhat);
-                        loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                        loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                         return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
@@ -78,13 +88,13 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã loại phạt!", NotificationType.WARNING);
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai == true && x.MaLoaiPhat.ToString().StartsWith("+-*/abcdefgh")).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai == true && x.MaLoaiPhat.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -94,20 +104,20 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên loại phạt!", NotificationType.WARNING);
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai == true && x.TenLoaiPhat.Contains("+-*/abcdefgh")).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai == true && x.TenLoaiPhat.Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         loaiPhats = db.LoaiPhats.Where(x => x.TrangThai == true).OrderBy(x => x.TenLoaiPhat);
-                        loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                        loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                         return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
@@ -119,13 +129,13 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo mã loại phạt!", NotificationType.WARNING);
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai != true && x.MaLoaiPhat.ToString().StartsWith("+-*/abcdefgh")).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai != true && x.MaLoaiPhat.ToString().Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
@@ -135,27 +145,27 @@ namespace WebApplication1.Controllers
                         {
                             this.AddNotification("Vui lòng nhập từ khóa để tìm kiếm theo tên loại phạt!", NotificationType.WARNING);
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai != true && x.TenLoaiPhat.Contains("+-*/abcdefgh")).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                         else
                         {
                             loaiPhats = db.LoaiPhats.Where(x => x.TrangThai != true && x.TenLoaiPhat.Contains(tenTimKiem.ToString())).OrderBy(x => x.TenLoaiPhat);
-                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                            loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                             return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                         }
                     }
                     else
                     {
                         loaiPhats = db.LoaiPhats.Where(x => x.TrangThai != true).OrderBy(x => x.TenLoaiPhat);
-                        loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                        loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                         return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                     }
                 }
                 else
                 {
                     loaiPhats = db.LoaiPhats.OrderBy(x => x.TenLoaiPhat);
-                    loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x); 
+                    loaiPhatViewModels = loaiPhats.ToList().ConvertAll<LoaiPhatViewModel>(x => x);
                     return View("Index", loaiPhatViewModels.ToPagedList(pageNumber, pageSize));
                 }
             }
@@ -171,6 +181,8 @@ namespace WebApplication1.Controllers
         // GET: LoaiPhat/Details/5
         public ActionResult Details(int? id)
         {
+            TempData.Keep();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -187,6 +199,7 @@ namespace WebApplication1.Controllers
         // GET: LoaiPhat/Create
         public ActionResult Create()
         {
+            TempData.Keep();
             LoaiPhatViewModel loaiPhatViewModel = new LoaiPhatViewModel();
             return View(loaiPhatViewModel);
         }
@@ -213,30 +226,52 @@ namespace WebApplication1.Controllers
                             item.TrangThai = false;
                             item.NguoiSua = "Hệ thống - " + loaiPhatViewModel.NguoiSua;
                             item.NgaySua = DateTime.Now;
-                           
+
                         }
                         oldTenLoaiPhat = item.TenLoaiPhat;
                     }
                     loaiPhatViewModel.TenLoaiPhat = oldTenLoaiPhat;
                     loaiPhatViewModel.TrangThai = true;
-                    loaiPhat = loaiPhatViewModel;
-                    db.LoaiPhats.Add(loaiPhat);
                 }
-                else
-                {
-                    loaiPhat = loaiPhatViewModel;
-                    db.LoaiPhats.Add(loaiPhat);
-                }
+                HandleAddLoaiPhatModel(loaiPhatViewModel);
+                //loaiPhat = loaiPhatViewModel;
+                //db.LoaiPhats.Add(loaiPhat);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
 
             return View(loaiPhatViewModel);
+        }
+        public void HandleAddLoaiPhatModel(LoaiPhatViewModel loaiPhatViewModel)
+        {
+            ReceiverLoaiPhat receiver = new ReceiverLoaiPhat()
+            {
+                loaiPhatViewModel = loaiPhatViewModel,
+                db = db,
+            };
+
+            Command convertToModelCommand = new ConvertToModelCommand()
+            {
+                receiver = receiver,
+            };
+            Command addModelCommand = new AddModelCommand()
+            {
+                receiver = receiver,
+            };
+
+            QLNS_App app = new QLNS_App()
+            {
+                convertToModelCommand = convertToModelCommand,
+                addModelCommand = addModelCommand,
+            };
+            app.ConvertToModel();
+            app.AddModel();
         }
 
         // GET: LoaiPhat/Edit/5
         public ActionResult Edit(int? id)
         {
+            TempData.Keep();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -271,7 +306,7 @@ namespace WebApplication1.Controllers
                             item.TrangThai = false;
                             item.NguoiSua = "Hệ thống - " + loaiPhatViewModel.NguoiSua;
                             item.NgaySua = DateTime.Now;
-                       
+
                         }
                         oldTenLoaiPhat = item.TenLoaiPhat;
                     }
@@ -287,7 +322,7 @@ namespace WebApplication1.Controllers
                 }
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             return View(loaiPhatViewModel);
         }
@@ -303,16 +338,16 @@ namespace WebApplication1.Controllers
                 if (checkIsChecked == null)
                 {
                     this.AddNotification("Vui lòng chọn loại phạt để xóa!", NotificationType.ERROR);
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
                 }
                 foreach (var item in loaiPhatViewModels)
                 {
                     if (item.IsChecked == true)
                     {
-                        if(item.TenLoaiPhat == "Nghỉ" || item.TenLoaiPhat == "Đi trễ")
+                        if (item.TenLoaiPhat == "Nghỉ" || item.TenLoaiPhat == "Đi trễ")
                         {
                             this.AddNotification("Không thể xóa vì loại phạt Đi trễ hoặc Nghỉ là loại phạt mặc định!", NotificationType.WARNING);
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
                         }
                         int maLoaiPhat = item.MaLoaiPhat;
                         LoaiPhat loaiPhat = db.LoaiPhats.Where(x => x.MaLoaiPhat == maLoaiPhat).SingleOrDefault();
@@ -324,7 +359,7 @@ namespace WebApplication1.Controllers
                     }
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { page = TempData["page"], trangThai = TempData["trangThai"], loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"] });
             }
             catch
             {

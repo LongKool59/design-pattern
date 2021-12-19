@@ -149,11 +149,21 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Builder\ConcreteBuilder\ChucVuViewModelBuilder.cs" />
+    <Compile Include="Builder\ConcreteBuilder\PhongBanBuilder.cs" />
+    <Compile Include="Builder\IBuilder\IChucVuViewModelBuilder.cs" />
+    <Compile Include="Builder\IBuilder\IPhongBanBuilder.cs" />
+    <Compile Include="CommandPattern\ImplementInterface\AddModelCommand.cs" />
+    <Compile Include="CommandPattern\ImplementInterface\ConvertToModelCommand.cs" />
+    <Compile Include="CommandPattern\Interface\Command.cs" />
+    <Compile Include="CommandPattern\Invoker\QLNS_App.cs" />
+    <Compile Include="CommandPattern\Receiver\ReceiverLoaiPhat.cs" />
     <Compile Include="Controllers\CCRaVaoController.cs" />
     <Compile Include="Controllers\ChamCongController.cs" />
     <Compile Include="Controllers\ChucVuController.cs" />
     <Compile Include="Controllers\Ct_PhatController.cs" />
     <Compile Include="Controllers\Ct_ThuongController.cs" />
+    <Compile Include="Controllers\DuyetDonNghiController.cs" />
     <Compile Include="Controllers\LoaiPhatController.cs" />
     <Compile Include="Controllers\LoaiThuongController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -162,10 +172,16 @@
     <Compile Include="Controllers\NhanVienController.cs" />
     <Compile Include="Controllers\PhanQuyenController.cs" />
     <Compile Include="Controllers\PhongBanController.cs" />
+    <Compile Include="Controllers\QuyDinhKhacController.cs" />
+    <Compile Include="Controllers\QuyDinhTGController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
+    <Compile Include="Controllers\TemplateMethodController.cs" />
     <Compile Include="Controllers\ThongKeLuongController.cs" />
     <Compile Include="Controllers\ThongTinController.cs" />
+    <Compile Include="Controllers\XinNghiPhepController.cs" />
     <Compile Include="Extensions\NotificationExtensions.cs" />
+    <Compile Include="FactoryMethod\ConcreteFactory\LoaiThuongFactory.cs" />
+    <Compile Include="FactoryMethod\Factory\Factory1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -240,6 +256,7 @@
     <Compile Include="Models\ViewModel\ChucVuViewModel.cs" />
     <Compile Include="Models\ViewModel\Ct_PhatViewModel.cs" />
     <Compile Include="Models\ViewModel\Ct_ThuongViewModel.cs" />
+    <Compile Include="Models\ViewModel\DonNghiPhepViewModel.cs" />
     <Compile Include="Models\ViewModel\LoaiPhatViewModel.cs" />
     <Compile Include="Models\ViewModel\LoaiThuongViewModel.cs" />
     <Compile Include="Models\ViewModel\LuongCoBanViewModel.cs" />
@@ -248,6 +265,8 @@
     <Compile Include="Models\ViewModel\NhanVienViewModel.cs" />
     <Compile Include="Models\ViewModel\PhanQuyenViewModel.cs" />
     <Compile Include="Models\ViewModel\PhongBanViewModel.cs" />
+    <Compile Include="Models\ViewModel\QuyDinhKhacViewModel.cs" />
+    <Compile Include="Models\ViewModel\QuyDinhTGViewModel.cs" />
     <Compile Include="Models\ViewModel\TaiKhoanViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -382,6 +401,22 @@
     <Content Include="Views\Shared\_LayoutPrint.cshtml" />
     <Content Include="Views\ThongKeLuong\DSLuongTheoPhongBan.cshtml" />
     <Content Include="Views\ThongKeLuong\DSLuongTheoNhanVien.cshtml" />
+    <Content Include="Views\QuyDinhTG\Details.cshtml" />
+    <Content Include="Views\QuyDinhTG\Edit.cshtml" />
+    <Content Include="Views\QuyDinhTG\Index.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Create.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Delete.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Details.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Edit.cshtml" />
+    <Content Include="Views\DuyetDonNghi\Index.cshtml" />
+    <Content Include="Views\XinNghiPhep\Create.cshtml" />
+    <Content Include="Views\XinNghiPhep\Details.cshtml" />
+    <Content Include="Views\XinNghiPhep\Edit.cshtml" />
+    <Content Include="Views\XinNghiPhep\Index.cshtml" />
+    <Content Include="Views\QuyDinhKhac\Details.cshtml" />
+    <Content Include="Views\QuyDinhKhac\Edit.cshtml" />
+    <Content Include="Views\QuyDinhKhac\Index.cshtml" />
+    <Content Include="Views\ThongKeLuong\Details_DSLuongTheoNhanVien.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />

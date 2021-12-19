@@ -86,7 +86,7 @@
 
 
             <dt>
-                @Html.DisplayNameFor(model => model.ChucVu.TenChucVu)
+                @Html.DisplayNameFor(model => model.ChucVuViewModel.TenChucVu)
             </dt>
 
             <dd>
@@ -94,7 +94,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.PhongBan.TenPB)
+                @Html.DisplayNameFor(model => model.PhongBanViewModel.TenPB)
             </dt>
 
             <dd>
@@ -102,7 +102,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.TaiKhoan.TenTK)
+                @Html.DisplayNameFor(model => model.TaiKhoanViewModel.TenTK)
             </dt>
 
             <dd>
@@ -157,5 +157,5 @@
 </div>
 <p class="footer-function" style="bottom:0;float:none;clear: both;position: relative;">
     @Html.ActionLink("Sửa", "Edit", new { id = Model.MaNhanVien }) |
-    @Html.ActionLink("Quay lại danh sách", "Index")
+    @Html.ActionLink("Quay lại danh sách", "Index", new { loaiTimKiem = TempData["loaiTimKiem"], tenTimKiem = TempData["tenTimKiem"], page = TempData["page"], trangThai = TempData["trangThai"] })
 </p>

@@ -1,0 +1,80 @@
+﻿@model WebApplication1.Models.ViewModel.DonNghiPhepViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="function-page-title">CHI TIẾT ĐƠN NGHỈ PHÉP</h1>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NhanVienViewModel.MaNhanVien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NhanVien.MaNhanVien)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NhanVienViewModel.HoTen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NhanVien.HoTen)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayNghi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayNghi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CaNghi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CaNghi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LyDo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LyDo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+
+        <dd>
+            @{
+                if (Model.TrangThai == true)
+                {
+                    @:Đã duyệt
+                }
+                else
+                {
+                    @:Chưa duyệt
+                }
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NguoiDuyet)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NguoiDuyet)
+        </dd>
+
+    </dl>
+</div>
+<p class="footer-function">
+    @Html.ActionLink("Quay lại danh sách", "Index", new { page = ViewBag.page, fromDate = ViewBag.fromDate, toDate = ViewBag.toDate, trangThai = ViewBag.trangThai })
+</p>
