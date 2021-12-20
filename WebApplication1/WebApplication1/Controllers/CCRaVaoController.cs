@@ -92,7 +92,9 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    this.AddNotification("Không được check in vì đã quá giờ quy định.", NotificationType.WARNING);
+                    StrategyPatternController CheckLate = new StrategyPatternController();
+                    CheckLate.SetChamCongBehavior(new LateBehaviorController());
+                    CheckLate.PrintNotification();
                     return RedirectToAction("ChamCongNgay");
                 }
                 db.ChamCongs.Add(chamCong);
@@ -200,5 +202,6 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction("ChamCongNgay");
         }
+        
     }
 }

@@ -680,8 +680,8 @@ D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\b
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\bin\xunit.core.xml
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\bin\xunit.execution.desktop.xml
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csprojAssemblyReference.cache
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.CoreCompileInputs.cache
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.CopyComplete
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.dll
 D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.pdb
+D:\18DH110950\Design Pattern\DA\design-pattern\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.AssemblyReference.cache

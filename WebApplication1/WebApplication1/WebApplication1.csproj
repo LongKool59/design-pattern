@@ -153,17 +153,26 @@
     <Compile Include="Builder\ConcreteBuilder\PhongBanBuilder.cs" />
     <Compile Include="Builder\IBuilder\IChucVuViewModelBuilder.cs" />
     <Compile Include="Builder\IBuilder\IPhongBanBuilder.cs" />
+    <Compile Include="ChamCong.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChucVu.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="CommandPattern\ImplementInterface\AddModelCommand.cs" />
     <Compile Include="CommandPattern\ImplementInterface\ConvertToModelCommand.cs" />
     <Compile Include="CommandPattern\Interface\Command.cs" />
     <Compile Include="CommandPattern\Invoker\QLNS_App.cs" />
     <Compile Include="CommandPattern\Receiver\ReceiverLoaiPhat.cs" />
     <Compile Include="Controllers\CCRaVaoController.cs" />
+    <Compile Include="Controllers\ChamCongBehaviorControllers.cs" />
     <Compile Include="Controllers\ChamCongController.cs" />
     <Compile Include="Controllers\ChucVuController.cs" />
     <Compile Include="Controllers\Ct_PhatController.cs" />
     <Compile Include="Controllers\Ct_ThuongController.cs" />
     <Compile Include="Controllers\DuyetDonNghiController.cs" />
+    <Compile Include="Controllers\EarlyBahviorController.cs" />
+    <Compile Include="Controllers\LateBehaviorController.cs" />
     <Compile Include="Controllers\LoaiPhatController.cs" />
     <Compile Include="Controllers\LoaiThuongController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -174,16 +183,53 @@
     <Compile Include="Controllers\PhongBanController.cs" />
     <Compile Include="Controllers\QuyDinhKhacController.cs" />
     <Compile Include="Controllers\QuyDinhTGController.cs" />
+    <Compile Include="Controllers\StrategyPatternController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\TemplateMethodController.cs" />
     <Compile Include="Controllers\ThongKeLuongController.cs" />
     <Compile Include="Controllers\ThongTinController.cs" />
     <Compile Include="Controllers\XinNghiPhepController.cs" />
+    <Compile Include="Ct_Phat.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ct_Thuong.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DonNghiPhep.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\NotificationExtensions.cs" />
     <Compile Include="FactoryMethod\ConcreteFactory\LoaiThuongFactory.cs" />
     <Compile Include="FactoryMethod\Factory\Factory1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiPhat.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiThuong.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LuongCoBan.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LuongThang.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ChamCong.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -268,13 +314,31 @@
     <Compile Include="Models\ViewModel\QuyDinhKhacViewModel.cs" />
     <Compile Include="Models\ViewModel\QuyDinhTGViewModel.cs" />
     <Compile Include="Models\ViewModel\TaiKhoanViewModel.cs" />
+    <Compile Include="Nghi.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NhanVien.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhanQuyen.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhongBan.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuyDinhKhac.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuyDinhThoiGian.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StragetyPattern\ChamCongBehavior.cs" />
+    <Compile Include="TaiKhoan.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\QLNhanSu.mdf" />
-    <Content Include="App_Data\QLNhanSu_log.ldf">
-      <DependentUpon>QLNhanSu.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -288,6 +352,16 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\images\hrm.png" />
     <Content Include="Content\images\IMG-20190124-WA0019.jpg" />
+    <Content Include="Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -310,6 +384,13 @@
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -419,6 +500,7 @@
     <Content Include="Views\ThongKeLuong\Details_DSLuongTheoNhanVien.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Reports\" />
   </ItemGroup>
   <ItemGroup>
