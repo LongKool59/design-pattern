@@ -13,9 +13,9 @@ namespace WebApplication1.Controllers
 {
     public class LateBehaviorController: ChamCongBehaviorControllers
     {
-        public override void PrintMessage()
+        public override string PrintMessage()
         {
-            this.AddNotification("Không được check in vì đã quá giờ quy định.", NotificationType.WARNING);
+            return "Không được check in vì đã quá giờ quy định.";
         }      
     }
 }

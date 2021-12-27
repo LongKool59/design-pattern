@@ -19,9 +19,10 @@ namespace WebApplication1.Controllers
             {
                 this.behavior = behavior;
             }
-            public void PrintNotification()
+            public string PrintNotification()
             {
-                this.behavior.PrintMessage();
+            return this.behavior.PrintMessage();
+
             }
     }
 }

@@ -94,7 +94,8 @@ namespace WebApplication1.Controllers
                 {
                     StrategyPatternController CheckInLate = new StrategyPatternController();
                     CheckInLate.SetChamCongBehavior(new LateBehaviorController());
-                    CheckInLate.PrintNotification();
+                  
+                    this.AddNotification(CheckInLate.PrintNotification(), NotificationType.WARNING);
                     return RedirectToAction("ChamCongNgay");
                 }
                 db.ChamCongs.Add(chamCong);
@@ -121,7 +122,8 @@ namespace WebApplication1.Controllers
                 {
                     StrategyPatternController CheckOutEarly = new StrategyPatternController();
                     CheckOutEarly.SetChamCongBehavior(new EarlyBehaviorController());
-                    CheckOutEarly.PrintNotification();
+                    
+                    this.AddNotification(CheckOutEarly.PrintNotification(), NotificationType.WARNING);
                     return RedirectToAction("ChamCongNgay");
                 }
 

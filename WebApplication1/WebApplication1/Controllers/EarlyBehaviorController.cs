@@ -13,9 +13,9 @@ namespace WebApplication1.Controllers
 {
     public class EarlyBehaviorController : ChamCongBehaviorControllers
     {
-        public override void PrintMessage()
+        public override string PrintMessage()
         {
-            this.AddNotification("Không được check out. Vì bạn vừa mới check in trong giờ nghỉ.", NotificationType.WARNING);
+            return "Không được check out. Vì bạn vừa mới check in trong giờ nghỉ.";
         }
     }
 }

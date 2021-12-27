@@ -13,6 +13,6 @@ namespace WebApplication1.Controllers
 {
     public abstract class ChamCongBehaviorControllers:Controller
     {
-        public abstract void PrintMessage();
+        public abstract string PrintMessage();
     }
 }
