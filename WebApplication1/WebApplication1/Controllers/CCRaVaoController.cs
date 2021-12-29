@@ -92,7 +92,9 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    this.AddNotification("Không được check in vì đã quá giờ quy định.", NotificationType.WARNING);
+                    StrategyPatternController CheckInLate = new StrategyPatternController();
+                    CheckInLate.SetChamCongBehavior(new LateBehaviorController());
+                    this.AddNotification(CheckInLate.PrintNotification(), NotificationType.WARNING);
                     return RedirectToAction("ChamCongNgay");
                 }
                 db.ChamCongs.Add(chamCong);
@@ -117,7 +119,9 @@ namespace WebApplication1.Controllers
                 nhanVien.ThoiGianRa = DateTime.Now.TimeOfDay;
                 if (nhanVien.ThoiGianVao >= thoiGianKetThucCaSang && nhanVien.ThoiGianVao <= thoiGianBatDauCaChieu && nhanVien.ThoiGianRa <= thoiGianBatDauCaChieu)
                 {
-                    this.AddNotification("Không được check out. Vì bạn vừa mới check in trong giờ nghỉ", NotificationType.WARNING);
+                    StrategyPatternController CheckOutEarly = new StrategyPatternController();
+                    CheckOutEarly.SetChamCongBehavior(new EarlyBehaviorController());
+                    this.AddNotification(CheckOutEarly.PrintNotification(), NotificationType.WARNING);
                     return RedirectToAction("ChamCongNgay");
                 }
 
